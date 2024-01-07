@@ -1,4 +1,4 @@
-import prisma from "@/app/lib/prisma";
+import { prisma } from "@/app/lib/prisma";
 
 /* Collection of functions to interact with database */
 
