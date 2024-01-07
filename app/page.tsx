@@ -1,3 +1,6 @@
-export default function Home() {
-  return <h1>Hello World!</h1>;
+import { getUserSession } from "@/app/lib/session";
+
+export default async function Home() {
+  const user = await getUserSession();
+  return <main className="">{JSON.stringify(user)}</main>;
 }
