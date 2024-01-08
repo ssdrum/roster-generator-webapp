@@ -1,4 +1,4 @@
-import { fetchUsers } from "@/app/lib/data";
+import { fetchUsers } from '@/app/lib/data';
 
 // Test page to display users
 export default async function Page() {

@@ -1,11 +1,12 @@
 # Filename: nurse_scheduling.py
-# Description: 
+# Description:
 # Author: osh
 # Date created: 12:49 on Tuesday, the 02nd of January, 2024.
 # Last modified: 12:54 on Wednesday, the 03rd of January, 2024.
 
 """Example of a simple nurse scheduling problem."""
 from ortools.sat.python import cp_model
+
 
 def solve_nurse_scheduling(num_nurses, num_shifts, num_days, solution_limit):
     all_nurses = range(num_nurses)
@@ -86,9 +87,7 @@ def solve_nurse_scheduling(num_nurses, num_shifts, num_days, solution_limit):
                         result += f"  Nurse {n} does not work\n"
 
             if self._solution_count >= self._solution_limit:
-                result += "Stop search after {} solutions".format(
-                    self._solution_limit
-                )
+                result += "Stop search after {} solutions".format(self._solution_limit)
                 self.StopSearch()
 
             return result
@@ -104,3 +103,4 @@ def solve_nurse_scheduling(num_nurses, num_shifts, num_days, solution_limit):
     solver.Solve(model, solution_printer)
 
     return str(solution_printer)
+

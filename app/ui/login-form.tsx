@@ -4,17 +4,17 @@ export default function LoginForm() {
       <h1>Login Form Page</h1>
       <form>
         <input
-          id="email"
-          type="email"
-          name="email"
-          placeholder="Enter your email address"
+          id='email'
+          type='email'
+          name='email'
+          placeholder='Enter your email address'
           required
         />
         <input
-          id="password"
-          type="password"
-          name="password"
-          placeholder="Enter password"
+          id='password'
+          type='password'
+          name='password'
+          placeholder='Enter password'
           required
           minLength={6}
         />
