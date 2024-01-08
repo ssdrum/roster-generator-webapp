@@ -5,7 +5,7 @@
   "scripts": {
     "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn python_api.index:app --reload",
     "next-dev": "next dev",
-    "dev": "concurrently \"puser.idnpm run next-dev\" \"pnpm run fastapi-dev\"",
+    "dev": "concurrently \"pnpm run next-dev\" \"pnpm run fastapi-dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
