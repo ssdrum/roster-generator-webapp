@@ -1,3 +1,7 @@
+"use client"
+
+import {signOut} from 'next-auth/react'
+
 export default function Navbar() {
   return (
     <nav className='bg-gray-800 p-4 text-white'>
@@ -20,7 +24,7 @@ export default function Navbar() {
           <a href='#' className='hover:text-gray-300'>
             Contact
           </a>
-          <a href='#' className='hover:text-gray-300'>
+          <a href='#' className='hover:text-gray-300' onClick={() => signOut()}>
             Logout
           </a>
         </div>
