@@ -1,4 +1,4 @@
-import Navbar from "@/app/ui/navbar";
+import Navbar from '@/app/ui/navbar';
 
 export default function DashboardLayout({
   children, // will be a page or nested layout
