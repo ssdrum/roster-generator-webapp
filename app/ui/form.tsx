@@ -14,7 +14,7 @@ export default function Home() {
     setFormData((prevState) => ({ ...prevState, [fieldName]: fieldValue }));
   };
 
-  const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const submitData = {
