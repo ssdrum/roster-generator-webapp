@@ -8,13 +8,13 @@ export default function Home() {
     solutions: '',
   });
 
-  const handleInput = (e) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
     setFormData((prevState) => ({ ...prevState, [fieldName]: fieldValue }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     const submitData = {
