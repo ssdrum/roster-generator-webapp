@@ -7,7 +7,7 @@ const Page = () => {
 
 useEffect(() => {
     // Define the API endpoint
-    const apiUrl = '/api';
+    const apiUrl = '/my_api';
 
     // Make a GET request using fetch
     fetch(apiUrl)
