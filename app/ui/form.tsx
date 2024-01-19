@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 
 export default function Home() {
@@ -5,7 +7,6 @@ export default function Home() {
     employees: '',
     shifts: '',
     days: '',
-    solutions: '',
   });
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,17 +19,16 @@ export default function Home() {
     e.preventDefault();
 
     const submitData = {
-      num_employees: parseInt(formData.employees),
-      num_shifts: parseInt(formData.shifts),
-      num_days: parseInt(formData.days),
-      solution_limit: parseInt(formData.solutions),
+      employees: parseInt(formData.employees),
+      days: parseInt(formData.days),
+      shifts: parseInt(formData.shifts),
     };
 
     console.log(submitData);
 
     try {
       const response = await fetch(
-        'http://127.0.0.1:8000/python_api/test-algorithm/',
+        '/my_api/test',
         {
           method: 'POST',
           body: JSON.stringify(submitData),
@@ -106,24 +106,6 @@ export default function Home() {
             name='days'
             placeholder='Enter the number of days'
             value={formData.days}
-            onChange={handleInput}
-            className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
-          />
-        </div>
-
-        <div className='mb-4'>
-          <label
-            className='mb-2 block text-sm font-bold text-gray-700'
-            htmlFor='solutions'
-          >
-            Number of Solutions
-          </label>
-          <input
-            type='number'
-            id='solutions'
-            name='solutions'
-            placeholder='Enter the number of solutions'
-            value={formData.solutions}
             onChange={handleInput}
             className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
           />
