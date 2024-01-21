@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function Home() {
+export default function Form({ handleFormSubmit }) {
   const [formData, setFormData] = useState({
     employees: '',
     shifts: '',
@@ -27,23 +27,18 @@ export default function Home() {
     console.log(submitData);
 
     try {
-      const response = await fetch(
-        '/my_api/test',
-        {
-          method: 'POST',
-          body: JSON.stringify(submitData),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const response = await fetch('/my_api/make_roster', {
+        method: 'POST',
+        body: JSON.stringify(submitData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (response.ok) {
-        // Handle success
         const responseData = await response.json();
-        console.log(responseData);
+        handleFormSubmit(responseData);
       } else {
-        // Handle errors
         console.log('Error submitting form');
       }
     } catch (error) {
@@ -52,11 +47,8 @@ export default function Home() {
   };
 
   return (
-    <div className='flex items-center justify-center'>
-      <form
-        onSubmit={handleSubmit}
-        className='mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md'
-      >
+    <div className='flex items-center'>
+      <form onSubmit={handleSubmit} className='mb-4 rounded bg-white pb-8 pt-6'>
         <div className='mb-4'>
           <label
             className='mb-2 block text-sm font-bold text-gray-700'

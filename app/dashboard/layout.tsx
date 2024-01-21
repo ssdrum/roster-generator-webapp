@@ -6,10 +6,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section>
+    <>
       <Navbar />
-
-      {children}
-    </section>
+      <div className='container mx-auto my-5'>{children}</div>
+    </>
   );
 }

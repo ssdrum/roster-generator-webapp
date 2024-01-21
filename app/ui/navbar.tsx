@@ -12,18 +12,6 @@ export default function Navbar() {
           </a>
         </div>
         <div className='hidden space-x-4 md:flex'>
-          <a href='#' className='hover:text-gray-300'>
-            Home
-          </a>
-          <a href='#' className='hover:text-gray-300'>
-            About
-          </a>
-          <a href='#' className='hover:text-gray-300'>
-            Services
-          </a>
-          <a href='#' className='hover:text-gray-300'>
-            Contact
-          </a>
           <a href='#' className='hover:text-gray-300' onClick={() => signOut()}>
             Logout
           </a>
