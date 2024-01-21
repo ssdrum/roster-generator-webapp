@@ -1,19 +1,19 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 import Form from '@/app/ui/form';
 import Roster from '@/app/ui/roster';
 
 const Page = () => {
-  const [formData, setRosterData] = useState(null)
+  const [rosterData, setRosterData] = useState(null);
 
-  const handleFormSubmit = (formData) => {
+  const handleRosterData = (formData) => {
     setRosterData(formData);
   };
 
   return (
     <>
-      <Form handleFormSubmit={handleFormSubmit} />
-      <Roster rosterData={formData} />
+      <Form handleRosterData={handleRosterData} />
+      <Roster rosterData={rosterData} />
     </>
   );
 };

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function Form({ handleFormSubmit }) {
+export default function Form({ handleRosterData }) {
   const [formData, setFormData] = useState({
     employees: '',
     shifts: '',
@@ -37,7 +37,7 @@ export default function Form({ handleFormSubmit }) {
 
       if (response.ok) {
         const responseData = await response.json();
-        handleFormSubmit(responseData);
+        handleRosterData(responseData); // Pass return data to parent component
       } else {
         console.log('Error submitting form');
       }
