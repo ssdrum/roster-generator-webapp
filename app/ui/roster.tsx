@@ -5,7 +5,7 @@ interface RosterProps {
 }
 
 export default function Roster({ rosterData }: RosterProps) {
-console.log(rosterData)
+  console.log(rosterData);
   return (
     <>
       <h1>{rosterData && <p>{rosterData.week_length}</p>}</h1>
