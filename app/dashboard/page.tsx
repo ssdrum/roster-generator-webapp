@@ -15,7 +15,7 @@ const Page = () => {
   return (
     <>
       <Form handleRosterData={handleRosterData} />
-      <RosterVisualizer data={rosterData} />
+      <RosterVisualizer rosterData={rosterData} />
     </>
   );
 };

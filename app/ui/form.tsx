@@ -68,6 +68,7 @@ const Form: FC<Props> = ({ handleRosterData }) => {
             value={formData.employees}
             onChange={handleInput}
             className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
+            min='1'
           />
         </div>
 
@@ -76,7 +77,7 @@ const Form: FC<Props> = ({ handleRosterData }) => {
             className='mb-2 block text-sm font-bold text-gray-700'
             htmlFor='shifts'
           >
-            Number of Shifts
+            Number of Shifts (Including off shift)
           </label>
           <input
             type='number'
@@ -86,6 +87,7 @@ const Form: FC<Props> = ({ handleRosterData }) => {
             value={formData.shifts}
             onChange={handleInput}
             className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
+            min='2'
           />
         </div>
 
@@ -94,7 +96,7 @@ const Form: FC<Props> = ({ handleRosterData }) => {
             className='mb-2 block text-sm font-bold text-gray-700'
             htmlFor='days'
           >
-            Number of Days
+            Week Length
           </label>
           <input
             type='number'
@@ -104,6 +106,8 @@ const Form: FC<Props> = ({ handleRosterData }) => {
             value={formData.days}
             onChange={handleInput}
             className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
+            min='1'
+            max='7'
           />
         </div>
 

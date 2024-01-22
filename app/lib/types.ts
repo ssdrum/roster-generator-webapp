@@ -1,9 +1,11 @@
 // Roster data
-type Shift = {
-  [employee_name: string]: number[];
+type EmployeeShift = {
+  employee_name: string;
+  shifts: number[];
 };
 
 export type Roster = {
+  status: number;
   week_length: number;
-  shifts: Shift;
+  data: EmployeeShift[];
 } | null;
