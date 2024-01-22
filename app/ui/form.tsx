@@ -70,6 +70,7 @@ const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
             id='employees'
             name='employees'
             placeholder='Enter the number of employees'
+            required
             value={formData.employees}
             onChange={handleInput}
             className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
@@ -89,6 +90,7 @@ const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
             id='shifts'
             name='shifts'
             placeholder='Enter the number of shifts'
+            required
             value={formData.shifts}
             onChange={handleInput}
             className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
@@ -108,6 +110,7 @@ const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
             id='days'
             name='days'
             placeholder='Enter the number of days'
+            required
             value={formData.days}
             onChange={handleInput}
             className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
