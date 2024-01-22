@@ -1,21 +1,21 @@
 'use client';
 import React, { useState } from 'react';
 import Form from '@/app/ui/form';
-import Roster from '@/app/ui/roster';
-import { RosterData } from '@/app/lib/types';
+import RosterVisualizer from '@/app/ui/roster';
+import { Roster } from '@/app/lib/types';
 
 // Page Component
 const Page = () => {
-  const [rosterData, setRosterData] = useState<RosterData | null>(null);
+  const [rosterData, setRosterData] = useState<Roster | null>(null);
 
-  const handleRosterData = (rosterData: RosterData) => {
-    setRosterData(rosterData);
+  const handleRosterData = (data: Roster) => {
+    setRosterData(data);
   };
 
   return (
     <>
       <Form handleRosterData={handleRosterData} />
-      <Roster rosterData={rosterData} />
+      <RosterVisualizer data={rosterData} />
     </>
   );
 };

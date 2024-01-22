@@ -1,13 +1,14 @@
+import React, { FC } from 'react'; // Import FC (functional component)
 import { useState } from 'react';
-import { RosterData } from '@/app/lib/types';
+import { Roster } from '@/app/lib/types';
 
-type HandleRosterDataFunction = (rosterData: RosterData) => void;
+type HandleRosterDataFunction = (data: Roster) => void;
 
-interface FormProps {
+type Props = {
   handleRosterData: HandleRosterDataFunction;
-}
+};
 
-export default function Form({ handleRosterData }: FormProps) {
+const Form: FC<Props> = ({ handleRosterData }) => {
   const [formData, setFormData] = useState({
     employees: '',
     shifts: '',
@@ -117,4 +118,6 @@ export default function Form({ handleRosterData }: FormProps) {
       </form>
     </div>
   );
-}
+};
+
+export default Form;
