@@ -1,8 +1,13 @@
-'use client';
-
 import { useState } from 'react';
+import { RosterData } from '@/app/lib/types';
 
-export default function Form({ handleRosterData }) {
+type HandleRosterDataFunction = (rosterData: RosterData) => void;
+
+interface FormProps {
+  handleRosterData: HandleRosterDataFunction;
+}
+
+export default function Form({ handleRosterData }: FormProps) {
   const [formData, setFormData] = useState({
     employees: '',
     shifts: '',
@@ -23,8 +28,6 @@ export default function Form({ handleRosterData }) {
       days: parseInt(formData.days),
       shifts: parseInt(formData.shifts),
     };
-
-    console.log(submitData);
 
     try {
       const response = await fetch('/my_api/make_roster', {
