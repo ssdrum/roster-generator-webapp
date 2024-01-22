@@ -23,11 +23,17 @@ const RosterVisualizer: FC<Props> = ({ rosterData }) => {
     const table_rows = data.map((employee) => (
       <tr key={employee.employee_name}>
         <td className='border px-4 py-2'>{employee.employee_name}</td>
-        {employee.shifts.map((shift, i) => (
-          <td key={i} className='border px-4 py-2 text-center'>
-            {shift}
-          </td>
-        ))}
+        {employee.shifts.map((shift, i) =>
+          shift === 1 ? (
+            <td key={i} className='border bg-red-300 px-4 py-2 text-center'>
+              Off
+            </td>
+          ) : (
+            <td key={i} className='border bg-green-300 px-4 py-2 text-center'>
+              {shift - 1}
+            </td>
+          )
+        )}
       </tr>
     ));
 

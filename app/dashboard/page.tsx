@@ -17,14 +17,7 @@ const Page = () => {
   return (
     <>
       <Form handleRosterData={handleRosterData} setIsLoading={setIsLoading} />
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          <RosterVisualizer rosterData={rosterData} />
-          <p className='mt-5'>Note: Shift 1 means day off</p>
-        </>
-      )}
+      {isLoading ? <Spinner /> : <RosterVisualizer rosterData={rosterData} />}
     </>
   );
 };
