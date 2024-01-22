@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { Roster } from '@/app/lib/types';
 
 type HandleRosterDataFunction = (data: Roster) => void;
+type SetIsLoading = (isLoading: boolean) => void;
 
 type Props = {
   handleRosterData: HandleRosterDataFunction;
+  setIsLoading: SetIsLoading;
 };
 
-const Form: FC<Props> = ({ handleRosterData }) => {
+const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
   const [formData, setFormData] = useState({
     employees: '',
     shifts: '',
@@ -23,6 +25,7 @@ const Form: FC<Props> = ({ handleRosterData }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const submitData = {
       employees: parseInt(formData.employees),
@@ -47,6 +50,8 @@ const Form: FC<Props> = ({ handleRosterData }) => {
       }
     } catch (error) {
       console.error('Error submitting form', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
