@@ -16,6 +16,7 @@ const Page = () => {
     <>
       <Form handleRosterData={handleRosterData} />
       <RosterVisualizer rosterData={rosterData} />
+      <p className="mt-5">Note: Shift 1 means day off</p>
     </>
   );
 };
