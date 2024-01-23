@@ -4,10 +4,12 @@ import { Roster } from '@/app/lib/types';
 
 type HandleRosterDataFunction = (data: Roster) => void;
 type SetIsLoading = (isLoading: boolean) => void;
+type SetShowSave = (showSave: boolean) => void;
 
 type Props = {
   handleRosterData: HandleRosterDataFunction;
   setIsLoading: SetIsLoading;
+  setShowSave: SetShowSave;
 };
 
 type FormData = {
@@ -17,7 +19,7 @@ type FormData = {
   soft_days_off: boolean;
 };
 
-const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
+const Form: FC<Props> = ({ handleRosterData, setIsLoading, setShowSave }) => {
   const [formData, setFormData] = useState<FormData>({
     employees: '',
     shifts: '',
@@ -56,6 +58,12 @@ const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
 
       if (response.ok) {
         const responseData = await response.json();
+        // Show save button if roster was generated
+        if (responseData.status === 1) {
+          setShowSave(true);
+        } else {
+          setShowSave(false);
+        }
         handleRosterData(responseData); // Pass return data to parent component
       } else {
         console.log('Error submitting form');
