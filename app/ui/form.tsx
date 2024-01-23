@@ -10,16 +10,25 @@ type Props = {
   setIsLoading: SetIsLoading;
 };
 
+type FormData = {
+  employees: string;
+  shifts: string;
+  days: string;
+  soft_days_off: boolean;
+};
+
 const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     employees: '',
     shifts: '',
     days: '',
+    soft_days_off: false,
   });
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName = e.target.name;
-    const fieldValue = e.target.value;
+    const fieldValue =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData((prevState) => ({ ...prevState, [fieldName]: fieldValue }));
   };
 
@@ -31,7 +40,10 @@ const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
       employees: parseInt(formData.employees),
       days: parseInt(formData.days),
       shifts: parseInt(formData.shifts),
+      soft_days_off: formData.soft_days_off,
     };
+
+    console.log(submitData);
 
     try {
       const response = await fetch('/my_api/make_roster', {
@@ -117,6 +129,23 @@ const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
             min='1'
             max='7'
           />
+        </div>
+
+        <div className='mb-4 flex'>
+          <input
+            type='checkbox'
+            id='soft_days_off'
+            name='soft_days_off'
+            checked={formData.soft_days_off}
+            onChange={handleInput}
+            className='mr-2 leading-tight text-gray-700 focus:outline-none'
+          />
+          <label
+            className='block text-sm font-bold text-gray-700'
+            htmlFor='soft_days_off'
+          >
+            Allow for less than two days off
+          </label>
         </div>
 
         <div className='flex items-center justify-between'>
