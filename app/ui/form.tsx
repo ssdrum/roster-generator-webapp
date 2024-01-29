@@ -39,9 +39,9 @@ const Form: FC<Props> = ({ handleRosterData, setIsLoading, setShowSave }) => {
     setIsLoading(true);
 
     const submitData = {
-      employees: parseInt(formData.employees),
-      days: parseInt(formData.days),
-      shifts: parseInt(formData.shifts),
+      num_employees: parseInt(formData.employees),
+      num_days: parseInt(formData.days),
+      num_shifts: parseInt(formData.shifts),
       soft_days_off: formData.soft_days_off,
     };
 

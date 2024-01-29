@@ -10,10 +10,11 @@ type Props = {
 // Create component
 const RosterVisualizer: FC<Props> = ({ rosterData }) => {
   if (rosterData) {
-    if (rosterData.status == 0) {
+    if (rosterData.status == 1) {
       return <h1>Constraints are unfeasible</h1>;
     }
     const { week_length, data } = rosterData;
+    console.log(rosterData)
 
     const days_array = Array.from(
       { length: week_length },
