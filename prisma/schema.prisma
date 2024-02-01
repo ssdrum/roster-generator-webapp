@@ -1,23 +1,51 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url      = env("POSTGRES_URL")
 }
 
 model User {
-  id            String       @default(cuid()) @id
-  name          String?
-  email         String?   @unique
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  id         String       @id @default(cuid())
+  name       String
+  email      String       @unique
+  createdAt  DateTime     @default(now()) @map(name: "created_at")
+  updatedAt  DateTime     @updatedAt @map(name: "updated_at")
+  Assignment Assignment[]
+
   @@map(name: "users")
+}
+
+model Employee {
+  id         String       @id @default(cuid())
+  name       String
+  email      String?      @unique
+  Assignment Assignment[]
+
+  @@map(name: "employees")
+}
+
+model Shift {
+  id         String       @id @default(cuid())
+  name       String
+  startTime  String
+  endTime    String
+  Assignment Assignment[]
+
+  @@map(name: "shifts")
+}
+
+model Assignment {
+  id         String   @id @default(cuid())
+  assignedTo Employee @relation(fields: [employeeId], references: [id])
+  employeeId String
+  shiftType  Shift    @relation(fields: [shiftId], references: [id])
+  shiftId    String
+  assignedBy User     @relation(fields: [userId], references: [id])
+  userId     String
+  day        Int
+
+  @@map(name: "assignments")
 }
