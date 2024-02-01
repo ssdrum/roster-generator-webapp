@@ -16,6 +16,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.7.1",
+    "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@types/node": "20.2.4",
