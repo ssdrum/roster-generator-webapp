@@ -76,7 +76,7 @@ const load = async () => {
       },
     });
 
-    // Create 3 dummy employees for each user
+    // Create 2 dummy employees for Sarah
     const james = await prisma.employee.upsert({
       where: { email: 'james.anderson@companyemail.com' },
       create: {
@@ -96,7 +96,7 @@ const load = async () => {
       update: {},
     });
 
-    // Create assignments
+    // Create 2 dummy assignments for Sarah
     const assign1 = await prisma.assignment.create({
       data: {
         assignedTo: james.id,
