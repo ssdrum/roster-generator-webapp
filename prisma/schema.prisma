@@ -1,3 +1,5 @@
+// Format with npx prisma format
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -43,6 +45,7 @@ model Shift {
   @@map(name: "shifts")
 }
 
+// Represents an employee, assigned to a shift by a user
 model Assignment {
   id         String   @id @default(cuid())
   Employee   Employee @relation(fields: [assignedTo], references: [id])

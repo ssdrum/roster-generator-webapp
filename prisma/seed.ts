@@ -15,13 +15,11 @@ const load = async () => {
       update: { name: 'Sarah Johnson' },
       create: { name: 'Sarah Johnson', email: 'sarah.johnson@email.com' },
     });
-
     const alex = await prisma.user.upsert({
       where: { email: 'alex.miller@email.com' },
       update: { name: 'Alex Miller' },
       create: { name: 'Alex Miller', email: 'alex.miller@email.com' },
     });
-
     const emily = await prisma.user.upsert({
       where: { email: 'emily.davis@email.com' },
       update: { name: 'Emily Davis' },
@@ -103,7 +101,7 @@ const load = async () => {
       data: {
         assignedTo: james.id,
         shift: sarahMorning.id,
-        assignedBy: sarah.id, // Check that sarah.id corresponds to an existing user
+        assignedBy: sarah.id,
         day: 1,
       },
     });
@@ -111,7 +109,7 @@ const load = async () => {
       data: {
         assignedTo: lauren.id,
         shift: sarahMorning.id,
-        assignedBy: sarah.id, // Check that sarah.id corresponds to an existing user
+        assignedBy: sarah.id,
         day: 2,
       },
     });
