@@ -8,12 +8,14 @@ datasource db {
 }
 
 model User {
-  id         String       @id @default(cuid())
-  name       String
-  email      String       @unique
-  createdAt  DateTime     @default(now()) @map(name: "created_at")
-  updatedAt  DateTime     @updatedAt @map(name: "updated_at")
-  Assignment Assignment[]
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  createdAt     DateTime     @default(now()) @map(name: "created_at")
+  updatedAt     DateTime     @updatedAt @map(name: "updated_at")
+  Assignment    Assignment[]
+  Employee      Employee[]
+  shiftsCreated Shift[]
 
   @@map(name: "users")
 }
@@ -23,6 +25,8 @@ model Employee {
   name       String
   email      String?      @unique
   Assignment Assignment[]
+  User       User         @relation(fields: [employedBy], references: [id])
+  employedBy String
 
   @@map(name: "employees")
 }
@@ -33,19 +37,21 @@ model Shift {
   startTime  String
   endTime    String
   Assignment Assignment[]
+  User       User         @relation(fields: [createdBy], references: [id])
+  createdBy  String
 
   @@map(name: "shifts")
 }
 
 model Assignment {
   id         String   @id @default(cuid())
-  assignedTo Employee @relation(fields: [employeeId], references: [id])
-  employeeId String
-  shiftType  Shift    @relation(fields: [shiftId], references: [id])
-  shiftId    String
-  assignedBy User     @relation(fields: [userId], references: [id])
-  userId     String
+  Employee   Employee @relation(fields: [assignedTo], references: [id])
+  Shift      Shift    @relation(fields: [shift], references: [id])
+  User       User     @relation(fields: [assignedBy], references: [id])
   day        Int
+  assignedBy String
+  shift      String
+  assignedTo String
 
   @@map(name: "assignments")
 }
