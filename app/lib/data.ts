@@ -1,5 +1,5 @@
 import { prisma } from '@/app/lib/prisma';
-import { User, Employee, Shift, Assignment } from '@prisma/client';
+import { User, Employee, Shift, Assignment } from '@prisma/client'; // Prisma generates classess associated with the models defined in the schema automatically
 
 /* Collection of functions to interact with database */
 
