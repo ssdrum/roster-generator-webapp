@@ -5,6 +5,8 @@ import Form from '@/app/ui/form';
 import RosterVisualizer from '@/app/ui/roster';
 import Spinner from '@/app/ui/spinner';
 
+import RosterForm from '../ui/roster-form';
+
 // Page Component
 const Page = () => {
   const [rosterData, setRosterData] = useState<Roster | null>(null);
@@ -16,8 +18,10 @@ const Page = () => {
 
   return (
     <>
-      <Form handleRosterData={handleRosterData} setIsLoading={setIsLoading} />
-      {isLoading ? <Spinner /> : <RosterVisualizer rosterData={rosterData} />}
+      {/* <Form handleRosterData={handleRosterData} setIsLoading={setIsLoading} />
+      {isLoading ? <Spinner /> : <RosterVisualizer rosterData={rosterData} />} */}
+
+      <RosterForm />
     </>
   );
 };
