@@ -2,7 +2,7 @@
 // Description: the multi-page drawer form where the user enters the details to create a roster
 // Created  by: osh
 //          at: 16:06 on Thursday, the 01st of February, 2024.
-// Last edited: 21:22 on Friday, the 02nd of February, 2024.
+// Last edited: 16:31 on Saturday, the 03rd of February, 2024.
 
 import {
   Sheet,
@@ -39,12 +39,29 @@ const shiftSchema = z.object({
   shiftEndTime: z.string(),
 });
 
+const employeeSchema = z.object({
+  employeeName: z.string()
+    .min(2, {
+      message: "Please enter a name longer than two characters."
+    }),
+  employeeEmail: z.string()
+    .email({ message: "Please enter a valid email." }),
+  workingDays: z.number()
+  .min(1, {
+    message: "Employees must work at least one day a week."
+  })
+  .max(7, {
+    message: "Employees cannot work more days than exists in a week."
+  })
+})
+
 // create the form schema
 const formSchema = z.object({
   workDays: z.array(z.number()).min(1, {
     message: "Please select at least one day that you're open.",
   }),
   shifts: z.array(shiftSchema), // an array of shifts
+  employees: z.array(employeeSchema), // an array of employee details
 });
 
 export default function RosterForm() {
@@ -71,23 +88,45 @@ export default function RosterForm() {
           shiftEndTime: '00:00',
         },
       ],
+      employees: [
+        {
+          employeeName: '',
+          employeeEmail: '',
+          workingDays: 1,
+        },
+      ],
     },
   });
 
-  // fieldarray lets us manage a changing number of shifts
-  const { fields, append, remove } = useFieldArray({
+  /// fieldarray lets us manage a changing number of shifts ( an array of fields [duh])
+  // shifts
+  const { fields: shiftFields, append: appendShift, remove: removeShift } = useFieldArray({
     control: form.control,
     name: 'shifts',
   });
 
-  // defining the methods to add and delete shifts
+  // employees
+  const { fields: employeeFields, append: appendEmployee, remove: removeEmployee } = useFieldArray({
+    control: form.control,
+    name: 'employees',
+  });
+
+  // defining the methods to add and delete shifts and employees
   const addShift = () => {
-    append({ shiftName: '', shiftStartTime: '00:00', shiftEndTime: '00:00' }); // create a new shift object with our default values
+    appendShift({ shiftName: '', shiftStartTime: '00:00', shiftEndTime: '00:00' }); // create a new shift object with our default values
   };
 
   const deleteShift = (index: number) => {
-    remove(index);
+    removeShift(index);
   };
+
+  const addEmployee = () => {
+    appendEmployee({ employeeName: '', employeeEmail: '', workingDays: 1 })
+  }
+
+  const deleteEmployee = (index: number) => {
+    removeEmployee(index);
+  }
 
   // submit handler
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -138,7 +177,7 @@ export default function RosterForm() {
 
         {/* generate shift entry rows depending on how many we've created */}
         {/* shift details */}
-        {fields.map((field, index) => (
+        {shiftFields.map((field, index) => (
           <div // gird container for the row
             key={field.id}
             className='grid grid-cols-9'
@@ -210,13 +249,105 @@ export default function RosterForm() {
             )}
 
             {/* plus button to add a new shift but only under the last element */}
-            {index === fields.length - 1 && (
+            {index === shiftFields.length - 1 && (
               <div className='col-span-8 flex items-center justify-start pr-4 pt-4'>
                 <Button
                   type='button'
                   variant='outline'
                   className='w-full'
                   onClick={addShift}
+                >
+                  <PlusIcon className='h-6 w-6' />
+                </Button>
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* employee details */}
+        {employeeFields.map((field, index) => (
+          <div // gird container for the row
+            key={field.id}
+            className='grid grid-cols-9'
+          >
+            {/* name */}
+            <div className='col-span-3 pr-4'>
+              <FormField
+                control={form.control}
+                name={`employees.${index}.employeeName`}
+                render={({ field }) => (
+                  <FormItem>
+                    {/* only render the label for the first one */}
+                    {index === 0 && <FormLabel>Employee Name</FormLabel>}
+                    <FormControl>
+                      <Input type='text' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* email */}
+            <div className='col-span-4 pr-4'>
+              <FormField
+                control={form.control}
+                name={`employees.${index}.employeeEmail`}
+                render={({ field }) => (
+                  <FormItem>
+                    {/* only render the label for the first one */}
+                    {index === 0 && <FormLabel>Employee Email</FormLabel>}
+                    <FormControl>
+                      <Input type='email' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* working days */}
+            <div className='col-span-1 pr-4'>
+              <FormField
+                control={form.control}
+                name={`employees.${index}.workingDays`}
+                render={({ field }) => (
+                  <FormItem>
+                    {index === 0 && <FormLabel>Days Working</FormLabel>}
+                    <FormControl>
+                      <Input 
+                        type='number' {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))} // convert the string to a number
+                        />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* delete icon */}
+            {index !== 0 && (
+              <div className='col-span-1 flex items-start justify-start'>
+                <Button
+                  type='button'
+                  size='icon'
+                  variant='destructive'
+                  onClick={() => deleteEmployee(index)}
+                >
+                  <DeleteIcon className='h-6 w-6' />
+                </Button>
+              </div>
+            )}
+
+            {/* plus button */}
+            {index === employeeFields.length - 1 && (
+              <div className='col-span-8 flex items-center justify-start pr-4 pt-4'>
+                <Button
+                  type='button'
+                  variant='outline'
+                  className='w-full'
+                  onClick={addEmployee}
                 >
                   <PlusIcon className='h-6 w-6' />
                 </Button>
