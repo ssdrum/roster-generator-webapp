@@ -2,7 +2,7 @@
 // Description: the multi-page drawer form where the user enters the details to create a roster
 // Created  by: osh
 //          at: 16:06 on Thursday, the 01st of February, 2024.
-// Last edited: 16:31 on Saturday, the 03rd of February, 2024.
+// Last edited: 04:22 on Sunday, the 04th of February, 2024.
 
 import {
   Sheet,
@@ -12,6 +12,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 import {
   Form,
@@ -29,6 +38,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 // the schema for the shift
 const shiftSchema = z.object({
@@ -62,6 +72,7 @@ const formSchema = z.object({
   }),
   shifts: z.array(shiftSchema), // an array of shifts
   employees: z.array(employeeSchema), // an array of employee details
+  employeesAssigned: z.array(z.number()), // the list of workers per day in the week
 });
 
 export default function RosterForm() {
@@ -95,6 +106,7 @@ export default function RosterForm() {
           workingDays: 1,
         },
       ],
+      employeesAssigned: [0, 0, 0, 0, 0, 0, 0],
     },
   });
 
@@ -132,6 +144,41 @@ export default function RosterForm() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values); // yeah we console logging for now woo
   }
+
+  /// employees assigned per day 
+  // initial value
+  const [employeesAssigned, setEmployeesAssigned] = useState(new Array(days.length).fill(0)); // inital value
+
+  // increase number of employees
+  const incrementEmployeesAssigned = (dayIndex: number) => {
+    setEmployeesAssigned(currentCounts =>
+      currentCounts.map((count, index) => {
+        // only update the day we changed
+        if (index === dayIndex) {
+          const updatedCount = count + 1; // +1
+          form.setValue(`employeesAssigned.${index}`, updatedCount, { shouldValidate: true }); // update the form
+  
+          return updatedCount; // return this day
+        }
+        return count; // return all the days
+      })
+    );
+  };
+
+  // decrease
+  const decrementEmployeesAssigned = (dayIndex: number) => {
+    setEmployeesAssigned(currentCounts =>
+      currentCounts.map((count, index) => {
+        if (index === dayIndex) {
+          const updatedCount = Math.max(count - 1, 0); // make sure it stays at 0 or above
+          form.setValue(`employeesAssigned.${index}`, updatedCount, { shouldValidate: true });
+  
+          return updatedCount;
+        }
+        return count;
+      })
+    );
+  };
 
   return (
     <Form {...form}>
@@ -355,6 +402,29 @@ export default function RosterForm() {
             )}
           </div>
         ))}
+
+        {/* assign a number for every employee for each day in days */}
+        {/* TODO: use the number of days selected instead of the days of the week (maybe remove days from the days array if they're not selected?) */}
+        <div className='grid grid-cols-7 gap-4'>
+          {days.map((day, index) => (
+            <Card key={day}>
+              <CardHeader>{day}</CardHeader>
+              <CardContent>
+                <div className='flex items-center justify-between'>
+                  <button type='button' onClick={() => decrementEmployeesAssigned(index)}>-</button>
+                  <Input
+                    type="text"
+                    readOnly //it's only an input so it submits with the form, but no manual changing
+                    // TODO: remove weird border shadows on focus
+                    className='border-none focus-visible:ring-0 focus:shadow-none focus:ring-offset-0 focus:outline-none flex justify-center items-center text-center'
+                    value={employeesAssigned[index]}
+                  />
+                  <button type='button' onClick={() => incrementEmployeesAssigned(index)}>+</button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
         <Button type='submit' className='fixed bottom-10 right-36 m-8'>
           Submit
