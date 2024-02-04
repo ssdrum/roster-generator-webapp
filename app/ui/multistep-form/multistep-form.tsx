@@ -8,7 +8,7 @@ const MultiStepForm = () => {
 
   return (
     <>
-      <ProgressBar currStepIndex={currStepIndex}/>
+      <ProgressBar currStepIndex={currStepIndex} />
       <form>
         {currStepIndex + 1} / {steps.length}
         {step}
@@ -18,7 +18,7 @@ const MultiStepForm = () => {
           </button>
         )}
         <button type='button' onClick={next}>
-          {isLastStep ? "Finish" : "Next"}
+          {isLastStep ? 'Finish' : 'Next'}
         </button>
       </form>
     </>

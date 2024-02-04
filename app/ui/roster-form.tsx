@@ -20,7 +20,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 
 import {
   Form,
@@ -50,20 +50,19 @@ const shiftSchema = z.object({
 });
 
 const employeeSchema = z.object({
-  employeeName: z.string()
-    .min(2, {
-      message: "Please enter a name longer than two characters."
+  employeeName: z.string().min(2, {
+    message: 'Please enter a name longer than two characters.',
+  }),
+  employeeEmail: z.string().email({ message: 'Please enter a valid email.' }),
+  workingDays: z
+    .number()
+    .min(1, {
+      message: 'Employees must work at least one day a week.',
+    })
+    .max(7, {
+      message: 'Employees cannot work more days than exists in a week.',
     }),
-  employeeEmail: z.string()
-    .email({ message: "Please enter a valid email." }),
-  workingDays: z.number()
-  .min(1, {
-    message: "Employees must work at least one day a week."
-  })
-  .max(7, {
-    message: "Employees cannot work more days than exists in a week."
-  })
-})
+});
 
 // create the form schema
 const formSchema = z.object({
@@ -112,20 +111,32 @@ export default function RosterForm() {
 
   /// fieldarray lets us manage a changing number of shifts ( an array of fields [duh])
   // shifts
-  const { fields: shiftFields, append: appendShift, remove: removeShift } = useFieldArray({
+  const {
+    fields: shiftFields,
+    append: appendShift,
+    remove: removeShift,
+  } = useFieldArray({
     control: form.control,
     name: 'shifts',
   });
 
   // employees
-  const { fields: employeeFields, append: appendEmployee, remove: removeEmployee } = useFieldArray({
+  const {
+    fields: employeeFields,
+    append: appendEmployee,
+    remove: removeEmployee,
+  } = useFieldArray({
     control: form.control,
     name: 'employees',
   });
 
   // defining the methods to add and delete shifts and employees
   const addShift = () => {
-    appendShift({ shiftName: '', shiftStartTime: '00:00', shiftEndTime: '00:00' }); // create a new shift object with our default values
+    appendShift({
+      shiftName: '',
+      shiftStartTime: '00:00',
+      shiftEndTime: '00:00',
+    }); // create a new shift object with our default values
   };
 
   const deleteShift = (index: number) => {
@@ -133,31 +144,35 @@ export default function RosterForm() {
   };
 
   const addEmployee = () => {
-    appendEmployee({ employeeName: '', employeeEmail: '', workingDays: 1 })
-  }
+    appendEmployee({ employeeName: '', employeeEmail: '', workingDays: 1 });
+  };
 
   const deleteEmployee = (index: number) => {
     removeEmployee(index);
-  }
+  };
 
   // submit handler
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values); // yeah we console logging for now woo
   }
 
-  /// employees assigned per day 
+  /// employees assigned per day
   // initial value
-  const [employeesAssigned, setEmployeesAssigned] = useState(new Array(days.length).fill(0)); // inital value
+  const [employeesAssigned, setEmployeesAssigned] = useState(
+    new Array(days.length).fill(0)
+  ); // inital value
 
   // increase number of employees
   const incrementEmployeesAssigned = (dayIndex: number) => {
-    setEmployeesAssigned(currentCounts =>
+    setEmployeesAssigned((currentCounts) =>
       currentCounts.map((count, index) => {
         // only update the day we changed
         if (index === dayIndex) {
           const updatedCount = count + 1; // +1
-          form.setValue(`employeesAssigned.${index}`, updatedCount, { shouldValidate: true }); // update the form
-  
+          form.setValue(`employeesAssigned.${index}`, updatedCount, {
+            shouldValidate: true,
+          }); // update the form
+
           return updatedCount; // return this day
         }
         return count; // return all the days
@@ -167,12 +182,14 @@ export default function RosterForm() {
 
   // decrease
   const decrementEmployeesAssigned = (dayIndex: number) => {
-    setEmployeesAssigned(currentCounts =>
+    setEmployeesAssigned((currentCounts) =>
       currentCounts.map((count, index) => {
         if (index === dayIndex) {
           const updatedCount = Math.max(count - 1, 0); // make sure it stays at 0 or above
-          form.setValue(`employeesAssigned.${index}`, updatedCount, { shouldValidate: true });
-  
+          form.setValue(`employeesAssigned.${index}`, updatedCount, {
+            shouldValidate: true,
+          });
+
           return updatedCount;
         }
         return count;
@@ -362,10 +379,11 @@ export default function RosterForm() {
                   <FormItem>
                     {index === 0 && <FormLabel>Days Working</FormLabel>}
                     <FormControl>
-                      <Input 
-                        type='number' {...field}
+                      <Input
+                        type='number'
+                        {...field}
                         onChange={(e) => field.onChange(Number(e.target.value))} // convert the string to a number
-                        />
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -411,15 +429,25 @@ export default function RosterForm() {
               <CardHeader>{day}</CardHeader>
               <CardContent>
                 <div className='flex items-center justify-between'>
-                  <button type='button' onClick={() => decrementEmployeesAssigned(index)}>-</button>
+                  <button
+                    type='button'
+                    onClick={() => decrementEmployeesAssigned(index)}
+                  >
+                    -
+                  </button>
                   <Input
-                    type="text"
+                    type='text'
                     readOnly //it's only an input so it submits with the form, but no manual changing
                     // TODO: remove weird border shadows on focus
-                    className='border-none focus-visible:ring-0 focus:shadow-none focus:ring-offset-0 focus:outline-none flex justify-center items-center text-center'
+                    className='flex items-center justify-center border-none text-center focus:shadow-none focus:outline-none focus:ring-offset-0 focus-visible:ring-0'
                     value={employeesAssigned[index]}
                   />
-                  <button type='button' onClick={() => incrementEmployeesAssigned(index)}>+</button>
+                  <button
+                    type='button'
+                    onClick={() => incrementEmployeesAssigned(index)}
+                  >
+                    +
+                  </button>
                 </div>
               </CardContent>
             </Card>

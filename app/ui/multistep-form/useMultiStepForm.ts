@@ -1,6 +1,22 @@
 import { ReactElement, useState } from 'react';
 
 const useMultiStepForm = (steps: ReactElement[]) => {
+  /*
+  Custom hook for managing multi-step forms.
+
+  Props:
+  - steps: Array of ReactElement representing individual steps in the form.
+
+  Returns an object with the following properties and functions:
+  - currStepIndex: Current step index
+  - step: Current step component
+  - steps: All steps in the form
+  - isFirstStep: Boolean, true if it's the first step
+  - isLastStep: Boolean, true if it's the last step
+  - goTo: Function to go to a specific step
+  - next: Function to move to the next step
+  - back: Function to go back to the previous step
+*/
   const [currStepIndex, setCurrStepIndex] = useState(0);
 
   const next = () => {
@@ -29,7 +45,7 @@ const useMultiStepForm = (steps: ReactElement[]) => {
     isLastStep: currStepIndex === steps.length - 1,
     goTo,
     next,
-    back
+    back,
   };
 };
 
