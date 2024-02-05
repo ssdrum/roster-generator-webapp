@@ -1,9 +1,10 @@
-import MultiStepForm from '@/app/ui/multistep-form/multistep-form';
+"use client"
+import RosterForm from "../ui/roster-form";
 
 const Page = () => {
   return (
     <>
-      <MultiStepForm />
+      <RosterForm />
     </>
   );
 };
