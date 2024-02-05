@@ -1,12 +1,12 @@
-'use client'
+'use client';
 import { signIn } from 'next-auth/react';
 
 const GoogleSignInButton = () => {
- const handleClick = () => {
+  const handleClick = () => {
     signIn('google', { callbackUrl: '/dashboard' });
- };
+  };
 
- return (
+  return (
     <div className='mt-10 flex items-center justify-center dark:bg-gray-800'>
       <button
         className='flex gap-2 rounded-lg border border-gray-600 bg-white px-6 py-3 text-black'
@@ -22,7 +22,7 @@ const GoogleSignInButton = () => {
         <span>Sign in with Google</span>
       </button>
     </div>
- );
+  );
 };
 
 export default GoogleSignInButton;
