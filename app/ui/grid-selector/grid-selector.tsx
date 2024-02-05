@@ -27,7 +27,7 @@ const GridSelector: FC<Props> = ({ workDays, shifts }) => {
   workDays.forEach((day) => {
     initialGridState[day] = {};
     shifts.forEach((shift) => {
-      initialGridState[day][shift.name] = 1; // You can set any default number here
+      initialGridState[day][shift.name] = 1;
     });
   });
 
