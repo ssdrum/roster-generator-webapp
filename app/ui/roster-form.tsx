@@ -1,9 +1,3 @@
-// File: roster-form.tsx
-// Description: the multi-page drawer form where the user enters the details to create a roster
-// Created  by: osh
-//          at: 16:06 on Thursday, the 01st of February, 2024.
-// Last edited: 04:22 on Sunday, the 04th of February, 2024.
-
 // shadcn
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -21,7 +15,7 @@ import ProgressBar from '@/app/ui/multistep-form/progress-bar';
 import { Day, formSchema, employeeSchema } from '../schemas/formSchemas';
 import WorkDetails from './work-details';
 import EmployeeDetails from './employee-details';
-import AssignDetails from './assign-details';
+import GridSelector from '@/app/ui/grid-selector/grid-selector';
 
 export default function RosterForm() {
   const days: Day[] = [
@@ -108,15 +102,14 @@ export default function RosterForm() {
   const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
     useMultiStepForm([
       <WorkDetails key={'one'} form={form} days={days} />,
-
       <EmployeeDetails key={'two'} form={form} />,
-
-      <AssignDetails
-        key={'three'}
-        days={days}
-        incrementEmployeesAssigned={incrementEmployeesAssigned}
-        decrementEmployeesAssigned={decrementEmployeesAssigned}
-        employeesAssigned={employeesAssigned}
+      // Temporarily hardcoded props
+      <GridSelector
+        workDays={[0, 1, 2, 3, 4, 5]}
+        shifts={[
+          { name: 'Morning', startTime: '08:00', endTime: '15:00' },
+          { name: 'Evening', startTime: '15:00', endTime: '21:00' },
+        ]}
       />,
     ]);
 

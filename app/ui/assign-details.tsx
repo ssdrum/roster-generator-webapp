@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import React, { FC } from 'react';
 
 // shadcn
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -7,14 +6,14 @@ import { Input } from '@/components/ui/input';
 
 import { Day } from '../schemas/formSchemas';
 
-interface Props {
+type Props = {
   incrementEmployeesAssigned: (dayIndex: number) => void;
   decrementEmployeesAssigned: (dayIndex: number) => void;
   days: Day[];
   employeesAssigned: number[];
 }
 
-const AssignDetails: React.FC<Props> = ({
+const AssignDetails: FC<Props> = ({
   days,
   incrementEmployeesAssigned,
   decrementEmployeesAssigned,

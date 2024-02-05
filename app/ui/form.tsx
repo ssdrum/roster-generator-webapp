@@ -1,4 +1,4 @@
-import React, { FC } from 'react'; // Import FC (functional component)
+import React, { FC } from 'react';
 import { useState } from 'react';
 import { Roster } from '@/app/lib/types';
 
