@@ -107,12 +107,12 @@ export default function RosterForm() {
   // break it into form components
   const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
     useMultiStepForm([
-      <WorkDetails key={"one"} form={form} days={days} />,
+      <WorkDetails key={'one'} form={form} days={days} />,
 
-      <EmployeeDetails key={"two"} form={form} />,
+      <EmployeeDetails key={'two'} form={form} />,
 
       <AssignDetails
-        key={"three"}
+        key={'three'}
         days={days}
         incrementEmployeesAssigned={incrementEmployeesAssigned}
         decrementEmployeesAssigned={decrementEmployeesAssigned}
@@ -131,30 +131,24 @@ export default function RosterForm() {
             <Button
               type='button'
               onClick={back}
-              className='fixed bottom-10 right-36 m-8'
+              className='fixed bottom-10 left-36 m-8'
             >
               Back
             </Button>
           )}
-
-            {isLastStep
-            ?
-              <Button
-                type='submit'
-                className='fixed bottom-10 right-36 m-8'
-              >
-                Submit
-              </Button>
-            :
-              <Button
-                type='button'
-                onClick={next}
-                className='fixed bottom-10 right-36 m-8'
-              >
-                Next
-              </Button>
-            }
-
+          {isLastStep ? (
+            <Button type='submit' className='fixed bottom-10 right-36 m-8'>
+              Submit
+            </Button>
+          ) : (
+            <Button
+              type='button'
+              onClick={next}
+              className='fixed bottom-10 right-36 m-8'
+            >
+              Next
+            </Button>
+          )}
         </form>
       </Form>
     </>

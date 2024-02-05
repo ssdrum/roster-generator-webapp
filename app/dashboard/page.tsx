@@ -1,5 +1,5 @@
-"use client"
-import RosterForm from "../ui/roster-form";
+'use client';
+import RosterForm from '../ui/roster-form';
 
 const Page = () => {
   return (
