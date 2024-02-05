@@ -30,7 +30,11 @@ export const formSchema = z.object({
   }),
   shifts: z.array(shiftSchema), // an array of shifts
   employees: z.array(employeeSchema), // an array of employee details
-  employeesAssigned: z.array(z.number()), // the list of workers per day in the week
+  employeesAssigned: z.array(z.number()) // the list of workers per day in the week
+    .refine((arr) => !arr.includes(0),
+    {
+      message: "Array must not contain 0",
+    }) 
 });
 
 export type FormType = z.infer<typeof formSchema>;
