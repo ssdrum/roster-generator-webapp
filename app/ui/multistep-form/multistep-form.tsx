@@ -4,7 +4,7 @@ import ProgressBar from '@/app/ui/multistep-form/progress-bar';
 
 const MultiStepForm = () => {
   const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
-    useMultiStepForm([<div>One</div>, <div>Two</div>, <div>Three</div>]);
+    useMultiStepForm([<div key={"one"}>One</div>, <div key={"two"}>Two</div>, <div key={"three"}>Three</div>]);
 
   return (
     <>

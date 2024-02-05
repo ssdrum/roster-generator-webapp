@@ -107,11 +107,12 @@ export default function RosterForm() {
   // break it into form components
   const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
     useMultiStepForm([
-      <WorkDetails form={form} days={days} />,
+      <WorkDetails key={"one"} form={form} days={days} />,
 
-      <EmployeeDetails form={form} />,
+      <EmployeeDetails key={"two"} form={form} />,
 
       <AssignDetails
+        key={"three"}
         days={days}
         incrementEmployeesAssigned={incrementEmployeesAssigned}
         decrementEmployeesAssigned={decrementEmployeesAssigned}
