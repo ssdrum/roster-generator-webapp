@@ -19,22 +19,29 @@ import { Day, formSchema } from '../schemas/formSchemas';
 
 // get the types of the props we're passing
 type Props = {
-  form: UseFormReturn<z.infer<typeof formSchema>>
-  days: Day[]
-}
+  form: UseFormReturn<z.infer<typeof formSchema>>;
+  days: Day[];
+};
 
 const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
-
   /// fieldarray lets us manage a changing number of shifts ( an array of fields [duh])
   // shifts
-  const { fields: shiftFields, append: appendShift, remove: removeShift } = useFieldArray({
+  const {
+    fields: shiftFields,
+    append: appendShift,
+    remove: removeShift,
+  } = useFieldArray({
     control: form.control,
     name: 'shifts',
   });
 
   // defining the methods to add and delete shifts and employees
   const addShift = () => {
-    appendShift({ shiftName: '', shiftStartTime: '00:00', shiftEndTime: '00:00' }); // create a new shift object with our default values
+    appendShift({
+      shiftName: '',
+      shiftStartTime: '00:00',
+      shiftEndTime: '00:00',
+    }); // create a new shift object with our default values
   };
 
   const deleteShift = (index: number) => {
@@ -57,9 +64,7 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
                 value={value.map(String)} // the output is a number, but we need to display it in a string format
                 onValueChange={(newValue) => {
                   // save the strings as numbers
-                  const numberValue = newValue.map((val) =>
-                    parseInt(val, 10)
-                  );
+                  const numberValue = newValue.map((val) => parseInt(val, 10));
                   onChange(numberValue);
                 }}
               >
@@ -172,8 +177,8 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
       ))}
     </>
   );
-}
-export default WorkDetails 
+};
+export default WorkDetails;
 
 // icons
 // icons for the days open selection

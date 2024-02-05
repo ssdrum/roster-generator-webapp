@@ -17,25 +17,28 @@ import { Input } from '@/components/ui/input';
 import { Day, formSchema } from '../schemas/formSchemas';
 
 type Props = {
-  form: UseFormReturn<z.infer<typeof formSchema>>
-}
+  form: UseFormReturn<z.infer<typeof formSchema>>;
+};
 
-const EmployeeDetails: React.FC<Props> = ({form}) => {
-
+const EmployeeDetails: React.FC<Props> = ({ form }) => {
   /// fieldarray lets us manage a changing number of shifts ( an array of fields)
   // employees
-  const { fields: employeeFields, append: appendEmployee, remove: removeEmployee } = useFieldArray({
+  const {
+    fields: employeeFields,
+    append: appendEmployee,
+    remove: removeEmployee,
+  } = useFieldArray({
     control: form.control,
     name: 'employees',
   });
 
   const addEmployee = () => {
-    appendEmployee({ employeeName: '', employeeEmail: '', workingDays: 1 })
-  }
+    appendEmployee({ employeeName: '', employeeEmail: '', workingDays: 1 });
+  };
 
   const deleteEmployee = (index: number) => {
     removeEmployee(index);
-  }
+  };
 
   return (
     <>
@@ -90,10 +93,11 @@ const EmployeeDetails: React.FC<Props> = ({form}) => {
                 <FormItem>
                   {index === 0 && <FormLabel>Days Working</FormLabel>}
                   <FormControl>
-                    <Input 
-                      type='number' {...field}
+                    <Input
+                      type='number'
+                      {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))} // convert the string to a number
-                      />
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -132,7 +136,7 @@ const EmployeeDetails: React.FC<Props> = ({form}) => {
       ))}
     </>
   );
-}
+};
 export default EmployeeDetails;
 
 // plus icon

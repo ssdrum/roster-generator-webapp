@@ -17,9 +17,9 @@ import { useState } from 'react';
 import useMultiStepForm from '@/app/ui/multistep-form/useMultiStepForm';
 import ProgressBar from '@/app/ui/multistep-form/progress-bar';
 
-// import types, schemas and the other two components 
-import { Day, formSchema, employeeSchema } from '../schemas/formSchemas'
-import WorkDetails from './work-details'
+// import types, schemas and the other two components
+import { Day, formSchema, employeeSchema } from '../schemas/formSchemas';
+import WorkDetails from './work-details';
 import EmployeeDetails from './employee-details';
 import AssignDetails from './assign-details';
 
@@ -63,19 +63,23 @@ export default function RosterForm() {
     console.log(values); // yeah we console logging for now woo
   }
 
-    /// employees assigned per day 
+  /// employees assigned per day
   // initial value
-  const [employeesAssigned, setEmployeesAssigned] = useState(new Array(days.length).fill(0)); // inital value
+  const [employeesAssigned, setEmployeesAssigned] = useState(
+    new Array(days.length).fill(0)
+  ); // inital value
 
   // increase number of employees
   const incrementEmployeesAssigned = (dayIndex: number) => {
-    setEmployeesAssigned(currentCounts =>
+    setEmployeesAssigned((currentCounts) =>
       currentCounts.map((count, index) => {
         // only update the day we changed
         if (index === dayIndex) {
           const updatedCount = count + 1; // +1
-          form.setValue(`employeesAssigned.${index}`, updatedCount, { shouldValidate: true }); // update the form
-  
+          form.setValue(`employeesAssigned.${index}`, updatedCount, {
+            shouldValidate: true,
+          }); // update the form
+
           return updatedCount; // return this day
         }
         return count; // return all the days
@@ -85,12 +89,14 @@ export default function RosterForm() {
 
   // decrease
   const decrementEmployeesAssigned = (dayIndex: number) => {
-    setEmployeesAssigned(currentCounts =>
+    setEmployeesAssigned((currentCounts) =>
       currentCounts.map((count, index) => {
         if (index === dayIndex) {
           const updatedCount = Math.max(count - 1, 0); // make sure it stays at 0 or above
-          form.setValue(`employeesAssigned.${index}`, updatedCount, { shouldValidate: true });
-  
+          form.setValue(`employeesAssigned.${index}`, updatedCount, {
+            shouldValidate: true,
+          });
+
           return updatedCount;
         }
         return count;
@@ -101,30 +107,23 @@ export default function RosterForm() {
   // break it into form components
   const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
     useMultiStepForm([
-    <WorkDetails
-      form={form}
-      days={days}
-    />, 
-    
-    <EmployeeDetails
-      form={form}
-    />,
+      <WorkDetails form={form} days={days} />,
 
-    <AssignDetails 
-      days={days}
-      incrementEmployeesAssigned={incrementEmployeesAssigned}
-      decrementEmployeesAssigned={decrementEmployeesAssigned}
-      employeesAssigned={employeesAssigned}
-    />
-  ]);
-    
+      <EmployeeDetails form={form} />,
+
+      <AssignDetails
+        days={days}
+        incrementEmployeesAssigned={incrementEmployeesAssigned}
+        decrementEmployeesAssigned={decrementEmployeesAssigned}
+        employeesAssigned={employeesAssigned}
+      />,
+    ]);
 
   return (
     <>
       <ProgressBar currStepIndex={currStepIndex} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-
           {currStepIndex + 1} / {steps.length}
           {step}
           {!isFirstStep && (
