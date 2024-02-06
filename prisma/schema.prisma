@@ -1,7 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// schema.prisma
+// Format with npx prisma format
 
 generator client {
   provider = "prisma-client-js"
@@ -9,15 +6,55 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url      = env("POSTGRES_URL")
 }
 
 model User {
-  id            String       @default(cuid()) @id
-  name          String?
-  email         String?   @unique
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  createdAt     DateTime     @default(now()) @map(name: "created_at")
+  updatedAt     DateTime     @updatedAt @map(name: "updated_at")
+  Assignment    Assignment[]
+  Employee      Employee[]
+  shiftsCreated Shift[]
+
   @@map(name: "users")
+}
+
+model Employee {
+  id         String       @id @default(cuid())
+  name       String
+  email      String?      @unique
+  Assignment Assignment[]
+  User       User         @relation(fields: [employedBy], references: [id])
+  employedBy String
+
+  @@map(name: "employees")
+}
+
+model Shift {
+  id         String       @id @default(cuid())
+  name       String
+  startTime  String
+  endTime    String
+  Assignment Assignment[]
+  User       User         @relation(fields: [createdBy], references: [id])
+  createdBy  String
+
+  @@map(name: "shifts")
+}
+
+// Represents an employee, assigned to a shift by a user
+model Assignment {
+  id         String   @id @default(cuid())
+  Employee   Employee @relation(fields: [assignedTo], references: [id])
+  Shift      Shift    @relation(fields: [shift], references: [id])
+  User       User     @relation(fields: [assignedBy], references: [id])
+  day        Int
+  assignedBy String
+  shift      String
+  assignedTo String
+
+  @@map(name: "assignments")
 }
