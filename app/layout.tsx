@@ -1,6 +1,13 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 
+// FontAwesome icons load at their default size and then resize accoring to the
+// size prop, resulting in the icons changing size when first rendered.
+// The next three line override that behavour.
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
