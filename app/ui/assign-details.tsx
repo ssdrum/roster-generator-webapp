@@ -11,7 +11,7 @@ type Props = {
   decrementEmployeesAssigned: (dayIndex: number) => void;
   days: Day[];
   employeesAssigned: number[];
-}
+};
 
 const AssignDetails: FC<Props> = ({
   days,

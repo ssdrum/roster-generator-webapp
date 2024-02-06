@@ -23,8 +23,7 @@ export const employeeSchema = z.object({
     }),
 });
 
-export const gridAssignmentSchema = z.object({
-})
+export const gridAssignmentSchema = z.object({});
 
 // create the form schema
 export const formSchema = z.object({

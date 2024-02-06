@@ -9,10 +9,10 @@ type Props = {
 
 const GridCell: FC<Props> = ({ day, shiftName, value, updateValue }) => {
   return (
-    <td className="w-20 border p-2">
+    <td className='w-20 border p-2'>
       <input
-        className="w-full h-10 p-2 text-center"
-        type="number"
+        className='h-10 w-full p-2 text-center'
+        type='number'
         value={value}
         onChange={(e) => updateValue(parseInt(e.target.value, 10))}
         min={0}
@@ -21,4 +21,4 @@ const GridCell: FC<Props> = ({ day, shiftName, value, updateValue }) => {
   );
 };
 
-export default GridCell
+export default GridCell;

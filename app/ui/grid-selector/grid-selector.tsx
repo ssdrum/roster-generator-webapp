@@ -27,7 +27,7 @@ const GridSelector: FC<Props> = ({ workDays, shifts }) => {
   workDays.forEach((day) => {
     initialGridState[day] = {};
     shifts.forEach((shift) => {
-      initialGridState[day][shift.name] = 1;
+      initialGridState[day][shift.name] = 1; // You can set any default number here
     });
   });
 
@@ -48,6 +48,9 @@ const GridSelector: FC<Props> = ({ workDays, shifts }) => {
 
   return (
     <div className='container mx-auto mt-8'>
+      <h1 className='font-size-lg'>
+        Select the number of employees to be assigned per shift
+      </h1>
       <table className='w-full'>
         <thead>
           <tr>
