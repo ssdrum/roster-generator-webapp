@@ -9,3 +9,10 @@ export type Roster = {
   week_length: number;
   data: EmployeeShift[];
 } | null;
+
+export type Session = {
+  name: string;
+  email: string;
+  image: string;
+  id: string;
+};

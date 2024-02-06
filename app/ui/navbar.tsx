@@ -1,17 +1,27 @@
 // Component: https://www.hyperui.dev/components/application-ui/side-menu
 'use client';
 
+import { FC } from 'react';
 import { signOut } from 'next-auth/react';
 import NavbarMenuItem from '@/app/ui/navbar-menu-item';
+import { Session } from '@/app/lib/types';
+import Link from 'next/link';
 
-const Navbar = () => {
+type Props = { session: Session };
+
+const Navbar: FC<Props> = ({ session }) => {
+  const { image, name } = session;
+
   return (
     <div className='flex h-screen w-16 flex-col justify-between border-e bg-white'>
       <div>
         <div className='inline-flex h-16 w-16 items-center justify-center'>
-          <span className='grid h-10 w-10 place-content-center rounded-lg bg-gray-100 text-xs text-gray-600'>
-            L
-          </span>
+          <Link href={'/dashboard'}>
+            <span className='grid h-10 w-10 place-content-center rounded-lg bg-gray-100'>
+              {/* User google image */}
+              <img src={image} alt={name} className='rounded-lg' />
+            </span>
+          </Link>
         </div>
 
         <div className='border-t border-gray-100'>
@@ -51,7 +61,6 @@ const Navbar = () => {
             <ul className='space-y-1 border-t border-gray-100 pt-4'>
               <NavbarMenuItem title={'Employees'} />
             </ul>
-
           </div>
         </div>
       </div>
