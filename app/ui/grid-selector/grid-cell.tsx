@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 
 type Props = {
   day: number;
-  shiftName: string;
+  name: string;
   value: number;
   updateValue: (value: number) => void;
 };
 
-const GridCell: FC<Props> = ({ day, shiftName, value, updateValue }) => {
+const GridCell: FC<Props> = ({ day, name, value, updateValue }) => {
   return (
     <td className='w-20 border p-2'>
       <input

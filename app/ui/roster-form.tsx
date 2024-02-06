@@ -24,15 +24,15 @@ export default function RosterForm() {
 
   // Define the form as it renders
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema), // link the react form and the resolver together for validation
+    resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
-      // to stop the values from changing from undefined to a type, we have to initialise them with an empty value matching their type
+      // To stop the values from changing from undefined to a type, we have to initialise them with an empty value matching their type
       workDays: [],
       shifts: [
         {
-          shiftName: '',
-          shiftStartTime: '00:00',
-          shiftEndTime: '00:00',
+          name: '',
+          startTime: '00:00',
+          endTime: '00:00',
         },
       ],
       employees: [
@@ -53,11 +53,8 @@ export default function RosterForm() {
       <EmployeeDetails key={'two'} form={form} />,
       // Temporary dummy data
       <GridSelector
-        workDays={[0, 1, 2, 3, 4, 5]}
-        shifts={[
-          { name: 'Morning', startTime: '08:00', endTime: '15:00' },
-          { name: 'Evening', startTime: '15:00', endTime: '21:00' },
-        ]}
+        workDays={form.getValues().workDays}
+        shifts={form.getValues().shifts}
         form={form}
       />,
     ]);
@@ -70,6 +67,10 @@ export default function RosterForm() {
       })();
     } else {
       return next();
+    }
+
+    if (currStepIndex === 1 && form.getValues().workDays.length === 0) {
+       alert("No working days selected")
     }
   };
 

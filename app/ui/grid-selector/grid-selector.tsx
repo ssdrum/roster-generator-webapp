@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 import GridCell from '@/app/ui/grid-selector/grid-cell';
 import { z } from 'zod';
 import { formSchema } from '@/app/schemas/formSchemas';
@@ -7,7 +7,7 @@ import { formSchema } from '@/app/schemas/formSchemas';
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
 type Shift = {
-  name: string;
+  shiftName: string;
   startTime: string;
   endTime: string;
 };
@@ -31,7 +31,7 @@ const GridSelector: FC<Props> = ({ workDays, shifts }) => {
   workDays.forEach((day) => {
     initialGridState[day] = {};
     shifts.forEach((shift) => {
-      initialGridState[day][shift.name] = 1; // You can set any default number here
+      initialGridState[day][shift.shiftName] = 1; // You can set any default number here
     });
   });
 
@@ -49,6 +49,8 @@ const GridSelector: FC<Props> = ({ workDays, shifts }) => {
 
     console.log(gridState);
   };
+
+  console.log(shifts)
 
   return (
     <div className='container mx-auto mt-8'>
@@ -68,16 +70,16 @@ const GridSelector: FC<Props> = ({ workDays, shifts }) => {
         </thead>
         <tbody>
           {shifts.map((shift) => (
-            <tr key={shift.name}>
-              <td className='w-16  p-2'>{shift.name}</td>
+            <tr key={shift.shiftName}>
+              <td className='w-16  p-2'>{shift.shiftName}</td>
               {workDays.map((day) => (
                 <GridCell
-                  key={`${shift.name}-${day}`}
+                  key={`${shift.shiftName}-${day}`}
                   day={day}
-                  shiftName={shift.name}
-                  value={gridState[day][shift.name]}
+                  name={shift.shiftName}
+                  value={gridState[day][shift.shiftName]}
                   updateValue={(value) =>
-                    updateGridState(day, shift.name, value)
+                    updateGridState(day, shift.shiftName, value)
                   }
                 />
               ))}
