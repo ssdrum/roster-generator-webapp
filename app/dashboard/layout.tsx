@@ -7,7 +7,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getUserSession();
+  const session: Session = await getUserSession();
 
   return (
     <div className='flex'>

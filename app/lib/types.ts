@@ -10,6 +10,7 @@ export type Roster = {
   data: EmployeeShift[];
 } | null;
 
+// Return type of getUserSession()
 export type Session = {
   name: string;
   email: string;
