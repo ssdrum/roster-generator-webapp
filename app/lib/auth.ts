@@ -22,9 +22,6 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ account, profile }) {
-      if (account?.provider === 'google') {
-        console.log('trying to log in with google');
-      }
       if (!profile?.email) {
         throw new Error('No profile');
       }
