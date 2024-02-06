@@ -34,8 +34,8 @@ const Navbar: FC<Props> = ({ session }) => {
         <div className='border-t border-gray-100'>
           <div className='px-2'>
             <div className='py-4'>
-              <a
-                href=''
+              <Link
+                href='/dashboard'
                 className='t group relative flex justify-center rounded bg-blue-50 px-2 py-1.5 text-blue-700'
               >
                 <FontAwesomeIcon icon={faHouse} size='lg' />
@@ -43,14 +43,26 @@ const Navbar: FC<Props> = ({ session }) => {
                 <span className='invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible'>
                   Dashboard
                 </span>
-              </a>
+              </Link>
             </div>
 
             {/* Navbar menu links */}
             <ul className='space-y-1 border-t border-gray-100 pt-4'>
-              <NavbarMenuItem title={'Shifts'} icon={faClock} />
-              <NavbarMenuItem title={'Employees'} icon={faUserGroup} />
-              <NavbarMenuItem title={'Assignments'} icon={faCalendarDays} />
+              <NavbarMenuItem
+                title={'Shifts'}
+                icon={faClock}
+                link={'/dashboard/shifts'}
+              />
+              <NavbarMenuItem
+                title={'Employees'}
+                icon={faUserGroup}
+                link={'/dashboard/employees'}
+              />
+              <NavbarMenuItem
+                title={'Assignments'}
+                icon={faCalendarDays}
+                link={'/dashboard/assignments'}
+              />
             </ul>
           </div>
         </div>
