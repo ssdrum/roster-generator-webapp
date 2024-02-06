@@ -22,7 +22,7 @@ export default function RosterForm() {
     'Sunday',
   ]; // the list for the day selection
 
-  // define the form as it renders
+  // Define the form as it renders
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema), // link the react form and the resolver together for validation
     defaultValues: {
@@ -42,16 +42,16 @@ export default function RosterForm() {
           workingDays: 1,
         },
       ],
-      employeesAssigned: {},
+      employeesAssigned: {}, // Todo
     },
   });
 
-  // break it into form components
+  // Break form into three pages and pass them to useMultiStepForm hook
   const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
     useMultiStepForm([
       <WorkDetails key={'one'} form={form} days={days} />,
       <EmployeeDetails key={'two'} form={form} />,
-      // Temporarily dummy data
+      // Temporary dummy data
       <GridSelector
         workDays={[0, 1, 2, 3, 4, 5]}
         shifts={[
@@ -61,11 +61,6 @@ export default function RosterForm() {
         form={form}
       />,
     ]);
-
-  // const onSubmit = (values: z.infer<typeof formSchema>) => {
-  //   console.log("form submitted"); // yeah we console logging for now woo
-  // }
-  //
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
