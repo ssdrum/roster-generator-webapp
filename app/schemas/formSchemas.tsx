@@ -33,7 +33,7 @@ export const formSchema = z.object({
   }),
   shifts: z.array(shiftSchema), // an array of shifts
   employees: z.array(employeeSchema), // an array of employee details
-  employeesAssigned: allShiftsSchema,
+  numEmployeesAssigned: allShiftsSchema,
 });
 
 export type FormType = z.infer<typeof formSchema>;

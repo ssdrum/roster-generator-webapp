@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import GridCell from '@/app/ui/grid-selector/grid-cell';
 import { z } from 'zod';
 import { formSchema } from '@/app/schemas/formSchemas';
 
+// Days displayed in the header of the table
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
 type Shift = {
@@ -24,20 +25,22 @@ type GridState = {
   };
 };
 
-const GridSelector: FC<Props> = ({ workDays, shifts }) => {
+const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
+  // Initialize gridState based on workDays and shifts
   const initialGridState: GridState = {};
 
-  // Initialize gridState based on workDays and shifts
   workDays.forEach((day) => {
     initialGridState[day] = {};
     shifts.forEach((shift) => {
-      initialGridState[day][shift.shiftName] = 1; // You can set any default number here
+      initialGridState[day][shift.shiftName] = 1; // Sets default values in component's state, 
+      form.setValue(`numEmployeesAssigned.${day}.${shift.shiftName}`, 1); // Sets default values in form
     });
   });
 
   const [gridState, setGridState] = useState<GridState>(initialGridState);
 
-  // Function to update the gridState with a new value
+  // This component manages its own state internally. The function form.setValue()
+  // keeps the component's state in sync with the main form
   const updateGridState = (day: number, shiftName: string, value: number) => {
     setGridState((prevGridState) => ({
       ...prevGridState,
@@ -47,10 +50,9 @@ const GridSelector: FC<Props> = ({ workDays, shifts }) => {
       },
     }));
 
-    console.log(gridState);
+    // Update form
+    form.setValue(`numEmployeesAssigned.${day}.${shiftName}`, value);
   };
-
-  console.log(shifts)
 
   return (
     <div className='container mx-auto mt-8'>

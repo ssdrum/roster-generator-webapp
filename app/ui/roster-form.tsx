@@ -11,7 +11,7 @@ import WorkDetails from './work-details';
 import EmployeeDetails from './employee-details';
 import GridSelector from '@/app/ui/grid-selector/grid-selector';
 
-export default function RosterForm() {
+const StartForm = () => {
   const days: Day[] = [
     'Monday',
     'Tuesday',
@@ -30,9 +30,9 @@ export default function RosterForm() {
       workDays: [],
       shifts: [
         {
-          name: '',
-          startTime: '00:00',
-          endTime: '00:00',
+          shiftName: '',
+          shiftStartTime: '00:00',
+          shiftEndTime: '00:00',
         },
       ],
       employees: [
@@ -42,7 +42,7 @@ export default function RosterForm() {
           workingDays: 1,
         },
       ],
-      employeesAssigned: {}, // Todo
+      numEmployeesAssigned: {},
     },
   });
 
@@ -53,7 +53,7 @@ export default function RosterForm() {
       <EmployeeDetails key={'two'} form={form} />,
       // Temporary dummy data
       <GridSelector
-        workDays={form.getValues().workDays}
+        workDays={form.getValues().workDays.sort()}
         shifts={form.getValues().shifts}
         form={form}
       />,
@@ -70,7 +70,7 @@ export default function RosterForm() {
     }
 
     if (currStepIndex === 1 && form.getValues().workDays.length === 0) {
-       alert("No working days selected")
+      alert('No working days selected');
     }
   };
 
@@ -100,4 +100,6 @@ export default function RosterForm() {
       </Form>
     </>
   );
-}
+};
+
+export default StartForm;
