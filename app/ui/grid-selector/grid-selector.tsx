@@ -1,5 +1,8 @@
 import React, { FC, useState } from 'react';
+import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import GridCell from '@/app/ui/grid-selector/grid-cell';
+import { z } from 'zod';
+import { formSchema } from '@/app/schemas/formSchemas';
 
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
@@ -12,6 +15,7 @@ type Shift = {
 type Props = {
   workDays: number[];
   shifts: Shift[];
+  form: UseFormReturn<z.infer<typeof formSchema>>;
 };
 
 type GridState = {
