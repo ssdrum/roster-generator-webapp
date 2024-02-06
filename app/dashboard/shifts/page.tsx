@@ -1,5 +1,5 @@
 const ShiftsPage = () => {
-  return <>Shifts Page</>
-}
+  return <>Shifts Page</>;
+};
 
-export default ShiftsPage
+export default ShiftsPage;

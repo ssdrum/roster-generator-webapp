@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import GoogleSignInButton from '@/app/ui/google-signin-btn';
 
-
 export default async function Home() {
   const user = await getUserSession();
   // redirect if logged in

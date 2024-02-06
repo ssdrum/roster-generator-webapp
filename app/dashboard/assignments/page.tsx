@@ -1,5 +1,5 @@
 const AssignmentsPage = () => {
-  return <>Assignments Page</>
-}
+  return <>Assignments Page</>;
+};
 
-export default AssignmentsPage
+export default AssignmentsPage;

@@ -1,5 +1,5 @@
 const EmployeesPage = () => {
-  return <>Employees Page</>
-}
+  return <>Employees Page</>;
+};
 
-export default EmployeesPage
+export default EmployeesPage;
