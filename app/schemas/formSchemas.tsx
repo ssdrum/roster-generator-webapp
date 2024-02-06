@@ -23,8 +23,8 @@ const employeeSchema = z.object({
     }),
 });
 
-const shiftAssignmentSchema = z.record(z.string(), z.number())
-export const allShiftsSchema = z.record(z.string(), shiftAssignmentSchema)
+const shiftAssignmentSchema = z.record(z.string(), z.number());
+export const allShiftsSchema = z.record(z.string(), shiftAssignmentSchema);
 
 // create the form schema
 export const formSchema = z.object({
@@ -33,7 +33,7 @@ export const formSchema = z.object({
   }),
   shifts: z.array(shiftSchema), // an array of shifts
   employees: z.array(employeeSchema), // an array of employee details
-  employeesAssigned: allShiftsSchema
+  employeesAssigned: allShiftsSchema,
 });
 
 export type FormType = z.infer<typeof formSchema>;

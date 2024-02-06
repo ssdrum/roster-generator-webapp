@@ -1,4 +1,3 @@
-'use client'
 import { FormEvent } from 'react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -67,11 +66,13 @@ export default function RosterForm() {
   //   console.log("form submitted"); // yeah we console logging for now woo
   // }
   //
-    
-  const handleSubmit = ( e: FormEvent) => {
+
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (isLastStep) {
-      console.log("submitted");
+      form.handleSubmit(async (data) => {
+        console.log(data);
+      })();
     } else {
       return next();
     }
