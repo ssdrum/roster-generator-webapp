@@ -7,15 +7,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/app/ui/form';
+} from '@/app/ui/shadcn/form';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '@/app/ui/hover-card';
-import { ToggleGroup, ToggleGroupItem } from '@/app/ui/toggle-group';
-import { Button } from '@/app/ui/button';
-import { Input } from '@/app/ui/input';
+} from '@/app/ui/shadcn/hover-card';
+import { ToggleGroup, ToggleGroupItem } from '@/app/ui/shadcn/toggle-group';
+import { Button } from '@/app/ui/shadcn/button';
+import { Input } from '@/app/ui/shadcn/input';
 
 import { Day, formSchema } from '../../lib/formSchemas';
 

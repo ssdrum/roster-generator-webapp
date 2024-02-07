@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 
 // shadcn
-import { Card, CardContent, CardHeader } from '@/app/ui/card';
-import { Input } from '@/app/ui/input';
+import { Card, CardContent, CardHeader } from '@/app/ui/shadcn/card';
+import { Input } from '@/app/ui/shadcn/input';
 
 import { Day } from '@/app/lib/formSchemas';
 
