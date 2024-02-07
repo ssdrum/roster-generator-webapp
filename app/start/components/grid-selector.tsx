@@ -2,20 +2,14 @@ import React, { FC, useState } from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import GridCell from '@/app/start/components/grid-cell';
 import { z } from 'zod';
-import { formSchema } from '@/app/lib/formSchemas';
+import { ShiftType, formSchema } from '@/app/lib/formSchemas';
 
 // Days displayed in the header of the table
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
-type Shift = {
-  shiftName: string;
-  startTime: string;
-  endTime: string;
-};
-
 type Props = {
   workDays: number[];
-  shifts: Shift[];
+  shifts: ShiftType[];
   form: UseFormReturn<z.infer<typeof formSchema>>;
 };
 

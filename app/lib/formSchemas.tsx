@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const shiftSchema = z.object({
+export const shiftSchema = z.object({
   shiftName: z.string().min(1, {
     message: 'Please give the shift a name.',
   }),
@@ -37,6 +37,7 @@ export const formSchema = z.object({
 });
 
 export type FormType = z.infer<typeof formSchema>;
+export type ShiftType = z.infer<typeof shiftSchema>;
 export type Day =
   | 'Monday'
   | 'Tuesday'
