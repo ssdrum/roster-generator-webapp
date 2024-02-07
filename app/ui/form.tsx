@@ -1,164 +1,177 @@
-import React, { FC } from 'react'; // Import FC (functional component)
-import { useState } from 'react';
-import { Roster } from '@/app/lib/types';
+import * as React from 'react';
+import * as LabelPrimitive from '@radix-ui/react-label';
+import { Slot } from '@radix-ui/react-slot';
+import {
+  Controller,
+  ControllerProps,
+  FieldPath,
+  FieldValues,
+  FormProvider,
+  useFormContext,
+} from 'react-hook-form';
 
-type HandleRosterDataFunction = (data: Roster) => void;
-type SetIsLoading = (isLoading: boolean) => void;
+import { cn } from '@/lib/utils';
+import { Label } from '@/app/ui/label';
 
-type Props = {
-  handleRosterData: HandleRosterDataFunction;
-  setIsLoading: SetIsLoading;
+const Form = FormProvider;
+
+type FormFieldContextValue<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = {
+  name: TName;
 };
 
-type FormData = {
-  employees: string;
-  shifts: string;
-  days: string;
-  soft_days_off: boolean;
-};
+const FormFieldContext = React.createContext<FormFieldContextValue>(
+  {} as FormFieldContextValue
+);
 
-const Form: FC<Props> = ({ handleRosterData, setIsLoading }) => {
-  const [formData, setFormData] = useState<FormData>({
-    employees: '',
-    shifts: '',
-    days: '',
-    soft_days_off: false,
-  });
-
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fieldName = e.target.name;
-    const fieldValue =
-      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormData((prevState) => ({ ...prevState, [fieldName]: fieldValue }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const submitData = {
-      employees: parseInt(formData.employees),
-      days: parseInt(formData.days),
-      shifts: parseInt(formData.shifts),
-      soft_days_off: formData.soft_days_off,
-    };
-
-    console.log(submitData);
-
-    try {
-      const response = await fetch('/my_api/make_roster', {
-        method: 'POST',
-        body: JSON.stringify(submitData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        handleRosterData(responseData); // Pass return data to parent component
-      } else {
-        console.log('Error submitting form');
-      }
-    } catch (error) {
-      console.error('Error submitting form', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+const FormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  ...props
+}: ControllerProps<TFieldValues, TName>) => {
   return (
-    <div className='flex items-center'>
-      <form onSubmit={handleSubmit} className='mb-4 rounded bg-white pb-8 pt-6'>
-        <div className='mb-4'>
-          <label
-            className='mb-2 block text-sm font-bold text-gray-700'
-            htmlFor='employees'
-          >
-            Number of Employees
-          </label>
-          <input
-            type='number'
-            id='employees'
-            name='employees'
-            placeholder='Enter the number of employees'
-            required
-            value={formData.employees}
-            onChange={handleInput}
-            className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
-            min='1'
-          />
-        </div>
-
-        <div className='mb-4'>
-          <label
-            className='mb-2 block text-sm font-bold text-gray-700'
-            htmlFor='shifts'
-          >
-            Number of Shifts (Including off shift)
-          </label>
-          <input
-            type='number'
-            id='shifts'
-            name='shifts'
-            placeholder='Enter the number of shifts'
-            required
-            value={formData.shifts}
-            onChange={handleInput}
-            className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
-            min='2'
-          />
-        </div>
-
-        <div className='mb-4'>
-          <label
-            className='mb-2 block text-sm font-bold text-gray-700'
-            htmlFor='days'
-          >
-            Week Length
-          </label>
-          <input
-            type='number'
-            id='days'
-            name='days'
-            placeholder='Enter the number of days'
-            required
-            value={formData.days}
-            onChange={handleInput}
-            className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none'
-            min='1'
-            max='7'
-          />
-        </div>
-
-        <div className='mb-4 flex'>
-          <input
-            type='checkbox'
-            id='soft_days_off'
-            name='soft_days_off'
-            checked={formData.soft_days_off}
-            onChange={handleInput}
-            className='mr-2 leading-tight text-gray-700 focus:outline-none'
-          />
-          <label
-            className='block text-sm font-bold text-gray-700'
-            htmlFor='soft_days_off'
-          >
-            Allow for less than two days off
-          </label>
-        </div>
-
-        <div className='flex items-center justify-between'>
-          <button
-            type='submit'
-            className='focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none'
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+    <FormFieldContext.Provider value={{ name: props.name }}>
+      <Controller {...props} />
+    </FormFieldContext.Provider>
   );
 };
 
-export default Form;
+const useFormField = () => {
+  const fieldContext = React.useContext(FormFieldContext);
+  const itemContext = React.useContext(FormItemContext);
+  const { getFieldState, formState } = useFormContext();
+
+  const fieldState = getFieldState(fieldContext.name, formState);
+
+  if (!fieldContext) {
+    throw new Error('useFormField should be used within <FormField>');
+  }
+
+  const { id } = itemContext;
+
+  return {
+    id,
+    name: fieldContext.name,
+    formItemId: `${id}-form-item`,
+    formDescriptionId: `${id}-form-item-description`,
+    formMessageId: `${id}-form-item-message`,
+    ...fieldState,
+  };
+};
+
+type FormItemContextValue = {
+  id: string;
+};
+
+const FormItemContext = React.createContext<FormItemContextValue>(
+  {} as FormItemContextValue
+);
+
+const FormItem = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  const id = React.useId();
+
+  return (
+    <FormItemContext.Provider value={{ id }}>
+      <div ref={ref} className={cn('space-y-2', className)} {...props} />
+    </FormItemContext.Provider>
+  );
+});
+FormItem.displayName = 'FormItem';
+
+const FormLabel = React.forwardRef<
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+>(({ className, ...props }, ref) => {
+  const { error, formItemId } = useFormField();
+
+  return (
+    <Label
+      ref={ref}
+      className={cn(error && 'text-destructive', className)}
+      htmlFor={formItemId}
+      {...props}
+    />
+  );
+});
+FormLabel.displayName = 'FormLabel';
+
+const FormControl = React.forwardRef<
+  React.ElementRef<typeof Slot>,
+  React.ComponentPropsWithoutRef<typeof Slot>
+>(({ ...props }, ref) => {
+  const { error, formItemId, formDescriptionId, formMessageId } =
+    useFormField();
+
+  return (
+    <Slot
+      ref={ref}
+      id={formItemId}
+      aria-describedby={
+        !error
+          ? `${formDescriptionId}`
+          : `${formDescriptionId} ${formMessageId}`
+      }
+      aria-invalid={!!error}
+      {...props}
+    />
+  );
+});
+FormControl.displayName = 'FormControl';
+
+const FormDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => {
+  const { formDescriptionId } = useFormField();
+
+  return (
+    <p
+      ref={ref}
+      id={formDescriptionId}
+      className={cn('text-sm text-muted-foreground', className)}
+      {...props}
+    />
+  );
+});
+FormDescription.displayName = 'FormDescription';
+
+const FormMessage = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, children, ...props }, ref) => {
+  const { error, formMessageId } = useFormField();
+  const body = error ? String(error?.message) : children;
+
+  if (!body) {
+    return null;
+  }
+
+  return (
+    <p
+      ref={ref}
+      id={formMessageId}
+      className={cn('text-sm font-medium text-destructive', className)}
+      {...props}
+    >
+      {body}
+    </p>
+  );
+});
+FormMessage.displayName = 'FormMessage';
+
+export {
+  useFormField,
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormField,
+};
