@@ -5,11 +5,7 @@
 // Last edited: 04:22 on Sunday, the 04th of February, 2024.
 
 // shadcn
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 
@@ -62,32 +58,37 @@ export default function RosterForm() {
       employeesAssigned: [0, 0, 0, 0, 0, 0, 0],
     },
   });
-  const {register, trigger} = form;
+  const { register, trigger } = form;
 
   // validation on next click
   const nextPage = () => {
     (async () => {
-
       // check the current page's shift
-      type FieldNames = "workDays" | "shifts" | "employees" | "employeesAssigned"; // define the types of fields we can expect
+      type FieldNames =
+        | 'workDays'
+        | 'shifts'
+        | 'employees'
+        | 'employeesAssigned'; // define the types of fields we can expect
       let fieldsToValidate: FieldNames[] = []; // the array containing the specific fields we want to validate on this page
-      switch (step.key) { // decide which values to validate based on the current page
-        case "one":
-          fieldsToValidate = ["workDays", "shifts"]
+      switch (
+        step.key // decide which values to validate based on the current page
+      ) {
+        case 'one':
+          fieldsToValidate = ['workDays', 'shifts'];
           break;
-        case "two":
-          fieldsToValidate = ["employees"]
+        case 'two':
+          fieldsToValidate = ['employees'];
           break;
         default:
-          fieldsToValidate = []
+          fieldsToValidate = [];
       }
 
       // validation passed, go to the next page
       if (await trigger(fieldsToValidate)) {
-        next()
+        next();
       }
     })();
-  }
+  };
 
   // submit handler
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -138,12 +139,12 @@ export default function RosterForm() {
   // break it into form components
   const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
     useMultiStepForm([
-      <WorkDetails key={"one"} form={form} days={days} />,
+      <WorkDetails key={'one'} form={form} days={days} />,
 
-      <EmployeeDetails key={"two"} form={form} />,
+      <EmployeeDetails key={'two'} form={form} />,
 
       <AssignDetails
-        key={"three"}
+        key={'three'}
         days={days}
         incrementEmployeesAssigned={incrementEmployeesAssigned}
         decrementEmployeesAssigned={decrementEmployeesAssigned}
@@ -155,45 +156,39 @@ export default function RosterForm() {
     <>
       <Sheet>
         <SheetTrigger>Create Roster</SheetTrigger>
-        <SheetContent
-          side={"bottom"}
-          className="w-full h-[60vh] overflow-auto"
-        >
+        <SheetContent side={'bottom'} className='h-[60vh] w-full overflow-auto'>
           <ProgressBar currStepIndex={currStepIndex} />
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className='flex justify-center flex-col space-y-4'>
-                {currStepIndex + 1} / {steps.length}
-                {step}
-                {!isFirstStep && (
-                  <Button
-                    type='button'
-                    onClick={back}
-                    className='fixed bottom-10 left-36 m-8'
-                  >
-                    Back
-                  </Button>
-                )}
-
-                  {isLastStep
-                  ?
-                    <Button
-                      type='submit'
-                      className='fixed bottom-10 right-36 m-8'
-                    >
-                      Submit
-                    </Button>
-                  :
-                    <Button
-                      type='button'
-                      onClick={nextPage}
-                      className='fixed bottom-10 right-36 m-8'
-                    >
-                      Next
-                    </Button>
-                  }
-
-              </form>
-            </Form>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='flex flex-col justify-center space-y-4'
+            >
+              {currStepIndex + 1} / {steps.length}
+              {step}
+              {!isFirstStep && (
+                <Button
+                  type='button'
+                  onClick={back}
+                  className='fixed bottom-10 left-36 m-8'
+                >
+                  Back
+                </Button>
+              )}
+              {isLastStep ? (
+                <Button type='submit' className='fixed bottom-10 right-36 m-8'>
+                  Submit
+                </Button>
+              ) : (
+                <Button
+                  type='button'
+                  onClick={nextPage}
+                  className='fixed bottom-10 right-36 m-8'
+                >
+                  Next
+                </Button>
+              )}
+            </form>
+          </Form>
         </SheetContent>
       </Sheet>
     </>
