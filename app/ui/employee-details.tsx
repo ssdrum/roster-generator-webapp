@@ -16,7 +16,7 @@ import {
 import { Button } from '@/app/ui/button';
 import { Input } from '@/app/ui/input';
 
-import { formSchema } from '../schemas/formSchemas';
+import { formSchema } from '@/app/lib/formSchemas';
 
 type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;

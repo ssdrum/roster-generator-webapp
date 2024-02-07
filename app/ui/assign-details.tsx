@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { Card, CardContent, CardHeader } from '@/app/ui/card';
 import { Input } from '@/app/ui/input';
 
-import { Day } from '../schemas/formSchemas';
+import { Day } from '../lib/formSchemas';
 
 type Props = {
   incrementEmployeesAssigned: (dayIndex: number) => void;

@@ -17,7 +17,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/app/ui/toggle-group';
 import { Button } from '@/app/ui/button';
 import { Input } from '@/app/ui/input';
 
-import { Day, formSchema } from '../schemas/formSchemas';
+import { Day, formSchema } from '../lib/formSchemas';
 
 type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;

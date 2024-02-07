@@ -12,11 +12,11 @@ import { Button } from '@/app/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
-import useMultiStepForm from '@/app/ui/multistep-form/useMultiStepForm';
+import useMultiStepForm from '@/app/lib/useMultiStepForm';
 import ProgressBar from '@/app/ui/multistep-form/progress-bar';
 
 // import types, schemas and the other two components
-import { Day, formSchema } from '../schemas/formSchemas';
+import { Day, formSchema } from '../lib/formSchemas';
 import WorkDetails from './work-details';
 import EmployeeDetails from './employee-details';
 import GridSelector from '@/app/ui/grid-selector/grid-selector';
