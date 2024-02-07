@@ -11,6 +11,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -56,7 +61,20 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
               render={({ field }) => (
                 <FormItem>
                   {/* only render the label for the first one */}
-                  {index === 0 && <FormLabel>Employee Name</FormLabel>}
+                  <HoverCard 
+                    openDelay={1}
+                    closeDelay={1}
+                  >
+                    <HoverCardTrigger>
+                      {index === 0 && <FormLabel className="hover:underline inline-flex items-center">Employee Name<QuestionIcon className="pl-1 text-gray-500" /></FormLabel>}
+                    </HoverCardTrigger>
+                    <HoverCardContent 
+                      side={"top"}
+                      className='text-sm text-gray-500'
+                    >
+                      List the employees that you want to work this week. Enter their details, and use the + button to add more shifts, or the delete button to remove extras.
+                    </HoverCardContent>
+                  </HoverCard>
                   <FormControl>
                     <Input type='text' {...field} />
                   </FormControl>
@@ -179,4 +197,23 @@ function DeleteIcon(props: any) {
       <path d='M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2' />
     </svg>
   );
+}
+
+function QuestionIcon(props: any) {
+  return (
+    <svg 
+    {...props}
+    xmlns='http://www.w3.org/2000/svg'
+    width='24'
+    height='24'
+    viewBox='0 0 24 24'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='2'
+    strokeLinecap='round'
+    strokeLinejoin='round'
+    >
+      <path d='M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z'></path>
+    </svg>
+  )
 }

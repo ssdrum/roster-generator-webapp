@@ -11,6 +11,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -56,7 +61,23 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
         name='workDays'
         render={({ field: { onChange, value } }) => (
           <FormItem>
-            <FormLabel>Select the days your company works</FormLabel>
+            <HoverCard 
+              openDelay={1}
+              closeDelay={1}
+            >
+              <HoverCardTrigger>
+                <FormLabel className="hover:underline inline-flex items-center">
+                  Select the days your company works
+                  <QuestionIcon className="pl-1 text-gray-500" />
+                </FormLabel>
+              </HoverCardTrigger>
+              <HoverCardContent 
+                side={"top"}
+                className='text-sm text-gray-500'
+              >
+                Does your company open for business every day? If so, select every day, if not, select all the days that you are open.
+              </HoverCardContent>
+            </HoverCard>
             <FormControl>
               <ToggleGroup
                 className='justify-start'
@@ -102,7 +123,20 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   {/* only render the label for the first one */}
-                  {index === 0 && <FormLabel>Shift Name</FormLabel>}
+                  <HoverCard 
+                    openDelay={1}
+                    closeDelay={1}
+                  >
+                    <HoverCardTrigger>
+                      {index === 0 && <FormLabel className="hover:underline inline-flex items-center">Shift Name<QuestionIcon className="pl-1 text-gray-500" /></FormLabel>}
+                    </HoverCardTrigger>
+                    <HoverCardContent 
+                      side={"top"}
+                      className='text-sm text-gray-500'
+                    >
+                      Enter the shifts that your employees work. Give it a name, and then enter the time that your shift starts and ends at. Use the + button to add more shifts, or the delete button to remove extras.
+                    </HoverCardContent>
+                  </HoverCard>
                   <FormControl>
                     <Input type='text' {...field} />
                   </FormControl>
@@ -119,7 +153,7 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
               name={`shifts.${index}.shiftStartTime`}
               render={({ field }) => (
                 <FormItem>
-                  {index === 0 && <FormLabel>Start Time</FormLabel>}
+                  {index === 0 && <FormLabel className="hover:underline inline-flex items-center">Start Time</FormLabel>}
                   <FormControl>
                     <Input type='time' {...field} />
                   </FormControl>
@@ -251,3 +285,23 @@ function DeleteIcon(props: any) {
     </svg>
   );
 }
+
+function QuestionIcon(props: any) {
+  return (
+    <svg 
+    {...props}
+    xmlns='http://www.w3.org/2000/svg'
+    width='24'
+    height='24'
+    viewBox='0 0 24 24'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='2'
+    strokeLinecap='round'
+    strokeLinejoin='round'
+    >
+      <path d='M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z'></path>
+    </svg>
+  )
+}
+
