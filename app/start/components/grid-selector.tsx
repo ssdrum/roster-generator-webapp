@@ -32,7 +32,7 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
   workDays.forEach((day) => {
     initialGridState[day] = {};
     shifts.forEach((shift) => {
-      initialGridState[day][shift.shiftName] = 1; // Sets default values in component's state, 
+      initialGridState[day][shift.shiftName] = 1; // Sets default values in component's state,
       form.setValue(`numEmployeesAssigned.${day}.${shift.shiftName}`, 1); // Sets default values in form
     });
   });

@@ -1,11 +1,7 @@
 'use client';
 
 const Page = () => {
-  return (
-    <>
-      Dashboard
-    </>
-  );
+  return <>Dashboard</>;
 };
 
 export default Page;
