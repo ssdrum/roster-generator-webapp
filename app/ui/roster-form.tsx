@@ -62,6 +62,32 @@ export default function RosterForm() {
       employeesAssigned: [0, 0, 0, 0, 0, 0, 0],
     },
   });
+  const {register, trigger} = form;
+
+  // validation on next click
+  const nextPage = () => {
+    (async () => {
+
+      // check the current page's shift
+      type FieldNames = "workDays" | "shifts" | "employees" | "employeesAssigned"; // define the types of fields we can expect
+      let fieldsToValidate: FieldNames[] = []; // the array containing the specific fields we want to validate on this page
+      switch (step.key) { // decide which values to validate based on the current page
+        case "one":
+          fieldsToValidate = ["workDays", "shifts"]
+          break;
+        case "two":
+          fieldsToValidate = ["employees"]
+          break;
+        default:
+          fieldsToValidate = []
+      }
+
+      // validation passed, go to the next page
+      if (await trigger(fieldsToValidate)) {
+        next()
+      }
+    })();
+  }
 
   // submit handler
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -159,7 +185,7 @@ export default function RosterForm() {
                   :
                     <Button
                       type='button'
-                      onClick={next}
+                      onClick={nextPage}
                       className='fixed bottom-10 right-36 m-8'
                     >
                       Next
