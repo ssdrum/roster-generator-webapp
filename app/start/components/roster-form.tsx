@@ -5,10 +5,10 @@
 // Last edited: 04:22 on Sunday, the 04th of February, 2024.
 
 // shadcn
-import { Sheet, SheetContent, SheetTrigger } from '@/app/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '@/app/ui/shadcn/sheet';
 import { FormEvent } from 'react';
-import { Form } from '@/app/ui/form';
-import { Button } from '@/app/ui/button';
+import { Form } from '@/app/ui/shadcn/form';
+import { Button } from '@/app/ui/shadcn/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
