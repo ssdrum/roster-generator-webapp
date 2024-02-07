@@ -1,7 +1,7 @@
 // Component: https://www.hyperui.dev/components/application-ui/steps
 
 import { FC } from 'react';
-import ProgressBarItem from '@/app/ui/multistep-form/progress-bar-item';
+import ProgressBarItem from '@/app/start/components/progress-bar-item';
 
 type Props = { currStepIndex: number };
 

@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
-import GridCell from '@/app/ui/grid-selector/grid-cell';
+import GridCell from '@/app/start/components/grid-cell';
 import { z } from 'zod';
-import { formSchema } from '@/app/schemas/formSchemas';
+import { formSchema } from '@/app/lib/formSchemas';
 
 // Days displayed in the header of the table
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
