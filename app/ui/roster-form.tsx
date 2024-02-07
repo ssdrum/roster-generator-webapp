@@ -5,6 +5,11 @@
 // Last edited: 04:22 on Sunday, the 04th of February, 2024.
 
 // shadcn
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 
@@ -18,7 +23,7 @@ import useMultiStepForm from '@/app/ui/multistep-form/useMultiStepForm';
 import ProgressBar from '@/app/ui/multistep-form/progress-bar';
 
 // import types, schemas and the other two components
-import { Day, formSchema, employeeSchema } from '../schemas/formSchemas';
+import { Day, formSchema } from '../schemas/formSchemas';
 import WorkDetails from './work-details';
 import EmployeeDetails from './employee-details';
 import AssignDetails from './assign-details';
@@ -122,41 +127,49 @@ export default function RosterForm() {
 
   return (
     <>
-      <ProgressBar currStepIndex={currStepIndex} />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-          {currStepIndex + 1} / {steps.length}
-          {step}
-          {!isFirstStep && (
-            <Button
-              type='button'
-              onClick={back}
-              className='fixed bottom-10 right-36 m-8'
-            >
-              Back
-            </Button>
-          )}
+      <Sheet>
+        <SheetTrigger>Create Roster</SheetTrigger>
+        <SheetContent
+          side={"bottom"}
+          className="w-full h-[60vh] overflow-auto"
+        >
+          <ProgressBar currStepIndex={currStepIndex} />
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className='flex justify-center flex-col space-y-4'>
+                {currStepIndex + 1} / {steps.length}
+                {step}
+                {!isFirstStep && (
+                  <Button
+                    type='button'
+                    onClick={back}
+                    className='fixed bottom-10 left-36 m-8'
+                  >
+                    Back
+                  </Button>
+                )}
 
-            {isLastStep
-            ?
-              <Button
-                type='submit'
-                className='fixed bottom-10 right-36 m-8'
-              >
-                Submit
-              </Button>
-            :
-              <Button
-                type='button'
-                onClick={next}
-                className='fixed bottom-10 right-36 m-8'
-              >
-                Next
-              </Button>
-            }
+                  {isLastStep
+                  ?
+                    <Button
+                      type='submit'
+                      className='fixed bottom-10 right-36 m-8'
+                    >
+                      Submit
+                    </Button>
+                  :
+                    <Button
+                      type='button'
+                      onClick={next}
+                      className='fixed bottom-10 right-36 m-8'
+                    >
+                      Next
+                    </Button>
+                  }
 
-        </form>
-      </Form>
+              </form>
+            </Form>
+        </SheetContent>
+      </Sheet>
     </>
   );
 }
