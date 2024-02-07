@@ -97,6 +97,7 @@ const StartForm = () => {
       <EmployeeDetails key={'two'} form={form} />,
       // Temporary dummy data
       <GridSelector
+        key={'three'}
         workDays={form.getValues().workDays.sort()}
         shifts={form.getValues().shifts}
         form={form}
