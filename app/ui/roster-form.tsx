@@ -6,15 +6,12 @@
 
 // shadcn
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { FormEvent } from 'react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-
-// form
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-
 import useMultiStepForm from '@/app/ui/multistep-form/useMultiStepForm';
 import ProgressBar from '@/app/ui/multistep-form/progress-bar';
 
@@ -22,9 +19,9 @@ import ProgressBar from '@/app/ui/multistep-form/progress-bar';
 import { Day, formSchema } from '../schemas/formSchemas';
 import WorkDetails from './work-details';
 import EmployeeDetails from './employee-details';
-import AssignDetails from './assign-details';
+import GridSelector from '@/app/ui/grid-selector/grid-selector';
 
-export default function RosterForm() {
+const StartForm = () => {
   const days: Day[] = [
     'Monday',
     'Tuesday',
@@ -35,11 +32,11 @@ export default function RosterForm() {
     'Sunday',
   ]; // the list for the day selection
 
-  // define the form as it renders
+  // Define the form as it renders
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema), // link the react form and the resolver together for validation
+    resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
-      // to stop the values from changing from undefined to a type, we have to initialise them with an empty value matching their type
+      // To stop the values from changing from undefined to a type, we have to initialise them with an empty value matching their type
       workDays: [],
       shifts: [
         {
@@ -55,7 +52,7 @@ export default function RosterForm() {
           workingDays: 1,
         },
       ],
-      employeesAssigned: [0, 0, 0, 0, 0, 0, 0],
+      numEmployeesAssigned: {},
     },
   });
   const { register, trigger } = form;
@@ -68,7 +65,7 @@ export default function RosterForm() {
         | 'workDays'
         | 'shifts'
         | 'employees'
-        | 'employeesAssigned'; // define the types of fields we can expect
+        | 'numEmployeesAssigned'; // define the types of fields we can expect
       let fieldsToValidate: FieldNames[] = []; // the array containing the specific fields we want to validate on this page
       switch (
         step.key // decide which values to validate based on the current page
@@ -78,6 +75,9 @@ export default function RosterForm() {
           break;
         case 'two':
           fieldsToValidate = ['employees'];
+          break;
+        case 'three':
+          fieldsToValidate = ['numEmployeesAssigned'];
           break;
         default:
           fieldsToValidate = [];
@@ -90,67 +90,37 @@ export default function RosterForm() {
     })();
   };
 
-  // submit handler
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values); // yeah we console logging for now woo
-  }
-
-  /// employees assigned per day
-  // initial value
-  const [employeesAssigned, setEmployeesAssigned] = useState(
-    new Array(days.length).fill(0)
-  ); // inital value
-
-  // increase number of employees
-  const incrementEmployeesAssigned = (dayIndex: number) => {
-    setEmployeesAssigned((currentCounts) =>
-      currentCounts.map((count, index) => {
-        // only update the day we changed
-        if (index === dayIndex) {
-          const updatedCount = count + 1; // +1
-          form.setValue(`employeesAssigned.${index}`, updatedCount, {
-            shouldValidate: true,
-          }); // update the form
-
-          return updatedCount; // return this day
-        }
-        return count; // return all the days
-      })
-    );
-  };
-
-  // decrease
-  const decrementEmployeesAssigned = (dayIndex: number) => {
-    setEmployeesAssigned((currentCounts) =>
-      currentCounts.map((count, index) => {
-        if (index === dayIndex) {
-          const updatedCount = Math.max(count - 1, 0); // make sure it stays at 0 or above
-          form.setValue(`employeesAssigned.${index}`, updatedCount, {
-            shouldValidate: true,
-          });
-
-          return updatedCount;
-        }
-        return count;
-      })
-    );
-  };
-
-  // break it into form components
+  // Break form into three pages and pass them to useMultiStepForm hook
   const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
     useMultiStepForm([
       <WorkDetails key={'one'} form={form} days={days} />,
-
       <EmployeeDetails key={'two'} form={form} />,
-
-      <AssignDetails
-        key={'three'}
-        days={days}
-        incrementEmployeesAssigned={incrementEmployeesAssigned}
-        decrementEmployeesAssigned={decrementEmployeesAssigned}
-        employeesAssigned={employeesAssigned}
+      // Temporary dummy data
+      <GridSelector
+        workDays={form.getValues().workDays.sort()}
+        shifts={form.getValues().shifts}
+        form={form}
       />,
     ]);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (isLastStep) {
+      form.handleSubmit(async (data) => {
+        console.log(data);
+      })();
+    } else {
+      return nextPage();
+    }
+
+    if (currStepIndex === 1 && form.getValues().workDays.length === 0) {
+      alert('No working days selected');
+    }
+  };
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+  }
 
   return (
     <>
@@ -160,37 +130,23 @@ export default function RosterForm() {
           <ProgressBar currStepIndex={currStepIndex} />
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={handleSubmit}
               className='flex flex-col justify-center space-y-4'
             >
               {currStepIndex + 1} / {steps.length}
               {step}
               {!isFirstStep && (
-                <Button
-                  type='button'
-                  onClick={back}
-                  className='fixed bottom-10 left-36 m-8'
-                >
+                <Button type='button' onClick={back}>
                   Back
                 </Button>
               )}
-              {isLastStep ? (
-                <Button type='submit' className='fixed bottom-10 right-36 m-8'>
-                  Submit
-                </Button>
-              ) : (
-                <Button
-                  type='button'
-                  onClick={nextPage}
-                  className='fixed bottom-10 right-36 m-8'
-                >
-                  Next
-                </Button>
-              )}
+              <Button type='submit'>{isLastStep ? 'Finish' : 'Next'}</Button>
             </form>
           </Form>
         </SheetContent>
       </Sheet>
     </>
   );
-}
+};
+
+export default StartForm;

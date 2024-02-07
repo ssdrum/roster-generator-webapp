@@ -8,7 +8,7 @@ const shiftSchema = z.object({
   shiftEndTime: z.string(),
 });
 
-export const employeeSchema = z.object({
+const employeeSchema = z.object({
   employeeName: z.string().min(2, {
     message: 'Please enter a name longer than two characters.',
   }),
@@ -23,6 +23,9 @@ export const employeeSchema = z.object({
     }),
 });
 
+const shiftAssignmentSchema = z.record(z.string(), z.number());
+export const allShiftsSchema = z.record(z.string(), shiftAssignmentSchema);
+
 // create the form schema
 export const formSchema = z.object({
   workDays: z.array(z.number()).min(1, {
@@ -30,11 +33,7 @@ export const formSchema = z.object({
   }),
   shifts: z.array(shiftSchema), // an array of shifts
   employees: z.array(employeeSchema), // an array of employee details
-  employeesAssigned: z
-    .array(z.number()) // the list of workers per day in the week
-    .refine((arr) => !arr.includes(0), {
-      message: 'Array must not contain 0',
-    }),
+  numEmployeesAssigned: allShiftsSchema
 });
 
 export type FormType = z.infer<typeof formSchema>;

@@ -1,9 +1,7 @@
 import { getUserSession } from '@/app/lib/session';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
-
-import { Button } from '@/components/ui/button';
+import GoogleSignInButton from '@/app/ui/google-signin-btn';
 
 export default async function Home() {
   const user = await getUserSession();
@@ -40,9 +38,7 @@ export default async function Home() {
           ever have to go through the exhausting process of creating it ever
           again. Fitted to your exact needs, powered by advanced algorithms.
         </p>
-        <Link href='/dashboard'>
-          <Button className='mt-8'>Get started</Button>
-        </Link>
+        <GoogleSignInButton />
       </div>
       <div className='z-10 mt-10 w-full md:w-1/2'>
         <Image

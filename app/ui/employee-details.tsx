@@ -1,9 +1,6 @@
 import React from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
-
 import { z } from 'zod';
-
-// shadcn
 import {
   FormControl,
   FormField,
@@ -19,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-import { Day, formSchema } from '../schemas/formSchemas';
+import { formSchema } from '../schemas/formSchemas';
 
 type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;

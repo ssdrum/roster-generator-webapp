@@ -1,9 +1,6 @@
 import React from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
-
 import { z } from 'zod';
-
-// shadcn
 import {
   FormControl,
   FormField,
@@ -22,14 +19,13 @@ import { Input } from '@/components/ui/input';
 
 import { Day, formSchema } from '../schemas/formSchemas';
 
-// get the types of the props we're passing
 type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;
   days: Day[];
 };
 
 const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
-  /// fieldarray lets us manage a changing number of shifts ( an array of fields [duh])
+  // Fieldarray lets us manage a changing number of shifts (an array of fields [duh])
   // shifts
   const {
     fields: shiftFields,
