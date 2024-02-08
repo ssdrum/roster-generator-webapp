@@ -7,7 +7,7 @@ export default async function Home() {
   const user = await getUserSession();
   // redirect if logged in
   if (user) {
-    redirect('/dashboard');
+    redirect('/start');
   }
 
   return (
