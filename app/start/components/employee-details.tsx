@@ -58,24 +58,24 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
               render={({ field }) => (
                 <FormItem>
                   {/* only render the label for the first one */}
-                  <HoverCard openDelay={1} closeDelay={1}>
-                    <HoverCardTrigger>
-                      {index === 0 && (
+                  {index === 0 && (
+                    <HoverCard openDelay={1} closeDelay={1}>
+                      <HoverCardTrigger>
                         <FormLabel className='inline-flex items-center hover:underline'>
                           Employee Name
                           <QuestionIcon className='pl-1 text-gray-500' />
                         </FormLabel>
-                      )}
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      side={'top'}
-                      className='text-sm text-gray-500'
-                    >
-                      List the employees that you want to work this week. Enter
-                      their details, and use the + button to add more shifts, or
-                      the delete button to remove extras.
-                    </HoverCardContent>
-                  </HoverCard>
+                      </HoverCardTrigger>
+                      <HoverCardContent
+                        side={'top'}
+                        className='text-sm text-gray-500'
+                      >
+                        List the employees that you want to work this week. Enter
+                        their details, and use the + button to add more shifts, or
+                        the delete button to remove extras.
+                      </HoverCardContent>
+                    </HoverCard>
+                  )}
                   <FormControl>
                     <Input type='text' {...field} />
                   </FormControl>

@@ -114,25 +114,26 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   {/* only render the label for the first one */}
-                  <HoverCard openDelay={1} closeDelay={1}>
-                    <HoverCardTrigger>
-                      {index === 0 && (
+                  {index === 0 && (
+                    <HoverCard openDelay={1} closeDelay={1}>
+                      <HoverCardTrigger
+                      >
                         <FormLabel className='inline-flex items-center hover:underline'>
                           Shift Name
                           <QuestionIcon className='pl-1 text-gray-500' />
                         </FormLabel>
-                      )}
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      side={'top'}
-                      className='text-sm text-gray-500'
-                    >
-                      Enter the shifts that your employees work. Give it a name,
-                      and then enter the time that your shift starts and ends
-                      at. Use the + button to add more shifts, or the delete
-                      button to remove extras.
-                    </HoverCardContent>
-                  </HoverCard>
+                      </HoverCardTrigger>
+                      <HoverCardContent
+                        side={'top'}
+                        className='text-sm text-gray-500'
+                      >
+                        Enter the shifts that your employees work. Give it a name,
+                        and then enter the time that your shift starts and ends
+                        at. Use the + button to add more shifts, or the delete
+                        button to remove extras.
+                      </HoverCardContent>
+                    </HoverCard>
+                  )}
                   <FormControl>
                     <Input type='text' {...field} />
                   </FormControl>
