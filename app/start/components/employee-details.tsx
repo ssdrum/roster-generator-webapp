@@ -46,12 +46,12 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
     <>
       {/* employee details */}
       {employeeFields.map((field, index) => (
-        <div // gird container for the row
+        <div // grid container for the row
           key={field.id}
           className='grid grid-cols-9'
         >
           {/* name */}
-          <div className='col-span-3 pr-4'>
+          <div className='col-span-3 pr-4 pt-4'>
             <FormField
               control={form.control}
               name={`employees.${index}.employeeName`}
@@ -86,7 +86,7 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
           </div>
 
           {/* email */}
-          <div className='col-span-4 pr-4'>
+          <div className='col-span-4 pr-4 pt-4'>
             <FormField
               control={form.control}
               name={`employees.${index}.employeeEmail`}
@@ -104,7 +104,7 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
           </div>
 
           {/* working days */}
-          <div className='col-span-1 pr-4'>
+          <div className='col-span-1 pr-4 pt-4'>
             <FormField
               control={form.control}
               name={`employees.${index}.workingDays`}
@@ -126,7 +126,7 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
 
           {/* delete icon */}
           {index !== 0 && (
-            <div className='col-span-1 flex items-start justify-start'>
+            <div className='col-span-1 flex items-start justify-start pt-4'>
               <Button
                 type='button'
                 size='icon'

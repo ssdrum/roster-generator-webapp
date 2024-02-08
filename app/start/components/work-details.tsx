@@ -107,7 +107,7 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
           className='grid grid-cols-9'
         >
           {/* name */}
-          <div className='col-span-4 pr-4'>
+          <div className='col-span-4 pr-4 pt-4'>
             <FormField
               control={form.control}
               name={`shifts.${index}.shiftName`}
@@ -144,7 +144,7 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
           </div>
 
           {/* start time */}
-          <div className='col-span-2 pr-4'>
+          <div className='col-span-2 pr-4 pt-4'>
             <FormField
               control={form.control}
               name={`shifts.${index}.shiftStartTime`}
@@ -165,7 +165,7 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
           </div>
 
           {/* end time */}
-          <div className='col-span-2 pr-4'>
+          <div className='col-span-2 pr-4 pt-4'>
             <FormField
               control={form.control}
               name={`shifts.${index}.shiftEndTime`}
@@ -183,7 +183,7 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
 
           {/* delete icon for all but the first shift */}
           {index !== 0 && (
-            <div className='col-span-1 flex items-start justify-start'>
+            <div className='col-span-1 flex items-start justify-start pt-4'>
               <Button
                 type='button'
                 size='icon'

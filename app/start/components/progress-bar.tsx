@@ -7,7 +7,7 @@ type Props = { currStepIndex: number };
 
 const ProgressBar: FC<Props> = ({ currStepIndex }) => {
   return (
-    <div>
+    <div className='w-full max-w-6xl mx-72'>
       <h2 className='sr-only'>Steps</h2>
 
       <div className='after:mt-4 after:block after:h-1 after:w-full after:rounded-lg after:bg-gray-200'>
