@@ -1,5 +1,9 @@
+"use client"
+
+import EditEmployees from "../components/edit-employees";
+
 const EmployeesPage = () => {
-  return <>Employees Page</>;
+  return <EditEmployees />;
 };
 
 export default EmployeesPage;
