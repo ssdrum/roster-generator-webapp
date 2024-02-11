@@ -1,11 +1,9 @@
-"use client"
+'use client';
 
-import EditShifts from "../components/edit-shifts";
+import EditShifts from '../components/edit-shifts';
 
 const ShiftsPage = () => {
-  return (
-    <EditShifts />
-    );
+  return <EditShifts />;
 };
 
 export default ShiftsPage;

@@ -18,7 +18,7 @@ import { Button } from '@/app/ui/shadcn/button';
 import { Input } from '@/app/ui/shadcn/input';
 
 import { Day, formSchema } from '../../lib/formSchemas';
-import { QuestionIcon, DayIcon, DeleteIcon, PlusIcon } from '@/app/lib/icons'
+import { QuestionIcon, DayIcon, DeleteIcon, PlusIcon } from '@/app/lib/icons';
 
 type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;
