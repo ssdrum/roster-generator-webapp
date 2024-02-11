@@ -36,6 +36,14 @@ export const formSchema = z.object({
   numEmployeesAssigned: allShiftsSchema,
 });
 
+export const editShiftSchema = z.object({
+  shifts: z.array(shiftSchema),
+});
+
+export const editEmployeeSchema = z.object({
+  employees: z.array(employeeSchema),
+});
+
 export type FormType = z.infer<typeof formSchema>;
 export type ShiftType = z.infer<typeof shiftSchema>;
 export type Day =
