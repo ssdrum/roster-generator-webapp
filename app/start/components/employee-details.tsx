@@ -34,8 +34,14 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
     name: 'employees',
   });
 
-  const addEmployee = () => {
-    appendEmployee({ employeeName: '', employeeEmail: '', workingDays: 1 });
+  // Add and delete employees
+  const addEmployee = (index: number) => {
+    appendEmployee({
+      employeeId: index,
+      employeeName: '',
+      employeeEmail: '',
+      workingDays: 1,
+    });
   };
 
   const deleteEmployee = (index: number) => {
@@ -145,7 +151,7 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
                 type='button'
                 variant='outline'
                 className='w-full'
-                onClick={addEmployee}
+                onClick={() => addEmployee(index)}
               >
                 <PlusIcon className='h-6 w-6' />
               </Button>

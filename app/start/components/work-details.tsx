@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import {
@@ -24,7 +24,7 @@ type Props = {
   days: Day[];
 };
 
-const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
+const WorkDetails: FC<Props> = ({ form, days }) => {
   // Fieldarray lets us manage a changing number of shifts (an array of fields [duh])
   // shifts
   const {
@@ -37,12 +37,14 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
   });
 
   // defining the methods to add and delete shifts and employees
-  const addShift = () => {
+  const addShift = (index: number) => {
     appendShift({
+      shiftId: index,
       shiftName: '',
       shiftStartTime: '00:00',
       shiftEndTime: '00:00',
     }); // create a new shift object with our default values
+    console.log(form.getValues().shifts)
   };
 
   const deleteShift = (index: number) => {
@@ -201,7 +203,7 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
                 type='button'
                 variant='outline'
                 className='w-full'
-                onClick={addShift}
+                onClick={() => addShift(index)}
               >
                 <PlusIcon className='h-6 w-6' />
               </Button>

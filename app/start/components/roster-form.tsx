@@ -37,18 +37,20 @@ const StartForm = () => {
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
       // To stop the values from changing from undefined to a type, we have to initialise them with an empty value matching their type
-      workDays: [],
+      workDays: [0, 1],
       shifts: [
         {
-          shiftName: '',
+          shiftId: -1,
+          shiftName: 'Morning',
           shiftStartTime: '00:00',
           shiftEndTime: '00:00',
         },
       ],
       employees: [
         {
-          employeeName: '',
-          employeeEmail: '',
+          employeeId: -1,
+          employeeName: 'Luigi',
+          employeeEmail: 'luigi@mail.dcu.ie',
           workingDays: 1,
         },
       ],
