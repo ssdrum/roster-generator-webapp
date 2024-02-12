@@ -1,16 +1,14 @@
 import { z } from 'zod';
 
 // First page
-export const shiftSchema = 
-  z.object({
-    shiftId: z.number(),
-    shiftName: z.string().min(1, {
-      message: 'Please give the shift a name.',
-    }),
-    shiftStartTime: z.string(),
-    shiftEndTime: z.string(),
-  })
-;
+export const shiftSchema = z.object({
+  shiftId: z.number(),
+  shiftName: z.string().min(1, {
+    message: 'Please give the shift a name.',
+  }),
+  shiftStartTime: z.string(),
+  shiftEndTime: z.string(),
+});
 
 // Second page
 const employeeSchema = z.array(
@@ -60,7 +58,7 @@ export const formSchema = z.object({
 // Types
 export type FormType = z.infer<typeof formSchema>;
 export type ShiftType = z.infer<typeof shiftSchema>;
-export type singleAssignmentType = z.infer<typeof assignmentSchema>
+export type singleAssignmentType = z.infer<typeof assignmentSchema>;
 export type WeeklyAssignmentsType = z.infer<typeof weeklyAssignmentsSchema>;
 export type Day =
   | 'Monday'

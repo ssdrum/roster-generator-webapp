@@ -1,12 +1,8 @@
 'use client';
-import RosterForm from '../start/components/roster-form';
+import StartForm from './components/start-form';
 
 const Page = () => {
-  return (
-    <>
-      <RosterForm />
-    </>
-  );
+  return <StartForm />;
 };
 
 export default Page;

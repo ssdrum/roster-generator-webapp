@@ -1,11 +1,3 @@
-// File: roster-form.tsx
-// Description: the multi-page drawer form where the user enters the details to create a roster
-// Created  by: osh
-//          at: 16:06 on Thursday, the 01st of February, 2024.
-// Last edited: 04:22 on Sunday, the 04th of February, 2024.
-
-// shadcn
-import { Sheet, SheetContent, SheetTrigger } from '@/app/ui/shadcn/sheet';
 import { FormEvent } from 'react';
 import { Form } from '@/app/ui/shadcn/form';
 import { Button } from '@/app/ui/shadcn/button';
@@ -62,7 +54,7 @@ const StartForm = () => {
       ],
     },
   });
-  const { register, trigger } = form;
+  const { trigger } = form;
 
   // validation on next click
   const nextPage = () => {
@@ -120,10 +112,6 @@ const StartForm = () => {
     } else {
       return nextPage();
     }
-
-    //if (currStepIndex === 1 && form.getValues().workDays.length === 0) {
-    //  alert('No working days selected');
-    //}
   };
 
   return (

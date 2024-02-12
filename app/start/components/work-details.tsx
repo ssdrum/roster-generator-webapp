@@ -38,13 +38,13 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
 
   // defining the methods to add and delete shifts and employees
   const addShift = (index: number) => {
-    const newAssignment = { shiftId: index, assignments: [] as any};
+    const newAssignment = { shiftId: index, assignments: [] as any };
     form.getValues().workDays.forEach((day) => {
       const newDay = { day: day, numAssigned: 1 };
-      newAssignment.assignments.push(newDay)
+      newAssignment.assignments.push(newDay);
     });
-    
-    form.getValues().numEmployeesAssigned.push(newAssignment) // updates grid-selector data
+
+    form.getValues().numEmployeesAssigned.push(newAssignment); // updates grid-selector data
 
     appendShift({
       shiftId: index,
@@ -55,7 +55,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
   };
 
   const deleteShift = (index: number) => {
-    // Todo
+    // TODO
     removeShift(index);
   };
 
