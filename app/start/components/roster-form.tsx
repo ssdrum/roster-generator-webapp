@@ -144,31 +144,24 @@ const StartForm = () => {
     //}
   };
 
-
   return (
-    <>
-      <Sheet>
-        <SheetTrigger>Create Roster</SheetTrigger>
-        <SheetContent side={'bottom'} className='h-[60vh] w-full overflow-auto'>
-          <ProgressBar currStepIndex={currStepIndex} />
-          <Form {...form}>
-            <form
-              onSubmit={handleSubmit}
-              className='flex flex-col justify-center space-y-4'
-            >
-              {currStepIndex + 1} / {steps.length}
-              {step}
-              {!isFirstStep && (
-                <Button type='button' onClick={back}>
-                  Back
-                </Button>
-              )}
-              <Button type='submit'>{isLastStep ? 'Finish' : 'Next'}</Button>
-            </form>
-          </Form>
-        </SheetContent>
-      </Sheet>
-    </>
+    <div className="container mx-auto mt-20">
+      <ProgressBar currStepIndex={currStepIndex} />
+      <Form {...form}>
+        <form
+          onSubmit={handleSubmit}
+          className='flex flex-col justify-center space-y-4'
+        >
+          {step}
+          {!isFirstStep && (
+            <Button type='button' onClick={back}>
+              Back
+            </Button>
+          )}
+          <Button type='submit'>{isLastStep ? 'Finish' : 'Next'}</Button>
+        </form>
+      </Form>
+    </div>
   );
 };
 
