@@ -139,14 +139,11 @@ const StartForm = () => {
       return nextPage();
     }
 
-    if (currStepIndex === 1 && form.getValues().workDays.length === 0) {
-      alert('No working days selected');
-    }
+    //if (currStepIndex === 1 && form.getValues().workDays.length === 0) {
+    //  alert('No working days selected');
+    //}
   };
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
 
   return (
     <>

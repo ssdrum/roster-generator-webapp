@@ -1,12 +1,8 @@
-import React, { FC, useState } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import React, { FC } from 'react';
+import { UseFormReturn, FieldPath } from 'react-hook-form';
 import GridCell from '@/app/start/components/grid-cell';
 import { z } from 'zod';
-import {
-  ShiftType,
-  WeeklyAssignmentsType,
-  formSchema,
-} from '@/app/lib/formSchemas';
+import { ShiftType, formSchema } from '@/app/lib/formSchemas';
 
 // Days displayed in the table header
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
@@ -37,7 +33,8 @@ type Props = {
 //  },
 //],
 const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
-  const getValue = (shiftId: number, day: number) => {
+  // Get value for each cell from form data
+  const getValue = (shiftId: number, day: number): number => {
     const formValues = form.getValues();
     // Find the shift with the corresponding shiftId
     const shift = formValues.numEmployeesAssigned.find(
@@ -47,6 +44,23 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
     return assignment.numAssigned;
   };
 
+  // Updates form value on change
+  const updateValue = (shiftId: number, day: number, newValue: number): void => {
+    // Locate the shift object by shiftId in the form data
+    const shiftIndex = form
+      .watch('numEmployeesAssigned')
+      .findIndex((s) => s.shiftId === shiftId);
+    // Locate the assignment object by day in the shift's assignments
+    const assignmentIndex = form
+      .watch(`numEmployeesAssigned.${shiftIndex}.assignments`)
+      .findIndex((a) => a.day === day);
+
+    // Construct the field path
+    const fieldPath: FieldPath<z.infer<typeof formSchema>> = // Not sure why it works, but it works. Better to keep an eye on it in case of unexpected behaviour
+      `numEmployeesAssigned.${shiftIndex}.assignments.${assignmentIndex}.numAssigned`;
+
+    form.setValue(fieldPath, newValue);
+  };
 
   return (
     <div className='container mx-auto mt-8'>
@@ -71,9 +85,10 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
               {workDays.map((day) => (
                 <GridCell
                   key={`${shift.shiftId}-${day}`}
+                  shiftId={shift.shiftId}
                   day={day}
-                  name={shift.shiftName}
                   value={getValue(shift.shiftId, day)}
+                  updateValue={updateValue}
                 />
               ))}
             </tr>

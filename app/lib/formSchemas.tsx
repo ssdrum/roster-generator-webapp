@@ -1,31 +1,35 @@
 import { z } from 'zod';
 
 // First page
-export const shiftSchema = z.object({
-  shiftId: z.number(),
-  shiftName: z.string().min(1, {
-    message: 'Please give the shift a name.',
-  }),
-  shiftStartTime: z.string(),
-  shiftEndTime: z.string(),
-});
+export const shiftSchema = 
+  z.object({
+    shiftId: z.number(),
+    shiftName: z.string().min(1, {
+      message: 'Please give the shift a name.',
+    }),
+    shiftStartTime: z.string(),
+    shiftEndTime: z.string(),
+  })
+;
 
 // Second page
-const employeeSchema = z.object({
-  employeeId: z.number(),
-  employeeName: z.string().min(2, {
-    message: 'Please enter a name longer than two characters.',
-  }),
-  employeeEmail: z.string().email({ message: 'Please enter a valid email.' }),
-  workingDays: z
-    .number()
-    .min(1, {
-      message: 'Employees must work at least one day a week.',
-    })
-    .max(7, {
-      message: 'Employees cannot work more days than exists in a week.',
+const employeeSchema = z.array(
+  z.object({
+    employeeId: z.number(),
+    employeeName: z.string().min(2, {
+      message: 'Please enter a name longer than two characters.',
     }),
-});
+    employeeEmail: z.string().email({ message: 'Please enter a valid email.' }),
+    workingDays: z
+      .number()
+      .min(1, {
+        message: 'Employees must work at least one day a week.',
+      })
+      .max(7, {
+        message: 'Employees cannot work more days than exists in a week.',
+      }),
+  })
+);
 
 // Third page
 
@@ -36,11 +40,13 @@ const assignmentSchema = z.object({
 });
 
 // Example: [{shiftId: 0, shiftName: Morning, assignments: [{day: 0, numAssigned: 2}, {day: 1, numAssigned: 3}]]
-const weeklyAssignmentsSchema = z.object({
-  shiftId: z.number(),
-  shiftName: z.string(),
-  assignments: z.array(assignmentSchema),
-});
+const weeklyAssignmentsSchema = z.array(
+  z.object({
+    shiftId: z.number(),
+    shiftName: z.string(),
+    assignments: z.array(assignmentSchema),
+  })
+);
 
 // Main form schema
 export const formSchema = z.object({
@@ -48,8 +54,8 @@ export const formSchema = z.object({
     message: "Please select at least one day that you're open.",
   }),
   shifts: z.array(shiftSchema), // an array of shifts
-  employees: z.array(employeeSchema), // an array of employee details
-  numEmployeesAssigned: z.array(weeklyAssignmentsSchema),
+  employees: employeeSchema, // an array of employee details
+  numEmployeesAssigned: weeklyAssignmentsSchema,
 });
 
 // Types
