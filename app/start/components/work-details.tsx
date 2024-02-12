@@ -44,12 +44,39 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
       shiftStartTime: '00:00',
       shiftEndTime: '00:00',
     }); // create a new shift object with our default values
-    console.log(form.getValues().shifts)
+    console.log(form.getValues().shifts);
   };
 
   const deleteShift = (index: number) => {
     removeShift(index);
   };
+
+/* Updates numEmployeesAssigned array when user adds or removes a workday */
+const updateDays = (days: number[]): void => {
+  // Removes days from form data when de-selected
+  form.getValues().numEmployeesAssigned.forEach((data) => {
+    data.assignments.forEach((assignment, index) => {
+      if (!days.includes(assignment.day)) {
+        data.assignments.splice(index, 1);
+      }
+    });
+  });
+
+  // Adds days in form data when selected
+  days.forEach((day) => {
+    form.getValues().numEmployeesAssigned.forEach((data) => {
+      // Check if the day is already assigned
+      const isDayAssigned = data.assignments.some((assignment) => assignment.day === day);
+      if (!isDayAssigned) {
+        // Add the day to assignments
+        data.assignments.push({
+          day: day,
+          numAssigned: 1
+        });
+      }
+    });
+  });
+};
 
   return (
     <>
@@ -78,7 +105,10 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
                 value={value.map(String)} // the output is a number, but we need to display it in a string format
                 onValueChange={(newValue) => {
                   // save the strings as numbers
-                  const numberValue = newValue.map((val) => parseInt(val, 10));
+                  const numberValue = newValue
+                    .map((val) => parseInt(val, 10))
+                    .sort();
+                  updateDays(numberValue);
                   onChange(numberValue);
                 }}
               >

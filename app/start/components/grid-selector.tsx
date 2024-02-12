@@ -39,13 +39,23 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
     // Find the shift with the corresponding shiftId
     const shift = formValues.numEmployeesAssigned.find(
       (s) => s.shiftId === shiftId
-    )!;
-    const assignment = shift.assignments.find((a) => a.day === day)!;
+    );
+    if (shift === undefined) {
+      return 1;
+    }
+    const assignment = shift.assignments.find((a) => a.day === day);
+    if (assignment === undefined) {
+      return 1;
+    }
     return assignment.numAssigned;
   };
 
   // Updates form value on change
-  const updateValue = (shiftId: number, day: number, newValue: number): void => {
+  const updateValue = (
+    shiftId: number,
+    day: number,
+    newValue: number
+  ): void => {
     // Locate the shift object by shiftId in the form data
     const shiftIndex = form
       .watch('numEmployeesAssigned')
@@ -55,8 +65,10 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
       .watch(`numEmployeesAssigned.${shiftIndex}.assignments`)
       .findIndex((a) => a.day === day);
 
-    // Construct the field path
-    const fieldPath: FieldPath<z.infer<typeof formSchema>> = // Not sure why it works, but it works. Better to keep an eye on it in case of unexpected behaviour
+    // FieldPath recursively generates all combinations of possible paths. Without it, we would have to do it manually.
+    // However, I am not entirely sure that I am using it correctly. For now it seems to work. Keep an eye on it
+    // In case of unexpected bahaviour
+    const fieldPath: FieldPath<z.infer<typeof formSchema>> =
       `numEmployeesAssigned.${shiftIndex}.assignments.${assignmentIndex}.numAssigned`;
 
     form.setValue(fieldPath, newValue);
