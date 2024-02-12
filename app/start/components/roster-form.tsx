@@ -40,10 +40,16 @@ const StartForm = () => {
       workDays: [0, 1],
       shifts: [
         {
-          shiftId: -1,
+          shiftId: -2,
           shiftName: 'Morning',
-          shiftStartTime: '00:00',
-          shiftEndTime: '00:00',
+          shiftStartTime: '09:00',
+          shiftEndTime: '15:00',
+        },
+        {
+          shiftId: -1,
+          shiftName: 'Evening',
+          shiftStartTime: '15:00',
+          shiftEndTime: '21:00',
         },
       ],
       employees: [
@@ -54,7 +60,24 @@ const StartForm = () => {
           workingDays: 1,
         },
       ],
-      numEmployeesAssigned: {},
+      numEmployeesAssigned: [
+        {
+          shiftId: -2,
+          shiftName: 'Morning',
+          assignments: [
+            { day: 0, numAssigned: 2 },
+            { day: 1, numAssigned: 1 },
+          ],
+        },
+        {
+          shiftId: -1,
+          shiftName: 'Evening',
+          assignments: [
+            { day: 0, numAssigned: 3 },
+            { day: 1, numAssigned: 2 },
+          ],
+        },
+      ],
     },
   });
   const { register, trigger } = form;

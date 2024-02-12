@@ -1,10 +1,14 @@
 import React, { FC, useState } from 'react';
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 import GridCell from '@/app/start/components/grid-cell';
 import { z } from 'zod';
-import { ShiftType, formSchema } from '@/app/lib/formSchemas';
+import {
+  ShiftType,
+  WeeklyAssignmentsType,
+  formSchema,
+} from '@/app/lib/formSchemas';
 
-// Days displayed in the header of the table
+// Days displayed in the table header
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
 type Props = {
@@ -13,40 +17,36 @@ type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;
 };
 
-type GridState = {
-  [day: number]: {
-    [shiftName: string]: number;
-  };
-};
-
+// Example assignments example:
+//numEmployeesAssigned: [
+//  {
+//    shiftId: -2,
+//    shiftName: 'Morning',
+//    assignments: [
+//      { day: 0, numAssigned: 2 },
+//      { day: 1, numAssigned: 1 },
+//    ],
+//  },
+//  {
+//    shiftId: -1,
+//    shiftName: 'Evening',
+//    assignments: [
+//      { day: 0, numAssigned: 3 },
+//      { day: 1, numAssigned: 2 },
+//    ],
+//  },
+//],
 const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
-  // Initialize gridState based on workDays and shifts
-  const initialGridState: GridState = {};
-
-  workDays.forEach((day) => {
-    initialGridState[day] = {};
-    shifts.forEach((shift) => {
-      initialGridState[day][shift.shiftName] = 1; // Sets default values in component's state,
-      form.setValue(`numEmployeesAssigned.${day}.${shift.shiftName}`, 1); // Sets default values in form
-    });
-  });
-
-  const [gridState, setGridState] = useState<GridState>(initialGridState);
-
-  // This component manages its own state internally. The function form.setValue()
-  // keeps the component's state in sync with the main form
-  const updateGridState = (day: number, shiftName: string, value: number) => {
-    setGridState((prevGridState) => ({
-      ...prevGridState,
-      [day]: {
-        ...prevGridState[day],
-        [shiftName]: value,
-      },
-    }));
-
-    // Update form
-    form.setValue(`numEmployeesAssigned.${day}.${shiftName}`, value);
+  const getValue = (shiftId: number, day: number) => {
+    const formValues = form.getValues();
+    // Find the shift with the corresponding shiftId
+    const shift = formValues.numEmployeesAssigned.find(
+      (s) => s.shiftId === shiftId
+    )!;
+    const assignment = shift.assignments.find((a) => a.day === day)!;
+    return assignment.numAssigned;
   };
+
 
   return (
     <div className='container mx-auto mt-8'>
@@ -66,17 +66,14 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
         </thead>
         <tbody>
           {shifts.map((shift) => (
-            <tr key={shift.shiftName}>
+            <tr key={shift.shiftId}>
               <td className='w-16  p-2'>{shift.shiftName}</td>
               {workDays.map((day) => (
                 <GridCell
-                  key={`${shift.shiftName}-${day}`}
+                  key={`${shift.shiftId}-${day}`}
                   day={day}
                   name={shift.shiftName}
-                  value={gridState[day][shift.shiftName]}
-                  updateValue={(value) =>
-                    updateGridState(day, shift.shiftName, value)
-                  }
+                  value={getValue(shift.shiftId, day)}
                 />
               ))}
             </tr>
