@@ -1,9 +1,8 @@
 'use client';
 
-import Roster from "./components/roster";
+import Roster from './components/roster';
 
 const Page = () => {
-  
   // temporary assignments data
   const assignments = [
     {
@@ -13,8 +12,8 @@ const Page = () => {
         null,
         { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
         null,
-        { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' }
-      ]
+        { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' },
+      ],
     },
     {
       employee: 'Jane',
@@ -23,8 +22,8 @@ const Page = () => {
         { name: 'Morning', startTime: '8:00 AM', endTime: '4:00 PM' },
         null,
         { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
-        { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' }
-      ]
+        { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' },
+      ],
     },
     {
       employee: 'Bob',
@@ -33,8 +32,8 @@ const Page = () => {
         null,
         null,
         { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
-        null
-      ]
+        null,
+      ],
     },
     {
       employee: 'Alice',
@@ -43,11 +42,11 @@ const Page = () => {
         null,
         { name: 'Morning', startTime: '8:00 AM', endTime: '4:00 PM' },
         { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
-        { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' }
-      ]
-    }
-  ];  
-  
+        { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' },
+      ],
+    },
+  ];
+
   return <Roster assignments={assignments} />;
 };
 
