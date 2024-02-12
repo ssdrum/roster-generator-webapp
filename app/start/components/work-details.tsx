@@ -38,45 +38,55 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
 
   // defining the methods to add and delete shifts and employees
   const addShift = (index: number) => {
+    const newAssignment = { shiftId: index, assignments: [] as any};
+    form.getValues().workDays.forEach((day) => {
+      const newDay = { day: day, numAssigned: 1 };
+      newAssignment.assignments.push(newDay)
+    });
+    
+    form.getValues().numEmployeesAssigned.push(newAssignment) // updates grid-selector data
+
     appendShift({
       shiftId: index,
       shiftName: '',
       shiftStartTime: '00:00',
       shiftEndTime: '00:00',
     }); // create a new shift object with our default values
-    console.log(form.getValues().shifts);
   };
 
   const deleteShift = (index: number) => {
+    // Todo
     removeShift(index);
   };
 
-/* Updates numEmployeesAssigned array when user adds or removes a workday */
-const updateDays = (days: number[]): void => {
-  // Removes days from form data when de-selected
-  form.getValues().numEmployeesAssigned.forEach((data) => {
-    data.assignments.forEach((assignment, index) => {
-      if (!days.includes(assignment.day)) {
-        data.assignments.splice(index, 1);
-      }
-    });
-  });
-
-  // Adds days in form data when selected
-  days.forEach((day) => {
+  /* Updates numEmployeesAssigned array when user adds or removes a workday */
+  const updateDays = (days: number[]): void => {
+    // Removes days from form data when de-selected
     form.getValues().numEmployeesAssigned.forEach((data) => {
-      // Check if the day is already assigned
-      const isDayAssigned = data.assignments.some((assignment) => assignment.day === day);
-      if (!isDayAssigned) {
-        // Add the day to assignments
-        data.assignments.push({
-          day: day,
-          numAssigned: 1
-        });
-      }
+      data.assignments.forEach((assignment, index) => {
+        if (!days.includes(assignment.day)) {
+          data.assignments.splice(index, 1);
+        }
+      });
     });
-  });
-};
+
+    // Adds days in form data when selected
+    days.forEach((day) => {
+      form.getValues().numEmployeesAssigned.forEach((data) => {
+        // Check if the day is already assigned
+        const isDayAssigned = data.assignments.some(
+          (assignment) => assignment.day === day
+        );
+        if (!isDayAssigned) {
+          // Add the day to assignments
+          data.assignments.push({
+            day: day,
+            numAssigned: 1,
+          });
+        }
+      });
+    });
+  };
 
   return (
     <>

@@ -43,7 +43,6 @@ const assignmentSchema = z.object({
 const weeklyAssignmentsSchema = z.array(
   z.object({
     shiftId: z.number(),
-    shiftName: z.string(),
     assignments: z.array(assignmentSchema),
   })
 );
@@ -61,6 +60,7 @@ export const formSchema = z.object({
 // Types
 export type FormType = z.infer<typeof formSchema>;
 export type ShiftType = z.infer<typeof shiftSchema>;
+export type singleAssignmentType = z.infer<typeof assignmentSchema>
 export type WeeklyAssignmentsType = z.infer<typeof weeklyAssignmentsSchema>;
 export type Day =
   | 'Monday'

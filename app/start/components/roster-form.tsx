@@ -37,45 +37,27 @@ const StartForm = () => {
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
       // To stop the values from changing from undefined to a type, we have to initialise them with an empty value matching their type
-      workDays: [0, 1],
+      workDays: [],
       shifts: [
         {
-          shiftId: -2,
-          shiftName: 'Morning',
-          shiftStartTime: '09:00',
-          shiftEndTime: '15:00',
-        },
-        {
           shiftId: -1,
-          shiftName: 'Evening',
-          shiftStartTime: '15:00',
-          shiftEndTime: '21:00',
+          shiftName: '',
+          shiftStartTime: '00:00',
+          shiftEndTime: '00:00',
         },
       ],
       employees: [
         {
           employeeId: -1,
-          employeeName: 'Luigi',
-          employeeEmail: 'luigi@mail.dcu.ie',
-          workingDays: 1,
+          employeeName: '',
+          employeeEmail: '',
+          workingDays: 0,
         },
       ],
       numEmployeesAssigned: [
         {
-          shiftId: -2,
-          shiftName: 'Morning',
-          assignments: [
-            { day: 0, numAssigned: 2 },
-            { day: 1, numAssigned: 1 },
-          ],
-        },
-        {
           shiftId: -1,
-          shiftName: 'Evening',
-          assignments: [
-            { day: 0, numAssigned: 3 },
-            { day: 1, numAssigned: 2 },
-          ],
+          assignments: [],
         },
       ],
     },
@@ -116,7 +98,7 @@ const StartForm = () => {
   };
 
   // Break form into three pages and pass them to useMultiStepForm hook
-  const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
+  const { step, isFirstStep, isLastStep, currStepIndex, back, next } =
     useMultiStepForm([
       <WorkDetails key={'one'} form={form} days={days} />,
       <EmployeeDetails key={'two'} form={form} />,
@@ -145,7 +127,7 @@ const StartForm = () => {
   };
 
   return (
-    <div className="container mx-auto mt-20">
+    <div className='container mx-auto mt-20'>
       <ProgressBar currStepIndex={currStepIndex} />
       <Form {...form}>
         <form

@@ -13,25 +13,6 @@ type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;
 };
 
-// Example assignments example:
-//numEmployeesAssigned: [
-//  {
-//    shiftId: -2,
-//    shiftName: 'Morning',
-//    assignments: [
-//      { day: 0, numAssigned: 2 },
-//      { day: 1, numAssigned: 1 },
-//    ],
-//  },
-//  {
-//    shiftId: -1,
-//    shiftName: 'Evening',
-//    assignments: [
-//      { day: 0, numAssigned: 3 },
-//      { day: 1, numAssigned: 2 },
-//    ],
-//  },
-//],
 const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
   // Get value for each cell from form data
   const getValue = (shiftId: number, day: number): number => {
@@ -39,14 +20,8 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
     // Find the shift with the corresponding shiftId
     const shift = formValues.numEmployeesAssigned.find(
       (s) => s.shiftId === shiftId
-    );
-    if (shift === undefined) {
-      return 1;
-    }
-    const assignment = shift.assignments.find((a) => a.day === day);
-    if (assignment === undefined) {
-      return 1;
-    }
+    )!;
+    const assignment = shift.assignments.find((a) => a.day === day)!;
     return assignment.numAssigned;
   };
 
