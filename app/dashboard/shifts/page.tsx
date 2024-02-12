@@ -1,5 +1,9 @@
+'use client';
+
+import EditShifts from '../components/edit-shifts';
+
 const ShiftsPage = () => {
-  return <>Shifts Page</>;
+  return <EditShifts />;
 };
 
 export default ShiftsPage;
