@@ -2,7 +2,7 @@
 // Description: the component that renders in the grid for the shift, takes the values as a prop
 // Created  by: root
 //          at: 22:50 on Sunday, the 11th of February, 2024.
-// Last edited: 23:47 on Sunday, the 11th of February, 2024.
+// Last edited: 23:59 on Sunday, the 11th of February, 2024.
 
 interface Details {
   side: "left" | "right" | "single" | "both"; // the side to extend to, if any
@@ -14,8 +14,10 @@ interface Details {
 
 const Shift: React.FC<Details> = ({ side, name, startTime, endTime, employee }: Details) => {
 
+  // apply the tailwind classes depending on the side prop we passed 
+  // this joins shift segments together if they're next to each other
   const adjustSide = () => {
-    let result = "my-4 p-4 shadow-lg";
+    let result = "my-4 p-4 shadow-lg"; // base classes
 
     switch (side) {
       case "left":
@@ -45,6 +47,7 @@ const Shift: React.FC<Details> = ({ side, name, startTime, endTime, employee }: 
   }
 
   // calculate the colour based on the employee's name, turn it into a tailwind colour
+  // dynamically assigning an employee a 'random' colour, but that employee will always get the same colour
   const calcColour = (employee: string) => {
     const sum = stringToSum(employee);
     // a choice selection of tailwind colours
@@ -53,6 +56,7 @@ const Shift: React.FC<Details> = ({ side, name, startTime, endTime, employee }: 
   }
 
   return (
+    // we need to apply the style using classic css since tailwind doesn't allow for dynamic colours
     <div style={{ backgroundColor: `${calcColour(employee)}` }} className={`h-16 text-white ${adjustSide()}`}>
       <div className="flex flex-col justify-center h-full">
         <div className="text-sm font-semibold">{name}</div>

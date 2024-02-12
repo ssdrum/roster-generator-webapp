@@ -2,7 +2,7 @@
 // Description: the main component on the dashboard which shows the roster for the week
 // Created  by: osh
 //          at: 17:07 on Sunday, the 11th of February, 2024.
-// Last edited: 23:31 on Sunday, the 11th of February, 2024.
+// Last edited: 23:55 on Sunday, the 11th of February, 2024.
 
 // shadcn
 import {
@@ -31,8 +31,6 @@ interface Props {
   assignments: Assignment[];
 }
 
-// can you generate me shifts following this schema? I want multiple employees each with multiple shifts. there 
-
 const Roster: React.FC<Props> = ({ assignments }: Props) => {
 
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -40,16 +38,17 @@ const Roster: React.FC<Props> = ({ assignments }: Props) => {
   // the function for choosing which side the shift should extend to
   function determineSide(shifts: (Shift | null)[], index: number): string {
 
-    // first one in the array
+    // check if first one
     if (index === 0) {
       return shifts[index + 1] !== null ? "left" : "single";
     }
 
-    // last one in the array
+    // check if last one
     if (index === shifts.length - 1) {
       return shifts[index - 1] !== null ? "right" : "single";
     }
 
+    // somewhere in the middle
     if (shifts[index - 1] !== null && shifts[index + 1] !== null) {
       return "both";
     } else if (shifts[index - 1] !== null) {
@@ -74,14 +73,17 @@ const Roster: React.FC<Props> = ({ assignments }: Props) => {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {/* loop over the assignments array and get the employees and their shifts */}
             {assignments.map(({ employee, shifts}) => (
               <TableRow key={employee}>
                 <TableCell className="font-medium w-64">{employee}</TableCell>
+                {/* loop over the days and draw shifts in the cells where there are shifts */}
                 {days.map((d, index) => (
                   <TableCell key={index} className="p-0 border-l">
                     {shifts !== null && shifts[index] !== null ? (
-                      <Shift
-                        side={determineSide(shifts, index) as "left" | "right" | "single" | "both"}
+                      // pass the props to the shift component
+                      <Shift 
+                        side={determineSide(shifts, index) as "left" | "right" | "single" | "both"} // calculate if it should stretch to a side, and assert into the allowed options
                         name={shifts[index]?.name}
                         startTime={shifts[index]?.startTime}
                         endTime={shifts[index]?.endTime}
@@ -100,5 +102,4 @@ const Roster: React.FC<Props> = ({ assignments }: Props) => {
     </div>
   )
 }
-
 export default Roster;
