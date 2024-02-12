@@ -56,8 +56,9 @@ export default function EditShifts() {
     name: 'shifts',
   });
 
-  const addShift = () => {
+  const addShift = (index: number) => {
     appendShift({
+      shiftId: index,
       shiftName: '',
       shiftStartTime: '00:00',
       shiftEndTime: '00:00',
@@ -173,7 +174,7 @@ export default function EditShifts() {
                       type='button'
                       variant='outline'
                       className='w-full'
-                      onClick={addShift}
+                      onClick={() => addShift(index)}
                     >
                       <PlusIcon className='h-6 w-6' />
                     </Button>
