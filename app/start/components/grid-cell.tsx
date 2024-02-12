@@ -1,20 +1,22 @@
 import React, { FC } from 'react';
 
 type Props = {
+  shiftId: number;
   day: number;
-  name: string;
   value: number;
-  updateValue: (value: number) => void;
+  updateValue: (shiftId: number, day: number, newValue: number) => void;
 };
 
-const GridCell: FC<Props> = ({ day, name, value, updateValue }) => {
+const GridCell: FC<Props> = ({ shiftId, day, value, updateValue }) => {
   return (
     <td className='w-20 border p-2'>
       <input
         className='h-10 w-full p-2 text-center'
         type='number'
         value={value}
-        onChange={(e) => updateValue(parseInt(e.target.value, 10))}
+        onChange={(e) =>
+          updateValue(shiftId, day, parseInt(e.target.value, 10))
+        }
         min={0}
       />
     </td>

@@ -1,10 +1,10 @@
-import React, { FC, useState } from 'react';
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import React, { FC } from 'react';
+import { UseFormReturn, FieldPath } from 'react-hook-form';
 import GridCell from '@/app/start/components/grid-cell';
 import { z } from 'zod';
 import { ShiftType, formSchema } from '@/app/lib/formSchemas';
 
-// Days displayed in the header of the table
+// Days displayed in the table header
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
 type Props = {
@@ -13,39 +13,40 @@ type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;
 };
 
-type GridState = {
-  [day: number]: {
-    [shiftName: string]: number;
-  };
-};
-
 const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
-  // Initialize gridState based on workDays and shifts
-  const initialGridState: GridState = {};
+  // Get value for each cell from form data
+  const getValue = (shiftId: number, day: number): number => {
+    const formValues = form.getValues();
+    // Find the shift with the corresponding shiftId
+    const shift = formValues.numEmployeesAssigned.find(
+      (s) => s.shiftId === shiftId
+    )!;
+    const assignment = shift.assignments.find((a) => a.day === day)!;
+    return assignment.numAssigned;
+  };
 
-  workDays.forEach((day) => {
-    initialGridState[day] = {};
-    shifts.forEach((shift) => {
-      initialGridState[day][shift.shiftName] = 1; // Sets default values in component's state,
-      form.setValue(`numEmployeesAssigned.${day}.${shift.shiftName}`, 1); // Sets default values in form
-    });
-  });
+  // Updates form value on change
+  const updateValue = (
+    shiftId: number,
+    day: number,
+    newValue: number
+  ): void => {
+    // Locate the shift object by shiftId in the form data
+    const shiftIndex = form
+      .watch('numEmployeesAssigned')
+      .findIndex((s) => s.shiftId === shiftId);
+    // Locate the assignment object by day in the shift's assignments
+    const assignmentIndex = form
+      .watch(`numEmployeesAssigned.${shiftIndex}.assignments`)
+      .findIndex((a) => a.day === day);
 
-  const [gridState, setGridState] = useState<GridState>(initialGridState);
+    // FieldPath recursively generates all combinations of possible paths. Without it, we would have to do it manually.
+    // However, I am not entirely sure that I am using it correctly. For now it seems to work. Keep an eye on it
+    // In case of unexpected bahaviour
+    const fieldPath: FieldPath<z.infer<typeof formSchema>> =
+      `numEmployeesAssigned.${shiftIndex}.assignments.${assignmentIndex}.numAssigned`;
 
-  // This component manages its own state internally. The function form.setValue()
-  // keeps the component's state in sync with the main form
-  const updateGridState = (day: number, shiftName: string, value: number) => {
-    setGridState((prevGridState) => ({
-      ...prevGridState,
-      [day]: {
-        ...prevGridState[day],
-        [shiftName]: value,
-      },
-    }));
-
-    // Update form
-    form.setValue(`numEmployeesAssigned.${day}.${shiftName}`, value);
+    form.setValue(fieldPath, newValue);
   };
 
   return (
@@ -66,17 +67,15 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
         </thead>
         <tbody>
           {shifts.map((shift) => (
-            <tr key={shift.shiftName}>
+            <tr key={shift.shiftId}>
               <td className='w-16  p-2'>{shift.shiftName}</td>
               {workDays.map((day) => (
                 <GridCell
-                  key={`${shift.shiftName}-${day}`}
+                  key={`${shift.shiftId}-${day}`}
+                  shiftId={shift.shiftId}
                   day={day}
-                  name={shift.shiftName}
-                  value={gridState[day][shift.shiftName]}
-                  updateValue={(value) =>
-                    updateGridState(day, shift.shiftName, value)
-                  }
+                  value={getValue(shift.shiftId, day)}
+                  updateValue={updateValue}
                 />
               ))}
             </tr>

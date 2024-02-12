@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import {
@@ -25,7 +25,7 @@ type Props = {
   days: Day[];
 };
 
-const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
+const WorkDetails: FC<Props> = ({ form, days }) => {
   // Fieldarray lets us manage a changing number of shifts (an array of fields [duh])
   // shifts
   const {
@@ -38,8 +38,17 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
   });
 
   // defining the methods to add and delete shifts and employees
-  const addShift = () => {
+  const addShift = (index: number) => {
+    const newAssignment = { shiftId: index, assignments: [] as any };
+    form.getValues().workDays.forEach((day) => {
+      const newDay = { day: day, numAssigned: 1 };
+      newAssignment.assignments.push(newDay);
+    });
+
+    form.getValues().numEmployeesAssigned.push(newAssignment); // updates grid-selector data
+
     appendShift({
+      shiftId: index,
       shiftName: '',
       shiftStartTime: '00:00',
       shiftEndTime: '00:00',
@@ -47,7 +56,37 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
   };
 
   const deleteShift = (index: number) => {
+    // TODO
     removeShift(index);
+  };
+
+  /* Updates numEmployeesAssigned array when user adds or removes a workday */
+  const updateDays = (days: number[]): void => {
+    // Removes days from form data when de-selected
+    form.getValues().numEmployeesAssigned.forEach((data) => {
+      data.assignments.forEach((assignment, index) => {
+        if (!days.includes(assignment.day)) {
+          data.assignments.splice(index, 1);
+        }
+      });
+    });
+
+    // Adds days in form data when selected
+    days.forEach((day) => {
+      form.getValues().numEmployeesAssigned.forEach((data) => {
+        // Check if the day is already assigned
+        const isDayAssigned = data.assignments.some(
+          (assignment) => assignment.day === day
+        );
+        if (!isDayAssigned) {
+          // Add the day to assignments
+          data.assignments.push({
+            day: day,
+            numAssigned: 1,
+          });
+        }
+      });
+    });
   };
 
   return (
@@ -77,7 +116,10 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
                 value={value.map(String)} // the output is a number, but we need to display it in a string format
                 onValueChange={(newValue) => {
                   // save the strings as numbers
-                  const numberValue = newValue.map((val) => parseInt(val, 10));
+                  const numberValue = newValue
+                    .map((val) => parseInt(val, 10))
+                    .sort();
+                  updateDays(numberValue);
                   onChange(numberValue);
                 }}
               >
@@ -202,7 +244,7 @@ const WorkDetails: React.FC<Props> = ({ form, days }: Props) => {
                 type='button'
                 variant='outline'
                 className='w-full'
-                onClick={addShift}
+                onClick={() => addShift(index)}
               >
                 <PlusIcon className='h-6 w-6' />
               </Button>

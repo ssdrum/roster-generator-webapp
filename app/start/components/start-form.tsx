@@ -1,11 +1,3 @@
-// File: roster-form.tsx
-// Description: the multi-page drawer form where the user enters the details to create a roster
-// Created  by: osh
-//          at: 16:06 on Thursday, the 01st of February, 2024.
-// Last edited: 04:22 on Sunday, the 04th of February, 2024.
-
-// shadcn
-import { Sheet, SheetContent, SheetTrigger } from '@/app/ui/shadcn/sheet';
 import { FormEvent } from 'react';
 import { Form } from '@/app/ui/shadcn/form';
 import { Button } from '@/app/ui/shadcn/button';
@@ -40,6 +32,7 @@ const StartForm = () => {
       workDays: [],
       shifts: [
         {
+          shiftId: -1,
           shiftName: '',
           shiftStartTime: '00:00',
           shiftEndTime: '00:00',
@@ -47,15 +40,21 @@ const StartForm = () => {
       ],
       employees: [
         {
+          employeeId: -1,
           employeeName: '',
           employeeEmail: '',
-          workingDays: 1,
+          workingDays: 0,
         },
       ],
-      numEmployeesAssigned: {},
+      numEmployeesAssigned: [
+        {
+          shiftId: -1,
+          assignments: [],
+        },
+      ],
     },
   });
-  const { register, trigger } = form;
+  const { trigger } = form;
 
   // validation on next click
   const nextPage = () => {
@@ -91,7 +90,7 @@ const StartForm = () => {
   };
 
   // Break form into three pages and pass them to useMultiStepForm hook
-  const { step, steps, isFirstStep, isLastStep, currStepIndex, back, next } =
+  const { step, isFirstStep, isLastStep, currStepIndex, back, next } =
     useMultiStepForm([
       <WorkDetails key={'one'} form={form} days={days} />,
       <EmployeeDetails key={'two'} form={form} />,
@@ -113,40 +112,26 @@ const StartForm = () => {
     } else {
       return nextPage();
     }
-
-    if (currStepIndex === 1 && form.getValues().workDays.length === 0) {
-      alert('No working days selected');
-    }
   };
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
-
   return (
-    <>
-      <Sheet>
-        <SheetTrigger>Create Roster</SheetTrigger>
-        <SheetContent side={'bottom'} className='h-[60vh] w-full overflow-auto'>
-          <ProgressBar currStepIndex={currStepIndex} />
-          <Form {...form}>
-            <form
-              onSubmit={handleSubmit}
-              className='flex flex-col justify-center space-y-4'
-            >
-              {currStepIndex + 1} / {steps.length}
-              {step}
-              {!isFirstStep && (
-                <Button type='button' onClick={back}>
-                  Back
-                </Button>
-              )}
-              <Button type='submit'>{isLastStep ? 'Finish' : 'Next'}</Button>
-            </form>
-          </Form>
-        </SheetContent>
-      </Sheet>
-    </>
+    <div className='container mx-auto mt-20'>
+      <ProgressBar currStepIndex={currStepIndex} />
+      <Form {...form}>
+        <form
+          onSubmit={handleSubmit}
+          className='flex flex-col justify-center space-y-4'
+        >
+          {step}
+          {!isFirstStep && (
+            <Button type='button' onClick={back}>
+              Back
+            </Button>
+          )}
+          <Button type='submit'>{isLastStep ? 'Finish' : 'Next'}</Button>
+        </form>
+      </Form>
+    </div>
   );
 };
 

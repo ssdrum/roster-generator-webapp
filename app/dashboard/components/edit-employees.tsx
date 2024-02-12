@@ -83,8 +83,9 @@ export default function EditEmployees() {
     name: 'employees',
   });
 
-  const addEmployee = () => {
+  const addEmployee = (index: number) => {
     appendEmployee({
+      employeeId: index,
       employeeName: '',
       employeeEmail: '',
       workingDays: 1,
@@ -203,7 +204,7 @@ export default function EditEmployees() {
                       type='button'
                       variant='outline'
                       className='w-full'
-                      onClick={addEmployee}
+                      onClick={() => addEmployee(index)}
                     >
                       <PlusIcon className='h-6 w-6' />
                     </Button>
