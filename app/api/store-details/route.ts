@@ -31,7 +31,6 @@ export async function POST(req: any) {
     })
   );
 
-
   return NextResponse.json(
     { message: 'Data stored successfully' },
     { status: 200 }
