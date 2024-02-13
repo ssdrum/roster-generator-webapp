@@ -45,14 +45,15 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
       newAssignment.assignments.push(newDay);
     });
 
-    form.getValues().numEmployeesAssigned.push(newAssignment); // updates grid-selector data
-
+    // updates grid-selector data
+    form.getValues().numEmployeesAssigned.push(newAssignment);
+    // create a new shift object with our default values
     appendShift({
       shiftId: index,
       shiftName: '',
       shiftStartTime: '00:00',
       shiftEndTime: '00:00',
-    }); // create a new shift object with our default values
+    });
   };
 
   const deleteShift = (index: number) => {
@@ -60,9 +61,9 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
     removeShift(index);
   };
 
-  /* Updates numEmployeesAssigned array when user adds or removes a workday */
+  /* Updates grid-selector data when user adds or removes a workday */
   const updateDays = (days: number[]): void => {
-    // Removes days from form data when de-selected
+    // Removes days from form grid-selector data when de-selected
     form.getValues().numEmployeesAssigned.forEach((data) => {
       data.assignments.forEach((assignment, index) => {
         if (!days.includes(assignment.day)) {

@@ -14,10 +14,9 @@ type Props = {
 };
 
 const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
-  // Get value for each cell from form data
+  /* Get value for each cell from form data from form data */
   const getValue = (shiftId: number, day: number): number => {
     const formValues = form.getValues();
-    // Find the shift with the corresponding shiftId
     const shift = formValues.numEmployeesAssigned.find(
       (s) => s.shiftId === shiftId
     )!;
@@ -25,7 +24,7 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
     return assignment.numAssigned;
   };
 
-  // Updates form value on change
+  /* Updates form value on change */
   const updateValue = (
     shiftId: number,
     day: number,

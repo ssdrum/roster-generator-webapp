@@ -22,13 +22,12 @@ const StartForm = () => {
     'Friday',
     'Saturday',
     'Sunday',
-  ]; // the list for the day selection
+  ];
 
-  // Define the form as it renders
+  // Initialise form with default values on first render
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
-      // To stop the values from changing from undefined to a type, we have to initialise them with an empty value matching their type
       workDays: [],
       shifts: [
         {
@@ -56,7 +55,7 @@ const StartForm = () => {
   });
   const { trigger } = form;
 
-  // validation on next click
+  // Intermediate validation triggered when clicking next
   const nextPage = () => {
     (async () => {
       // check the current page's shift
