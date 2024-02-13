@@ -108,7 +108,7 @@ const StartForm = () => {
   // Example db POST request
   const testDB = (data: any) => {
     // Send the POST request using fetch
-    fetch('/api/test', {
+    fetch('/api/store-details', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
