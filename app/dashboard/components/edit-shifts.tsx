@@ -23,6 +23,8 @@ import {
 import { editShiftSchema } from '@/app/lib/formSchemas';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
 
+const { v4: uuidv4 } = require('uuid');
+
 export default function EditShifts() {
   // here we would load the shift data from the db into this component,
   // but for now we have dummy data
@@ -56,9 +58,9 @@ export default function EditShifts() {
     name: 'shifts',
   });
 
-  const addShift = (index: number) => {
+  const addShift = () => {
     appendShift({
-      shiftId: index,
+      shiftId: uuidv4(),
       shiftName: '',
       shiftStartTime: '00:00',
       shiftEndTime: '00:00',
@@ -174,7 +176,7 @@ export default function EditShifts() {
                       type='button'
                       variant='outline'
                       className='w-full'
-                      onClick={() => addShift(index)}
+                      onClick={addShift}
                     >
                       <PlusIcon className='h-6 w-6' />
                     </Button>

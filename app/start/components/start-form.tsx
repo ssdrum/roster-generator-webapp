@@ -6,13 +6,14 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import useMultiStepForm from '@/app/lib/useMultiStepForm';
 import ProgressBar from '@/app/start/components/progress-bar';
-import { v4 as uuidv4 } from 'uuid';
 
 // import types, schemas and the other two components
 import { Day, formSchema } from '../../lib/formSchemas';
 import WorkDetails from './work-details';
 import EmployeeDetails from './employee-details';
 import GridSelector from '@/app/start/components/grid-selector';
+
+const { v4: uuidv4 } = require('uuid');
 
 const StartForm = () => {
   const days: Day[] = [

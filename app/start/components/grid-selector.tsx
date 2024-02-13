@@ -6,7 +6,6 @@ import { ShiftType, formSchema } from '@/app/lib/formSchemas';
 
 // Days displayed in the table header
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
-
 type Props = {
   workDays: number[];
   shifts: ShiftType[];
@@ -15,7 +14,7 @@ type Props = {
 
 const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
   /* Get value for each cell from form data from form data */
-  const getValue = (shiftId: number, day: number): number => {
+  const getValue = (shiftId: string, day: number): number => {
     const formValues = form.getValues();
     const shift = formValues.numEmployeesAssigned.find(
       (s) => s.shiftId === shiftId
@@ -26,7 +25,7 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
 
   /* Updates form value on change */
   const updateValue = (
-    shiftId: number,
+    shiftId: string,
     day: number,
     newValue: number
   ): void => {

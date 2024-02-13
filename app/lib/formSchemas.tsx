@@ -43,7 +43,7 @@ const numAssignedSchema = z.object({
      Example: [{shiftId: 0, assignments: [{day: 0, numAssigned: 2}, {day: 1, numAssigned: 3}, ...], ...]
  */
 const allNumAssignedSchema = z.object({
-  shiftId: z.number(),
+  shiftId: z.string(),
   assignments: z.array(numAssignedSchema),
 });
 

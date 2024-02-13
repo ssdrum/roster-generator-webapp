@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
-import { v4 as uuidv4 } from 'uuid';
 import {
   FormControl,
   FormField,
@@ -20,6 +19,8 @@ import { Input } from '@/app/ui/shadcn/input';
 
 import { Day, formSchema } from '../../lib/formSchemas';
 import { QuestionIcon, DayIcon, DeleteIcon, PlusIcon } from '@/app/lib/icons';
+
+const { v4: uuidv4 } = require('uuid');
 
 type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;
@@ -259,7 +260,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
                 type='button'
                 variant='outline'
                 className='w-full'
-                onClick={() => addShift(index)}
+                onClick={addShift}
               >
                 <PlusIcon className='h-6 w-6' />
               </Button>
