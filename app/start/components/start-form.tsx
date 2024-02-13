@@ -13,6 +13,8 @@ import WorkDetails from './work-details';
 import EmployeeDetails from './employee-details';
 import GridSelector from '@/app/start/components/grid-selector';
 
+const { v4: uuidv4 } = require('uuid');
+
 const StartForm = () => {
   const days: Day[] = [
     'Monday',
@@ -22,17 +24,17 @@ const StartForm = () => {
     'Friday',
     'Saturday',
     'Sunday',
-  ]; // the list for the day selection
+  ];
 
-  // Define the form as it renders
+  // Initialise form with default values on first render
+  const firstShiftId = uuidv4();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
-      // To stop the values from changing from undefined to a type, we have to initialise them with an empty value matching their type
       workDays: [],
       shifts: [
         {
-          shiftId: -1,
+          shiftId: firstShiftId,
           shiftName: '',
           shiftStartTime: '00:00',
           shiftEndTime: '00:00',
@@ -48,7 +50,7 @@ const StartForm = () => {
       ],
       numEmployeesAssigned: [
         {
-          shiftId: -1,
+          shiftId: firstShiftId,
           assignments: [],
         },
       ],
@@ -56,7 +58,7 @@ const StartForm = () => {
   });
   const { trigger } = form;
 
-  // validation on next click
+  // Intermediate validation triggered when clicking next
   const nextPage = () => {
     (async () => {
       // check the current page's shift
@@ -128,7 +130,9 @@ const StartForm = () => {
               Back
             </Button>
           )}
-          <Button type='submit'>{isLastStep ? 'Finish' : 'Next'}</Button>
+          <Button type='submit' onClick={() => console.log(form.getValues())}>
+            {isLastStep ? 'Finish' : 'Next'}
+          </Button>
         </form>
       </Form>
     </div>
