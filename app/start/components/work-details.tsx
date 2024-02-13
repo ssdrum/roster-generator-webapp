@@ -56,8 +56,19 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
     });
   };
 
+  /* Updates shifts array and grid-selector data */
   const deleteShift = (index: number) => {
-    // TODO
+    // Remove shift from grid-selector data
+    const formValues = form.getValues();
+    const newValues: any[] = [];
+    formValues.numEmployeesAssigned.forEach((elem) => {
+      if (elem.shiftId !== index - 1) {
+        // The first shift index is -1 since it's pre-populated
+        newValues.push(elem);
+      }
+    });
+    form.setValue('numEmployeesAssigned', newValues);
+    // Remove shift from shifts array
     removeShift(index);
   };
 

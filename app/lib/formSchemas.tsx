@@ -70,8 +70,8 @@ export const editEmployeeSchema = z.object({
 // Export types
 export type FormType = z.infer<typeof formSchema>;
 export type ShiftType = z.infer<typeof shiftSchema>;
-export type numAssignedType = z.infer<typeof numAssignedSchema>;
-export type allNumAssignedSchema = z.infer<typeof allNumAssignedSchema>;
+export type NumAssignedType = z.infer<typeof numAssignedSchema>;
+export type AllNumAssignedSchema = z.infer<typeof allNumAssignedSchema>;
 export type Day =
   | 'Monday'
   | 'Tuesday'
