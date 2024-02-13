@@ -57,7 +57,6 @@ export const formSchema = z.object({
   numEmployeesAssigned: z.array(allNumAssignedSchema),
 });
 
-
 // Edit pages schemas
 export const editShiftSchema = z.object({
   shifts: z.array(shiftSchema),
