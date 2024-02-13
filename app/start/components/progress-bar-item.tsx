@@ -6,6 +6,7 @@ type Props = {
   alignment: 'start' | 'center' | 'end';
 };
 
+/* Sets correct spacing and color for progress-bar elements */
 const getDynamicClassName = (
   alignment: Props['alignment'],
   isChecked: boolean
@@ -15,10 +16,8 @@ const getDynamicClassName = (
     center: 'left-1/2 -translate-x-1/2',
     end: 'end-0',
   };
-
   const baseClassName = `absolute -bottom-[1.75rem] ${svgAlignments[alignment]} rounded-full text-white`;
   const colorClassName = isChecked ? 'bg-green-600' : 'bg-gray-600';
-
   return `${baseClassName} ${colorClassName}` as const;
 };
 
