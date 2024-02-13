@@ -122,6 +122,7 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
                       type='number'
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))} // convert the string to a number
+                      min={1}
                     />
                   </FormControl>
                   <FormMessage />
