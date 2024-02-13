@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import useMultiStepForm from '@/app/lib/useMultiStepForm';
 import ProgressBar from '@/app/start/components/progress-bar';
+import { v4 as uuidv4 } from 'uuid';
 
 // import types, schemas and the other two components
 import { Day, formSchema } from '../../lib/formSchemas';
@@ -25,13 +26,14 @@ const StartForm = () => {
   ];
 
   // Initialise form with default values on first render
+  const firstShiftId = uuidv4();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
       workDays: [],
       shifts: [
         {
-          shiftId: -1,
+          shiftId: firstShiftId,
           shiftName: '',
           shiftStartTime: '00:00',
           shiftEndTime: '00:00',
@@ -47,7 +49,7 @@ const StartForm = () => {
       ],
       numEmployeesAssigned: [
         {
-          shiftId: -1,
+          shiftId: firstShiftId,
           assignments: [],
         },
       ],
@@ -127,7 +129,9 @@ const StartForm = () => {
               Back
             </Button>
           )}
-          <Button type='submit'>{isLastStep ? 'Finish' : 'Next'}</Button>
+          <Button type='submit' onClick={() => console.log(form.getValues())}>
+            {isLastStep ? 'Finish' : 'Next'}
+          </Button>
         </form>
       </Form>
     </div>

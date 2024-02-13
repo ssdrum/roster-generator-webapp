@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
+import { v4 as uuidv4 } from 'uuid';
 import {
   FormControl,
   FormField,
@@ -38,8 +39,11 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
   });
 
   // defining the methods to add and delete shifts and employees
-  const addShift = (index: number) => {
-    const newAssignment = { shiftId: index, assignments: [] as any };
+  const addShift = () => {
+    // Create unique ID
+    const shiftId = uuidv4();
+
+    const newAssignment = { shiftId: shiftId, assignments: [] as any };
     form.getValues().workDays.forEach((day) => {
       const newDay = { day: day, numAssigned: 1 };
       newAssignment.assignments.push(newDay);
@@ -49,7 +53,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
     form.getValues().numEmployeesAssigned.push(newAssignment);
     // create a new shift object with our default values
     appendShift({
-      shiftId: index,
+      shiftId: shiftId,
       shiftName: '',
       shiftStartTime: '00:00',
       shiftEndTime: '00:00',
@@ -57,19 +61,18 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
   };
 
   /* Updates shifts array and grid-selector data */
-  const deleteShift = (index: number) => {
+  const deleteShift = (shiftId: any) => {
     // Remove shift from grid-selector data
     const formValues = form.getValues();
-    const newValues: any[] = [];
-    formValues.numEmployeesAssigned.forEach((elem) => {
-      if (elem.shiftId !== index - 1) {
-        // The first shift index is -1 since it's pre-populated
-        newValues.push(elem);
-      }
-    });
+    const newValues = formValues.numEmployeesAssigned.filter(
+      (elem) => elem.shiftId !== shiftId
+    );
     form.setValue('numEmployeesAssigned', newValues);
     // Remove shift from shifts array
-    removeShift(index);
+    const shiftIndex = shiftFields.findIndex(
+      (field) => field.shiftId === shiftId
+    );
+    removeShift(shiftIndex);
   };
 
   /* Updates grid-selector data when user adds or removes a workday */
@@ -242,7 +245,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
                 type='button'
                 size='icon'
                 variant='destructive'
-                onClick={() => deleteShift(index)}
+                onClick={() => deleteShift(field.shiftId)}
               >
                 <DeleteIcon className='h-6 w-6' />
               </Button>

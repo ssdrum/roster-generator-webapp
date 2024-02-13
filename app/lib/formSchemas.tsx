@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 // ************* First page *************
 export const shiftSchema = z.object({
-  shiftId: z.number(),
+  shiftId: z.string(),
   shiftName: z.string().min(1, {
     message: 'Please give the shift a name.',
   }),
