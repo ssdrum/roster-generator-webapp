@@ -25,7 +25,7 @@ const getDynamicClassName = (
 const ProgressBarItem: FC<Props> = ({ title, isChecked, alignment }) => {
   return (
     <li
-      className={`relative flex justify-${alignment} ${
+      className={`relative flex ${
         isChecked ? 'text-green-600' : 'text-gray-600'
       }`}
     >
