@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
 type Props = {
-  shiftId: number;
+  shiftId: string;
   day: number;
   value: number;
-  updateValue: (shiftId: number, day: number, newValue: number) => void;
+  updateValue: (shiftId: string, day: number, newValue: number) => void;
 };
 
 const GridCell: FC<Props> = ({ shiftId, day, value, updateValue }) => {

@@ -20,6 +20,8 @@ import { Input } from '@/app/ui/shadcn/input';
 import { Day, formSchema } from '../../lib/formSchemas';
 import { QuestionIcon, DayIcon, DeleteIcon, PlusIcon } from '@/app/lib/icons';
 
+const { v4: uuidv4 } = require('uuid');
+
 type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;
   days: Day[];
@@ -38,31 +40,45 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
   });
 
   // defining the methods to add and delete shifts and employees
-  const addShift = (index: number) => {
-    const newAssignment = { shiftId: index, assignments: [] as any };
+  const addShift = () => {
+    // Create unique ID
+    const shiftId = uuidv4();
+
+    const newAssignment = { shiftId: shiftId, assignments: [] as any };
     form.getValues().workDays.forEach((day) => {
       const newDay = { day: day, numAssigned: 1 };
       newAssignment.assignments.push(newDay);
     });
 
-    form.getValues().numEmployeesAssigned.push(newAssignment); // updates grid-selector data
-
+    // updates grid-selector data
+    form.getValues().numEmployeesAssigned.push(newAssignment);
+    // create a new shift object with our default values
     appendShift({
-      shiftId: index,
+      shiftId: shiftId,
       shiftName: '',
       shiftStartTime: '00:00',
       shiftEndTime: '00:00',
-    }); // create a new shift object with our default values
+    });
   };
 
-  const deleteShift = (index: number) => {
-    // TODO
-    removeShift(index);
+  /* Updates shifts array and grid-selector data */
+  const deleteShift = (shiftId: any) => {
+    // Remove shift from grid-selector data
+    const formValues = form.getValues();
+    const newValues = formValues.numEmployeesAssigned.filter(
+      (elem) => elem.shiftId !== shiftId
+    );
+    form.setValue('numEmployeesAssigned', newValues);
+    // Remove shift from shifts array
+    const shiftIndex = shiftFields.findIndex(
+      (field) => field.shiftId === shiftId
+    );
+    removeShift(shiftIndex);
   };
 
-  /* Updates numEmployeesAssigned array when user adds or removes a workday */
+  /* Updates grid-selector data when user adds or removes a workday */
   const updateDays = (days: number[]): void => {
-    // Removes days from form data when de-selected
+    // Removes days from form grid-selector data when de-selected
     form.getValues().numEmployeesAssigned.forEach((data) => {
       data.assignments.forEach((assignment, index) => {
         if (!days.includes(assignment.day)) {
@@ -230,7 +246,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
                 type='button'
                 size='icon'
                 variant='destructive'
-                onClick={() => deleteShift(index)}
+                onClick={() => deleteShift(field.shiftId)}
               >
                 <DeleteIcon className='h-6 w-6' />
               </Button>
@@ -244,7 +260,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
                 type='button'
                 variant='outline'
                 className='w-full'
-                onClick={() => addShift(index)}
+                onClick={addShift}
               >
                 <PlusIcon className='h-6 w-6' />
               </Button>

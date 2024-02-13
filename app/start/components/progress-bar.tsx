@@ -11,7 +11,7 @@ const ProgressBar: FC<Props> = ({ currStepIndex }) => {
       <h2 className='sr-only'>Steps</h2>
 
       <div className='after:mt-4 after:block after:h-1 after:w-full after:rounded-lg after:bg-gray-200'>
-        <ol className='grid grid-cols-3 text-sm font-medium text-gray-500'>
+        <ol className='flex justify-between text-sm font-medium text-gray-500'>
           <ProgressBarItem
             title={'Business Details'}
             isChecked={currStepIndex > 0}
