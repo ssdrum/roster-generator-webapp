@@ -105,11 +105,25 @@ const StartForm = () => {
       />,
     ]);
 
+  // Example db POST request
+  const testDB = (data: any) => {
+    // Send the POST request using fetch
+    fetch('/api/test', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .catch((error) => console.error('Error:', error));
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (isLastStep) {
       form.handleSubmit(async (data) => {
-        console.log(data);
+        testDB(data);
       })();
     } else {
       return nextPage();
@@ -130,7 +144,7 @@ const StartForm = () => {
               Back
             </Button>
           )}
-          <Button type='submit' onClick={() => console.log(form.getValues())}>
+          <Button type='submit' onClick={handleSubmit}>
             {isLastStep ? 'Finish' : 'Next'}
           </Button>
         </form>

@@ -15,7 +15,7 @@ model User {
   email         String       @unique
   createdAt     DateTime     @default(now()) @map(name: "created_at")
   updatedAt     DateTime     @updatedAt @map(name: "updated_at")
-  workDays      Int
+  workDays      Int[]
   Assignment    Assignment[]
   Employee      Employee[]
   shiftsCreated Shift[]
