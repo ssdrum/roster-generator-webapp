@@ -20,7 +20,7 @@ export async function POST(req: any) {
   });
 
   // Associates client-side shift ids with database shift ids
-  const shiftsMap: any = {};
+  const shiftsIdMap: any = {};
 
   // Create shifts and assign them to the user
   const createdShifts = await Promise.all(
@@ -36,7 +36,7 @@ export async function POST(req: any) {
         },
       });
 
-      shiftsMap[shiftId] = shift.id;
+      shiftsIdMap[shiftId] = shift.id;
     })
   );
 
@@ -62,7 +62,7 @@ export async function POST(req: any) {
 
         const shift = await prisma.shift.findUnique({
           where: {
-            id: shiftsMap[shiftId],
+            id: shiftsIdMap[shiftId],
           },
         });
 
