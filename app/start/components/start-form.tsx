@@ -19,6 +19,7 @@ const { v4: uuidv4 } = require('uuid');
 const StartForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { push } = useRouter();
+  const router = useRouter();
 
   const days: Day[] = [
     'Monday',
@@ -150,7 +151,6 @@ const StartForm = () => {
       if (jsonResponse.redirect) {
         // Use Next.js router to perform the client-side redirect
         import('next/router').then(({ useRouter }) => {
-          const router = useRouter();
           router.push(jsonResponse.redirect);
         });
       }
