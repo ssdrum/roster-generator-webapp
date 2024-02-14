@@ -28,4 +28,4 @@ done
 npx prisma migrate dev
 
 # Run prisma studio
-npx prisma studio
+npx prisma studio --browser none

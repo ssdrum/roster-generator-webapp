@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { Form } from '@/app/ui/shadcn/form';
 import { Button } from '@/app/ui/shadcn/button';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import useMultiStepForm from '@/app/lib/useMultiStepForm';
 import ProgressBar from '@/app/start/components/progress-bar';
+import { useRouter } from 'next/navigation';
 
 // import types, schemas and the other two components
 import { Day, formSchema } from '../../lib/formSchemas';
@@ -16,6 +17,9 @@ import GridSelector from '@/app/start/components/grid-selector';
 const { v4: uuidv4 } = require('uuid');
 
 const StartForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { push } = useRouter();
+
   const days: Day[] = [
     'Monday',
     'Tuesday',
@@ -28,30 +32,54 @@ const StartForm = () => {
 
   // Initialise form with default values on first render
   const firstShiftId = uuidv4();
+  const secondShiftId = uuidv4();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
-      workDays: [],
+      // Temporary dummy data to speed-up testing
+      workDays: [0, 1],
       shifts: [
         {
           shiftId: firstShiftId,
-          shiftName: '',
-          shiftStartTime: '00:00',
-          shiftEndTime: '00:00',
+          shiftName: 'Morning',
+          shiftStartTime: '08:00',
+          shiftEndTime: '12:00',
+        },
+        {
+          shiftId: secondShiftId,
+          shiftName: 'Evening',
+          shiftStartTime: '15:00',
+          shiftEndTime: '21:00',
         },
       ],
       employees: [
         {
+          employeeId: -2,
+          employeeName: 'Luigi',
+          employeeEmail: 'luigi@mail.com',
+          workingDays: 5,
+        },
+        {
           employeeId: -1,
-          employeeName: '',
-          employeeEmail: '',
-          workingDays: 0,
+          employeeName: 'Oisin',
+          employeeEmail: 'oisin@mail.com',
+          workingDays: 5,
         },
       ],
       numEmployeesAssigned: [
         {
           shiftId: firstShiftId,
-          assignments: [],
+          assignments: [
+            { day: 0, numAssigned: 1 },
+            { day: 1, numAssigned: 2 },
+          ],
+        },
+        {
+          shiftId: secondShiftId,
+          assignments: [
+            { day: 0, numAssigned: 3 },
+            { day: 1, numAssigned: 4 },
+          ],
         },
       ],
     },
@@ -106,24 +134,39 @@ const StartForm = () => {
     ]);
 
   // Example db POST request
-  const testDB = (data: any) => {
+  const submitToDB = async (data: any) => {
     // Send the POST request using fetch
-    fetch('/api/store-details', {
+    const res = await fetch('/api/store-details', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .catch((error) => console.error('Error:', error));
+    });
+
+    if (res.ok) {
+      // Assuming the API responds with a JSON object containing a 'redirect' property
+      const jsonResponse = await res.json();
+      if (jsonResponse.redirect) {
+        // Use Next.js router to perform the client-side redirect
+        import('next/router').then(({ useRouter }) => {
+          const router = useRouter();
+          router.push(jsonResponse.redirect);
+        });
+      }
+    } else {
+      console.error('Error:', res.statusText);
+    }
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (isLastStep) {
       form.handleSubmit(async (data) => {
-        testDB(data);
+        console.log(data);
+        setIsSubmitting(true);
+        submitToDB(data);
+        push('/dashboard');
       })();
     } else {
       return nextPage();
@@ -144,7 +187,7 @@ const StartForm = () => {
               Back
             </Button>
           )}
-          <Button type='submit' onClick={handleSubmit}>
+          <Button type='submit' onClick={handleSubmit} disabled={isSubmitting}>
             {isLastStep ? 'Finish' : 'Next'}
           </Button>
         </form>

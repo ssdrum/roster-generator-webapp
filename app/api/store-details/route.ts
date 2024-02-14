@@ -15,7 +15,7 @@ export async function POST(req: any) {
   });
 
   // Create shifts and assign them to the user
-  const createShifts = await Promise.all(
+  await Promise.all(
     shifts.map(async (shiftData: any) => {
       const { shiftName, shiftStartTime, shiftEndTime, shiftId } = shiftData;
 
@@ -28,12 +28,11 @@ export async function POST(req: any) {
           createdBy: user.id,
         },
       });
-      return shift;
     })
   );
 
   // Create employees and assign them to the user
-  const createEmployees = await Promise.all(
+  Promise.all(
     employees.map(async (employeeData: any) => {
       const { employeeEmail, employeeName } = employeeData;
       const employee = await prisma.employee.create({
@@ -43,12 +42,11 @@ export async function POST(req: any) {
           employedBy: user.id,
         },
       });
-      return employee;
     })
   );
 
   // Create numEmployeesAssigned and assign them to the shifts
-  const createNumEmployeesAssigned = await Promise.all(
+  await Promise.all(
     numEmployeesAssigned.map(async (numEmployeesAssignedData: any) => {
       const { shiftId, assignments } = numEmployeesAssignedData;
 
@@ -73,7 +71,6 @@ export async function POST(req: any) {
           },
         },
       });
-      return numEmployeesAssigned;
     })
   );
 
