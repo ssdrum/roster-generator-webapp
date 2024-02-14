@@ -54,6 +54,21 @@ const Dashboard = () => {
     },
   ];
 
+  const submitToDB = async (data: any) => {
+    // Send the POST request using fetch
+    try {
+    const res = await fetch('/roster-api', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   const fetchData = async () => {
     try {
       // Send the GET request using fetch
