@@ -134,7 +134,6 @@ const StartForm = () => {
       />,
     ]);
 
-  // Example db POST request
   const submitToDB = async (data: any) => {
     // Send the POST request using fetch
     const res = await fetch('/api/store-details', {

@@ -54,8 +54,28 @@ const Dashboard = () => {
     },
   ];
 
+  const fetchData = async () => {
+    try {
+      // Send the GET request using fetch
+      const res = await fetch('/api/fetch-test', {
+        method: 'GET',
+      });
+
+      if (res.ok) {
+        // Assuming the API responds with a JSON object containing a 'redirect' property
+        const jsonResponse = await res.json();
+        console.log(jsonResponse);
+      } else {
+        console.error('Error:', res.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   const handleClick = () => {
     setIsGenerating((currState) => !currState);
+    fetchData();
   };
 
   if (hasRoster) return <Roster assignments={assignments} />;
