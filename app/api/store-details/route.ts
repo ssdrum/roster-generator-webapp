@@ -17,10 +17,11 @@ export async function POST(req: any) {
   // Create shifts and assign them to the user
   const createShifts = await Promise.all(
     shifts.map(async (shiftData: any) => {
-      const { shiftName, shiftStartTime, shiftEndTime } = shiftData;
+      const { shiftName, shiftStartTime, shiftEndTime, shiftId } = shiftData;
 
       const shift = await prisma.shift.create({
         data: {
+          tempID: shiftId,
           name: shiftName,
           startTime: shiftStartTime,
           endTime: shiftEndTime,
@@ -31,11 +32,10 @@ export async function POST(req: any) {
     })
   );
 
-  // employees
+  // Create employees and assign them to the user
   const createEmployees = await Promise.all(
     employees.map(async (employeeData: any) => {
       const { employeeEmail, employeeName } = employeeData;
-
       const employee = await prisma.employee.create({
         data: {
           name: employeeName,
@@ -44,6 +44,36 @@ export async function POST(req: any) {
         },
       });
       return employee;
+    })
+  );
+
+  // Create numEmployeesAssigned and assign them to the shifts
+  const createNumEmployeesAssigned = await Promise.all(
+    numEmployeesAssigned.map(async (numEmployeesAssignedData: any) => {
+      const { shiftId, assignments } = numEmployeesAssignedData;
+
+      const shift = await prisma.shift.findUnique({
+        where: {
+          tempID: shiftId,
+        },
+      });
+
+      const numEmployeesAssigned = await prisma.numEmployeesAssigned.create({
+        data: {
+          Shift: {
+            connect: { id: shift?.id },
+          },
+          countPerDay: {
+            createMany: {
+              data: assignments.map((assignment: any) => ({
+                day: assignment.day,
+                numAssigned: assignment.numAssigned,
+              })),
+            },
+          },
+        },
+      });
+      return numEmployeesAssigned;
     })
   );
 
