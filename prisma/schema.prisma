@@ -36,7 +36,7 @@ model Employee {
 
 model Shift {
   id                   String                 @id @default(cuid())
-  tempID               String?
+  tempID               String
   name                 String
   startTime            String
   endTime              String

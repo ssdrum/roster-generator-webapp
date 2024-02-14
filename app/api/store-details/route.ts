@@ -50,7 +50,7 @@ export async function POST(req: any) {
     numEmployeesAssigned.map(async (numEmployeesAssignedData: any) => {
       const { shiftId, assignments } = numEmployeesAssignedData;
 
-      const shift = await prisma.shift.findFirst({
+      const shift = await prisma.shift.findUnique({
         where: {
           tempID: shiftId,
         },
