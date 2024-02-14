@@ -1,8 +1,15 @@
 'use client';
 
+import { useState } from 'react';
+import ButtonLoading from './components/loading-button';
+import { Button } from '@/app/ui/shadcn/button';
 import Roster from './components/roster';
 
-const Page = () => {
+const hasRoster = false;
+
+const Dashboard = () => {
+  const [isGenerating, setIsGenerating] = useState(false);
+
   // temporary assignments data
   const assignments = [
     {
@@ -47,7 +54,17 @@ const Page = () => {
     },
   ];
 
-  return <Roster assignments={assignments} />;
+  const handleClick = () => {
+    setIsGenerating((currState) => !currState);
+  };
+
+  if (hasRoster) return <Roster assignments={assignments} />;
+  else
+    return isGenerating ? (
+      <ButtonLoading handleClick={handleClick} />
+    ) : (
+      <Button onClick={handleClick}>Generate Roster</Button>
+    );
 };
 
-export default Page;
+export default Dashboard;
