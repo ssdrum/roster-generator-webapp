@@ -45,9 +45,9 @@ export default async function Home() {
           alt='Example'
           className='w-full rounded-t-lg'
           height='600'
-          src='/example.png'
+          src='/roster.png'
           style={{
-            aspectRatio: '1200/600',
+            aspectRatio: '1356/455',
             objectFit: 'cover',
           }}
           width='1200'

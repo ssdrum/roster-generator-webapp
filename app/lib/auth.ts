@@ -33,6 +33,7 @@ export const authOptions: NextAuthOptions = {
         create: {
           email: profile.email,
           name: profile.name!,
+          workDays: [],
         },
         update: {
           name: profile.name!,
