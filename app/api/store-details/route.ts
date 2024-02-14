@@ -20,7 +20,7 @@ export async function POST(req: any) {
   });
 
   // Associates client-side shift ids with database shift ids
-  const shiftsIdMap: any = {};
+  const shiftsIdMap: {[key: string]: string} = {};
 
   // Create shifts and assign them to the user
   const createdShifts = await Promise.all(
