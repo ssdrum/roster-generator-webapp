@@ -19,6 +19,9 @@ export async function GET() {
 
   const user = await prisma.user.findFirst({ where: { id: userId } })!;
 
+  console.log(numEmployeesAssigned)
+
+
   // Return object
   const data = {
     user: user,

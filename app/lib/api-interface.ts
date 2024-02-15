@@ -2,11 +2,12 @@
 const genRoster = async () => {
   // Get user data
   const userData = await queryDB();
+  console.log(userData.numEmployeesAssigned);
 
   // Construct object to send to API
   const num_employees: number = userData.employees.length;
   const num_days: number = userData.user.workDays.length;
-  const num_shifts: number = userData.numEmployeesAssigned.length + 1;
+  const num_shifts: number = userData.numEmployeesAssigned.length + 1; // Includes off shift
   const soft_days_off: boolean = true;
 
   const queryData = {
@@ -18,6 +19,24 @@ const genRoster = async () => {
 
   // query roster API
   const APIres = await queryRosterAPI(queryData);
+  //console.log(APIres);
+
+  const rosterData: any = [];
+
+  APIres.data.forEach((element: any) => {
+    const APIshifts = element.shifts;
+    const shiftsAssigned: any = {};
+    shiftsAssigned['employee'] =
+      userData.employees[parseInt(element.employee_num) - 1].name;
+    shiftsAssigned['shifts'] = APIshifts.map((shift: any, i: number) =>
+      shift === 1
+        ? null
+        : { name: 'Blah', startTime: '8:00 AM', endTime: '4:00 PM' } // Temporary hardcoded
+    );
+    rosterData.push(shiftsAssigned);
+  });
+
+  return rosterData;
 };
 
 /* Queries and returns user information from database */

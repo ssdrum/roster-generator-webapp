@@ -7,7 +7,11 @@ import {
   AllNumAssignedSchema,
 } from '@/app/lib/formSchemas';
 
-export async function POST(req: any) {
+type PostReq = {
+    json: () => any;
+};
+
+export async function POST(req: PostReq): Promise<NextResponse> {
   const user = await getUserSession();
   const data = await req.json();
 

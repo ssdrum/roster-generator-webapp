@@ -3,13 +3,12 @@
 import { useState } from 'react';
 import ButtonLoading from './components/loading-button';
 import { Button } from '@/app/ui/shadcn/button';
-import Roster from './components/roster';
 import genRoster from '@/app/lib/api-interface';
-
-const hasRoster = false;
+import Roster from './components/roster';
 
 const Dashboard = () => {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [rosterData, setRosterData] = useState(null);
 
   // temporary assignments data
   const assignments = [
@@ -55,7 +54,7 @@ const Dashboard = () => {
     },
   ];
 
-  const handleClick = () => {
+  const handleClick = async () => {
     // setIsGenerating((currState) => !currState);
     // Query data from db
     // Translate for API
@@ -63,16 +62,20 @@ const Dashboard = () => {
     // Get data back
     // Show roster
     // Store to db
-    genRoster();
+    setRosterData(await genRoster());
   };
 
   //if (hasRoster) return <Roster assignments={assignments} />;
   //else
-  return isGenerating ? (
-    <ButtonLoading handleClick={handleClick} />
-  ) : (
-    <Button onClick={handleClick}>Generate Roster</Button>
-  );
+  if (rosterData) {
+    return <Roster assignments={rosterData} />;
+  } else {
+    return isGenerating ? (
+      <ButtonLoading handleClick={handleClick} />
+    ) : (
+      <Button onClick={handleClick}>Generate Roster</Button>
+    );
+  }
 };
 
 export default Dashboard;
