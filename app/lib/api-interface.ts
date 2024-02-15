@@ -20,7 +20,7 @@ const genRoster = async () => {
   const APIres = await queryRosterAPI(queryData);
 };
 
-/* Gets user information from database */
+/* Queries and returns user information from database */
 const queryDB = async () => {
   try {
     const res = await fetch('/api/fetch-data', {
@@ -41,7 +41,7 @@ const queryDB = async () => {
   }
 };
 
-// Query API
+/* Queries roster and returns response object data API */
 const queryRosterAPI = async (queryData: any) => {
   try {
     const res = await fetch('/roster_api/make_roster', {
@@ -63,7 +63,12 @@ const queryRosterAPI = async (queryData: any) => {
   }
 };
 
-// Todo
-const processAPIResponse = (userData, APIresponse) => {};
+// TODO
+/* Processes roster API response and formats it correctly to be displayed on
+* dashboard
+*/
+const processAPIResponse = (userData, APIresponse) => {
+    console.log("TODO")
+};
 
 export default genRoster
