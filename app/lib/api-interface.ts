@@ -65,10 +65,10 @@ const queryRosterAPI = async (queryData: any) => {
 
 // TODO
 /* Processes roster API response and formats it correctly to be displayed on
-* dashboard
-*/
+ * dashboard
+ */
 const processAPIResponse = (userData, APIresponse) => {
-    console.log("TODO")
+  console.log('TODO');
 };
 
-export default genRoster
+export default genRoster;

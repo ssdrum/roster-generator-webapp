@@ -68,11 +68,11 @@ const Dashboard = () => {
 
   //if (hasRoster) return <Roster assignments={assignments} />;
   //else
-    return isGenerating ? (
-      <ButtonLoading handleClick={handleClick} />
-    ) : (
-      <Button onClick={handleClick}>Generate Roster</Button>
-    );
+  return isGenerating ? (
+    <ButtonLoading handleClick={handleClick} />
+  ) : (
+    <Button onClick={handleClick}>Generate Roster</Button>
+  );
 };
 
 export default Dashboard;
