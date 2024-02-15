@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ButtonLoading from './components/loading-button';
 import { Button } from '@/app/ui/shadcn/button';
 import Roster from './components/roster';
+import genRoster from '@/app/lib/api-interface';
 
 const hasRoster = false;
 
@@ -13,7 +14,7 @@ const Dashboard = () => {
   // temporary assignments data
   const assignments = [
     {
-      employee: 'John',
+      employee: 'employeeID',
       shifts: [
         { name: 'Blah', startTime: '8:00 AM', endTime: '4:00 PM' },
         null,
@@ -54,47 +55,19 @@ const Dashboard = () => {
     },
   ];
 
-  const submitToDB = async (data: any) => {
-    // Send the POST request using fetch
-    try {
-    const res = await fetch('/roster-api', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-  const fetchData = async () => {
-    try {
-      // Send the GET request using fetch
-      const res = await fetch('/api/fetch-test', {
-        method: 'GET',
-      });
-
-      if (res.ok) {
-        // Assuming the API responds with a JSON object containing a 'redirect' property
-        const jsonResponse = await res.json();
-        console.log(jsonResponse);
-      } else {
-        console.error('Error:', res.statusText);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   const handleClick = () => {
-    setIsGenerating((currState) => !currState);
-    fetchData();
+    // setIsGenerating((currState) => !currState);
+    // Query data from db
+    // Translate for API
+    // Send to API
+    // Get data back
+    // Show roster
+    // Store to db
+    genRoster();
   };
 
-  if (hasRoster) return <Roster assignments={assignments} />;
-  else
+  //if (hasRoster) return <Roster assignments={assignments} />;
+  //else
     return isGenerating ? (
       <ButtonLoading handleClick={handleClick} />
     ) : (
