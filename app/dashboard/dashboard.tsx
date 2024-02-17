@@ -2,22 +2,25 @@
 
 import { FC, useState } from 'react';
 import Roster from './components/roster';
-import { Employee, NumEmployeesAssigned, Shift } from '@prisma/client';
+import { Employee, NumEmployeesAssigned, Shift, User } from '@prisma/client';
 import ButtonLoading from './components/button-loading';
 import { Button } from '../ui/shadcn/button';
+import genRoster from '../lib/roster-api-interface';
 
 type Props = {
+  user: User;
   employees: Employee[];
   shifts: Shift[];
   numEmployeesAssigned: NumEmployeesAssigned[];
 };
 
-const Dashboard: FC<Props> = ({ employees, shifts, numEmployeesAssigned }) => {
+const Dashboard: FC<Props> = ({ user, employees, shifts, numEmployeesAssigned }) => {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleClick = async () => {
     setIsGenerating(true);
-    console.log('clicked');
+    await new Promise(resolve => setTimeout(resolve,  1000)); // Wait one second
+    await genRoster(user, employees, shifts)
     setIsGenerating(false);
   };
 
