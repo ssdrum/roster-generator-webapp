@@ -13,6 +13,16 @@ export const fetchUsers = async (): Promise<User[]> => {
   return users;
 };
 
+export const fetchUserData = async (userId: string): Promise<User> => {
+  /* Returns user data */
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId
+    },
+  });
+  return user!;
+};
+
 export const fetchEmployees = async (userId: string): Promise<Employee[]> => {
   /* Returns all employees created by user */
   const employees = await prisma.employee.findMany({

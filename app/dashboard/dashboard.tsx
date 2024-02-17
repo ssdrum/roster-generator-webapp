@@ -1,15 +1,17 @@
 import { FC } from 'react';
 import Roster from './components/roster';
-import { Employee, NumEmployeesAssigned, Shift } from '@prisma/client';
+import { Employee, NumEmployeesAssigned, Shift, User } from '@prisma/client';
 
 type Props = {
+  user: User;
   employees: Employee[];
   shifts: Shift[];
   numEmployeesAssigned: NumEmployeesAssigned[];
 };
 
-const Dashboard: FC<Props> = ({ employees, shifts, numEmployeesAssigned }) => {
+const Dashboard: FC<Props> = ({ user, employees, shifts, numEmployeesAssigned }) => {
   // This is a server-component, ergo the logs will also happen server side (not in the browser)
+  console.log(user);
   console.log(employees);
   console.log(shifts);
   console.log(numEmployeesAssigned);
