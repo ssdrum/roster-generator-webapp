@@ -15,15 +15,20 @@ type Props = {
   numEmployeesAssigned: NumEmployeesAssigned[];
 };
 
-const Dashboard: FC<Props> = ({ user, employees, shifts, numEmployeesAssigned }) => {
+const Dashboard: FC<Props> = ({
+  user,
+  employees,
+  shifts,
+  numEmployeesAssigned,
+}) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [rosterData, setRosterData] = useState(null);
 
   const handleClick = async () => {
     setIsGenerating(true);
-    await new Promise(resolve => setTimeout(resolve,  1000)); // Wait one second
-    const roster = await genRoster(user, employees, shifts)
-    setRosterData(roster)
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait one second
+    const roster = await genRoster(user, employees, shifts);
+    setRosterData(roster);
     setIsGenerating(false);
   };
 
@@ -53,7 +58,7 @@ const Dashboard: FC<Props> = ({ user, employees, shifts, numEmployeesAssigned })
 
   return (
     <>
-      <Title title={"Dashboard"} />
+      <Title title={'Dashboard'} />
       {rosterData && <Roster assignments={rosterData} />}
       {isGenerating ? (
         <ButtonLoading />
