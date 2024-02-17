@@ -1,5 +1,12 @@
+import Title from '@/app/ui/title';
+
 const AssignmentsPage = () => {
-  return <>Assignments Page</>;
+  return (
+    <>
+      <Title title={'Assignments'} />
+      Assignments Page
+    </>
+  );
 };
 
 export default AssignmentsPage;

@@ -1,9 +1,13 @@
-'use client';
-
 import EditShifts from '../components/edit-shifts';
+import Title from '@/app/ui/title';
 
 const ShiftsPage = () => {
-  return <EditShifts />;
+  return (
+    <>
+      <Title title={'Shifts'} />
+      <EditShifts />;
+    </>
+  );
 };
 
 export default ShiftsPage;

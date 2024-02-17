@@ -1,3 +1,5 @@
+'use client';
+
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -97,7 +99,7 @@ export default function EditEmployees() {
   };
 
   return (
-    <div className='flex min-h-screen items-start justify-center pt-48'>
+    <div className='flex min-h-screen items-start justify-center'>
       {/* shadcn form wrapper */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
