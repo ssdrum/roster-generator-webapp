@@ -10,15 +10,16 @@ datasource db {
 }
 
 model User {
-  id            String       @id @default(cuid())
-  name          String
-  email         String       @unique
-  createdAt     DateTime     @default(now()) @map(name: "created_at")
-  updatedAt     DateTime     @updatedAt @map(name: "updated_at")
-  workDays      Int[]
-  Assignment    Assignment[]
-  Employee      Employee[]
-  shiftsCreated Shift[]
+  id                   String                 @id @default(cuid())
+  name                 String
+  email                String                 @unique
+  createdAt            DateTime               @default(now()) @map(name: "created_at")
+  updatedAt            DateTime               @updatedAt @map(name: "updated_at")
+  workDays             Int[]
+  Assignment           Assignment[]
+  Employee             Employee[]
+  shiftsCreated        Shift[]
+  NumEmployeesAssigned NumEmployeesAssigned[]
 
   @@map(name: "users")
 }
@@ -66,6 +67,8 @@ model NumEmployeesAssigned {
   shift       String
   Shift       Shift         @relation(fields: [shift], references: [id])
   countPerDay CountPerDay[]
+  assignedBy  String
+  User        User          @relation(fields: [assignedBy], references: [id])
 
   @@map(name: "num_employees_assigned")
 }

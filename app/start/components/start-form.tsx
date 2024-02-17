@@ -1,3 +1,5 @@
+'use client';
+
 import { FormEvent, useState } from 'react';
 import { Form } from '@/app/ui/shadcn/form';
 import { Button } from '@/app/ui/shadcn/button';
@@ -165,7 +167,7 @@ const StartForm = () => {
       form.handleSubmit(async (data) => {
         console.log(data);
         setIsSubmitting(true);
-        submitToDB(data);
+        await submitToDB(data);
         push('/dashboard');
       })();
     } else {

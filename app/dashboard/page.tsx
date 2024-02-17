@@ -1,53 +1,28 @@
-'use client';
+import {
+  fetchEmployees,
+  fetchNumEmployeesAssigned,
+  fetchShifts,
+} from '../lib/data';
+import { getUserSession } from '../lib/session';
+import Dashboard from './dashboard';
 
-import Roster from './components/roster';
+const FetchWrapper = async () => {
+  // Retreive user id
+  const user = await getUserSession();
+  const userId = user.id;
 
-const Page = () => {
-  // temporary assignments data
-  const assignments = [
-    {
-      employee: 'John',
-      shifts: [
-        { name: 'Blah', startTime: '8:00 AM', endTime: '4:00 PM' },
-        null,
-        { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
-        null,
-        { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' },
-      ],
-    },
-    {
-      employee: 'Jane',
-      shifts: [
-        null,
-        { name: 'Morning', startTime: '8:00 AM', endTime: '4:00 PM' },
-        null,
-        { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
-        { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' },
-      ],
-    },
-    {
-      employee: 'Bob',
-      shifts: [
-        { name: 'Morning', startTime: '8:00 AM', endTime: '4:00 PM' },
-        null,
-        null,
-        { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
-        null,
-      ],
-    },
-    {
-      employee: 'Alice',
-      shifts: [
-        null,
-        null,
-        { name: 'Morning', startTime: '8:00 AM', endTime: '4:00 PM' },
-        { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
-        { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' },
-      ],
-    },
-  ];
+  // Fetch all data related to user server-side
+  const employees = await fetchEmployees(userId);
+  const shifts = await fetchShifts(userId);
+  const numEmployeesAssigned = await fetchNumEmployeesAssigned(userId);
 
-  return <Roster assignments={assignments} />;
+  return (
+    <Dashboard
+      employees={employees}
+      shifts={shifts}
+      numEmployeesAssigned={numEmployeesAssigned}
+    />
+  );
 };
 
-export default Page;
+export default FetchWrapper;
