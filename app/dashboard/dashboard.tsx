@@ -9,6 +9,7 @@ type Props = {
 };
 
 const Dashboard: FC<Props> = ({ employees, shifts, numEmployeesAssigned }) => {
+  // This is a server-component, ergo the logs will also happen server side (not in the browser)
   console.log(employees);
   console.log(shifts);
   console.log(numEmployeesAssigned);

@@ -7,7 +7,6 @@ import {
   NumEmployeesAssigned,
 } from '@prisma/client'; // Prisma generates classess associated with the models defined in the schema automatically
 
-
 /* Collection of functions to fetch data from the database */
 export const fetchUsers = async (): Promise<User[]> => {
   const users = await prisma.user.findMany();

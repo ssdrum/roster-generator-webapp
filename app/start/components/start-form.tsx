@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { FormEvent, useState } from 'react';
 import { Form } from '@/app/ui/shadcn/form';
