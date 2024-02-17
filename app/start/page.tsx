@@ -1,4 +1,3 @@
-'use client';
 import StartForm from './components/start-form';
 
 const Page = () => {

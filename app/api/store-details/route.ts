@@ -7,7 +7,7 @@ import {
   AllNumAssignedSchema,
 } from '@/app/lib/formSchemas';
 
-export async function POST(req: any) {
+export async function POST(req: any): Promise<NextResponse> {
   const user = await getUserSession();
   const data = await req.json();
 
@@ -20,7 +20,7 @@ export async function POST(req: any) {
   });
 
   // Associates client-side shift ids with database shift ids
-  const shiftsIdMap: {[key: string]: string} = {};
+  const shiftsIdMap: { [key: string]: string } = {};
 
   // Create shifts and assign them to the user
   const createdShifts = await Promise.all(
@@ -78,6 +78,9 @@ export async function POST(req: any) {
                   numAssigned: assignment.numAssigned,
                 })),
               },
+            },
+            User: {
+              connect: { id: user.id }, // Connect the current user as the one who assigned this record
             },
           },
         });
