@@ -14,7 +14,7 @@ import {
 } from '@/app/ui/shadcn/ui/select';
 
 type Props = {
-  selected?: string,
+  selected?: string;
   shifts: Shift[];
 };
 

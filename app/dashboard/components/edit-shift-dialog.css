@@ -3,7 +3,6 @@
 @import '@radix-ui/colors/mauve.css';
 @import '@radix-ui/colors/violet.css';
 
-
 .DialogOverlay {
   background-color: var(--black-a9);
   position: fixed;
@@ -59,7 +58,7 @@
 .Button.green {
   background-color: var(--green-4);
   color: var(--green-11);
-  padding: .5rem;
+  padding: 0.5rem;
 }
 .Button.green:hover {
   background-color: var(--green-5);

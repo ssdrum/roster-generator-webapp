@@ -60,12 +60,7 @@ const Dashboard: FC<Props> = ({
   return (
     <>
       <Title title={'Dashboard'} />
-      {rosterData && (
-        <Roster
-          assignments={rosterData}
-          shifts={shifts}
-        />
-      )}
+      {rosterData && <Roster assignments={rosterData} shifts={shifts} />}
       {isGenerating ? (
         <ButtonLoading />
       ) : (
