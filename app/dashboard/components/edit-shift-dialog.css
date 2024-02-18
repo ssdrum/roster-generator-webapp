@@ -3,12 +3,6 @@
 @import '@radix-ui/colors/mauve.css';
 @import '@radix-ui/colors/violet.css';
 
-/* reset */
-button,
-fieldset,
-input {
-  all: unset;
-}
 
 .DialogOverlay {
   background-color: var(--black-a9);
@@ -65,6 +59,7 @@ input {
 .Button.green {
   background-color: var(--green-4);
   color: var(--green-11);
+  padding: .5rem;
 }
 .Button.green:hover {
   background-color: var(--green-5);

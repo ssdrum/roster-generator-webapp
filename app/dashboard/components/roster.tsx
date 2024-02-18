@@ -17,12 +17,11 @@ type RosterAssignment = {
 
 type Props = {
   assignments: RosterAssignment[];
-  shifts: Shift[]
+  shifts: Shift[];
 };
 
 const Roster: FC<Props> = ({ assignments, shifts }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  console.log(assignments)
 
   // the function for choosing which side the shift should extend to
   function determineSide(shifts: (Shift | null)[], index: number): string {
@@ -66,11 +65,14 @@ const Roster: FC<Props> = ({ assignments, shifts }) => {
             {/* loop over the assignments array and get the employees and their shifts */}
             {assignments.map(({ employee, shiftsAssigned }) => (
               <TableRow key={employee.name}>
-                <TableCell className='w-64 font-medium'>{employee.name}</TableCell>
+                <TableCell className='w-64 font-medium'>
+                  {employee.name}
+                </TableCell>
                 {/* loop over the days and draw shifts in the cells where there are shifts */}
                 {days.map((d, index) => (
                   <TableCell key={index} className='border-l p-0'>
-                    {shiftsAssigned !== null && shiftsAssigned[index] !== null ? (
+                    {shiftsAssigned !== null &&
+                    shiftsAssigned[index] !== null ? (
                       // pass the props to the shift component
                       <RosterShift
                         side={
@@ -80,6 +82,7 @@ const Roster: FC<Props> = ({ assignments, shifts }) => {
                             | 'single'
                             | 'both'
                         } // calculate if it should stretch to a side, and assert into the allowed options
+                        id={shiftsAssigned[index]?.id}
                         name={shiftsAssigned[index]?.name}
                         startTime={shiftsAssigned[index]?.startTime}
                         endTime={shiftsAssigned[index]?.endTime}
