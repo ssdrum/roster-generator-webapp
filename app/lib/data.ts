@@ -17,7 +17,7 @@ export const fetchUserData = async (userId: string): Promise<User> => {
   /* Returns user data */
   const user = await prisma.user.findUnique({
     where: {
-      id: userId
+      id: userId,
     },
   });
   return user!;

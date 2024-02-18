@@ -39,8 +39,7 @@ const StartForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
-      // Temporary dummy data to speed-up testing
-      workDays: [0, 1],
+      workDays: [0, 1, 2, 3, 4],
       shifts: [
         {
           shiftId: firstShiftId,
@@ -56,6 +55,18 @@ const StartForm = () => {
         },
       ],
       employees: [
+        {
+          employeeId: -4,
+          employeeName: 'Good Employee',
+          employeeEmail: 'good@mail.com',
+          workingDays: 5,
+        },
+        {
+          employeeId: -3,
+          employeeName: 'Bad Employee',
+          employeeEmail: 'bad@mail.com',
+          workingDays: 5,
+        },
         {
           employeeId: -2,
           employeeName: 'Luigi',
@@ -75,13 +86,19 @@ const StartForm = () => {
           assignments: [
             { day: 0, numAssigned: 1 },
             { day: 1, numAssigned: 2 },
+            { day: 2, numAssigned: 2 },
+            { day: 3, numAssigned: 2 },
+            { day: 4, numAssigned: 2 },
           ],
         },
         {
           shiftId: secondShiftId,
           assignments: [
-            { day: 0, numAssigned: 3 },
-            { day: 1, numAssigned: 4 },
+            { day: 0, numAssigned: 1 },
+            { day: 1, numAssigned: 2 },
+            { day: 2, numAssigned: 2 },
+            { day: 3, numAssigned: 2 },
+            { day: 4, numAssigned: 2 },
           ],
         },
       ],
