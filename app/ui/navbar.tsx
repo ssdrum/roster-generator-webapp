@@ -51,7 +51,7 @@ const Navbar: FC<Props> = ({ session }) => {
               <NavbarMenuItem
                 title={'Shifts'}
                 icon={faClock}
-                link={'/dashboard/shifts'}
+                link={'/dashboard/edit-shifts'}
               />
               <NavbarMenuItem
                 title={'Employees'}
