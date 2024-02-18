@@ -1,24 +1,25 @@
-// File: shift.tsx
-// Description: the component that renders in the grid for the shift, takes the values as a prop
-// Created  by: root
-//          at: 22:50 on Sunday, the 11th of February, 2024.
-// Last edited: 00:00 on Monday, the 12th of February, 2024.
+import { Shift } from '@prisma/client';
+import EditShiftBtn from './edit-shift-dialog';
 
-interface Details {
+interface Props {
+  id?: string;
   side: 'left' | 'right' | 'single' | 'both'; // the side to extend to, if any
   name?: string;
   startTime?: string;
   endTime?: string;
   employee: string;
+  shifts: Shift[];
 }
 
-const Shift: React.FC<Details> = ({
+const RosterShift: React.FC<Props> = ({
+  id,
   side,
   name,
   startTime,
   endTime,
   employee,
-}: Details) => {
+  shifts,
+}) => {
   // apply the tailwind classes depending on the side prop we passed
   // this joins shift segments together if they're next to each other
   const adjustSide = () => {
@@ -86,7 +87,10 @@ const Shift: React.FC<Details> = ({
       className={`h-16 text-white ${adjustSide()}`}
     >
       <div className='flex h-full flex-col justify-center'>
-        <div className='text-sm font-semibold'>{name}</div>
+        <div className='flex justify-between text-sm font-semibold'>
+          <p>{name}</p>
+          <EditShiftBtn shifts={shifts} selected={id} />
+        </div>
         <div className='text-xs'>
           {startTime} - {endTime}
         </div>
@@ -95,4 +99,4 @@ const Shift: React.FC<Details> = ({
   );
 };
 
-export default Shift;
+export default RosterShift;

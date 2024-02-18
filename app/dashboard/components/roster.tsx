@@ -1,10 +1,4 @@
-// File: roster.tsx
-// Description: the main component on the dashboard which shows the roster for the week
-// Created  by: osh
-//          at: 17:07 on Sunday, the 11th of February, 2024.
-// Last edited: 23:55 on Sunday, the 11th of February, 2024.
-
-// shadcn
+import { FC } from 'react';
 import {
   Table,
   TableHeader,
@@ -13,24 +7,20 @@ import {
   TableBody,
   TableCell,
 } from '@/app/ui/shadcn/table';
-import Shift from './shift';
+import RosterShift from './roster-shift';
+import { Employee, Shift } from '@prisma/client';
 
-interface Shift {
-  name: string;
-  startTime: string;
-  endTime: string;
-}
+type RosterAssignment = {
+  employee: Employee;
+  shiftsAssigned: (Shift | null)[];
+};
 
-interface Assignment {
-  employee: string;
-  shifts: (Shift | null)[];
-}
+type Props = {
+  assignments: RosterAssignment[];
+  shifts: Shift[];
+};
 
-interface Props {
-  assignments: Assignment[];
-}
-
-const Roster: React.FC<Props> = ({ assignments }: Props) => {
+const Roster: FC<Props> = ({ assignments, shifts }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   // the function for choosing which side the shift should extend to
@@ -73,26 +63,31 @@ const Roster: React.FC<Props> = ({ assignments }: Props) => {
           </TableHeader>
           <TableBody>
             {/* loop over the assignments array and get the employees and their shifts */}
-            {assignments.map(({ employee, shifts }) => (
-              <TableRow key={employee}>
-                <TableCell className='w-64 font-medium'>{employee}</TableCell>
+            {assignments.map(({ employee, shiftsAssigned }) => (
+              <TableRow key={employee.name}>
+                <TableCell className='w-64 font-medium'>
+                  {employee.name}
+                </TableCell>
                 {/* loop over the days and draw shifts in the cells where there are shifts */}
                 {days.map((d, index) => (
                   <TableCell key={index} className='border-l p-0'>
-                    {shifts !== null && shifts[index] !== null ? (
+                    {shiftsAssigned !== null &&
+                    shiftsAssigned[index] !== null ? (
                       // pass the props to the shift component
-                      <Shift
+                      <RosterShift
                         side={
-                          determineSide(shifts, index) as
+                          determineSide(shiftsAssigned, index) as
                             | 'left'
                             | 'right'
                             | 'single'
                             | 'both'
                         } // calculate if it should stretch to a side, and assert into the allowed options
-                        name={shifts[index]?.name}
-                        startTime={shifts[index]?.startTime}
-                        endTime={shifts[index]?.endTime}
-                        employee={employee}
+                        id={shiftsAssigned[index]?.id}
+                        name={shiftsAssigned[index]?.name}
+                        startTime={shiftsAssigned[index]?.startTime}
+                        endTime={shiftsAssigned[index]?.endTime}
+                        employee={employee.name}
+                        shifts={shifts}
                       />
                     ) : (
                       ''

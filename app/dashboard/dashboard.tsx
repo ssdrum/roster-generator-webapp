@@ -7,6 +7,7 @@ import ButtonLoading from './components/button-loading';
 import { Button } from '../ui/shadcn/button';
 import genRoster from '../lib/roster-api-interface';
 import Title from '@/app/ui/title';
+import EditShiftBtn from './components/edit-shift-dialog';
 
 type Props = {
   user: User;
@@ -59,7 +60,7 @@ const Dashboard: FC<Props> = ({
   return (
     <>
       <Title title={'Dashboard'} />
-      {rosterData && <Roster assignments={rosterData} />}
+      {rosterData && <Roster assignments={rosterData} shifts={shifts} />}
       {isGenerating ? (
         <ButtonLoading />
       ) : (
