@@ -169,9 +169,7 @@ const StartForm = () => {
       const jsonResponse = await res.json();
       if (jsonResponse.redirect) {
         // Use Next.js router to perform the client-side redirect
-        import('next/router').then(({ useRouter }) => {
           router.push(jsonResponse.redirect);
-        });
       }
     } else {
       console.error('Error:', res.statusText);

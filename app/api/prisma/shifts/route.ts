@@ -2,20 +2,10 @@ import { prisma } from '@/app/lib/prisma';
 import { NextResponse } from 'next/server';
 import { getUserSession } from '@/app/lib/session';
 
-export async function GET(req: any) {
-  const user = await getUserSession();
-
-  const data = await prisma.shift.findMany({
-    where: { createdBy: user.id },
-  });
-
-  return NextResponse.json({ data }, { status: 200 });
-}
-
 export async function POST(req: any) {
   const shifts = await req.json();
-  console.log('req ', await shifts);
-  const user = await getUserSession();
+  const session = await getUserSession();
+  const userId = session.id;
 
   // check if shifts is an array
   if (!Array.isArray(shifts)) {
@@ -42,7 +32,7 @@ export async function POST(req: any) {
           name: name,
           startTime: startTime,
           endTime: endTime,
-          createdBy: user.id,
+          createdBy: userId,
         },
       });
     })
@@ -52,7 +42,7 @@ export async function POST(req: any) {
   const deleteShiftIds = upsertShifts.map((shift) => shift.id);
   const deleteShifts = await prisma.shift.deleteMany({
     where: {
-      createdBy: user.id,
+      createdBy: userId,
       NOT: {
         id: {
           in: deleteShiftIds,
