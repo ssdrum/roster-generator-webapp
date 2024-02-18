@@ -25,18 +25,18 @@ export async function POST(req: any): Promise<NextResponse> {
   // Create shifts and assign them to the user
   const createdShifts = await Promise.all(
     shifts.map(async (shiftData: ShiftType) => {
-      const { shiftId, shiftName, shiftStartTime, shiftEndTime } = shiftData;
+      const { id, name, startTime, endTime } = shiftData;
 
       const shift = await prisma.shift.create({
         data: {
-          name: shiftName,
-          startTime: shiftStartTime,
-          endTime: shiftEndTime,
+          name: name,
+          startTime: startTime,
+          endTime: endTime,
           createdBy: user.id,
         },
       });
 
-      shiftsIdMap[shiftId] = shift.id;
+      shiftsIdMap[id] = shift.id;
     })
   );
 

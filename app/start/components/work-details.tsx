@@ -54,10 +54,10 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
     form.getValues().numEmployeesAssigned.push(newAssignment);
     // create a new shift object with our default values
     appendShift({
-      shiftId: shiftId,
-      shiftName: '',
-      shiftStartTime: '00:00',
-      shiftEndTime: '00:00',
+      id: shiftId,
+      name: '',
+      startTime: '00:00',
+      endTime: '00:00',
     });
   };
 
@@ -70,9 +70,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
     );
     form.setValue('numEmployeesAssigned', newValues);
     // Remove shift from shifts array
-    const shiftIndex = shiftFields.findIndex(
-      (field) => field.shiftId === shiftId
-    );
+    const shiftIndex = shiftFields.findIndex((field) => field.id === shiftId);
     removeShift(shiftIndex);
   };
 
@@ -169,7 +167,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
           <div className='col-span-4 pr-4'>
             <FormField
               control={form.control}
-              name={`shifts.${index}.shiftName`}
+              name={`shifts.${index}.name`}
               render={({ field }) => (
                 <FormItem>
                   {/* only render the label for the first one */}
@@ -205,7 +203,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
           <div className='col-span-2 pr-4'>
             <FormField
               control={form.control}
-              name={`shifts.${index}.shiftStartTime`}
+              name={`shifts.${index}.startTime`}
               render={({ field }) => (
                 <FormItem>
                   {index === 0 && (
@@ -226,7 +224,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
           <div className='col-span-2 pr-4'>
             <FormField
               control={form.control}
-              name={`shifts.${index}.shiftEndTime`}
+              name={`shifts.${index}.endTime`}
               render={({ field }) => (
                 <FormItem>
                   {index === 0 && <FormLabel>End Time</FormLabel>}
@@ -246,7 +244,7 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
                 type='button'
                 size='icon'
                 variant='destructive'
-                onClick={() => deleteShift(field.shiftId)}
+                onClick={() => deleteShift(field.id)}
               >
                 <DeleteIcon className='h-6 w-6' />
               </Button>

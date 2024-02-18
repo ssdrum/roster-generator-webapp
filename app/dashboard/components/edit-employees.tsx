@@ -27,7 +27,7 @@ import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
 export default function EditEmployees() {
   const { employees } = useContext(DashboardContext)!;
   console.log(employees);
-  
+
   // here we would load the shift data from the db into this component,
   // but for now we have dummy data
   const tempEmployees = [

@@ -42,16 +42,16 @@ const StartForm = () => {
       workDays: [0, 1, 2, 3, 4],
       shifts: [
         {
-          shiftId: firstShiftId,
-          shiftName: 'Morning',
-          shiftStartTime: '08:00',
-          shiftEndTime: '12:00',
+          id: firstShiftId,
+          name: 'Morning',
+          startTime: '08:00',
+          endTime: '12:00',
         },
         {
-          shiftId: secondShiftId,
-          shiftName: 'Evening',
-          shiftStartTime: '15:00',
-          shiftEndTime: '21:00',
+          id: secondShiftId,
+          name: 'Evening',
+          startTime: '15:00',
+          endTime: '21:00',
         },
       ],
       employees: [

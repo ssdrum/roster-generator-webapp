@@ -14,25 +14,21 @@ type Props = {
 
 const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
   /* Get value for each cell from form data from form data */
-  const getValue = (shiftId: string, day: number): number => {
+  const getValue = (id: string, day: number): number => {
     const formValues = form.getValues();
     const shift = formValues.numEmployeesAssigned.find(
-      (s) => s.shiftId === shiftId
+      (s) => s.shiftId === id
     )!;
     const assignment = shift.assignments.find((a) => a.day === day)!;
     return assignment.numAssigned;
   };
 
   /* Updates form value on change */
-  const updateValue = (
-    shiftId: string,
-    day: number,
-    newValue: number
-  ): void => {
-    // Locate the shift object by shiftId in the form data
+  const updateValue = (id: string, day: number, newValue: number): void => {
+    // Locate the shift object by id in the form data
     const shiftIndex = form
       .watch('numEmployeesAssigned')
-      .findIndex((s) => s.shiftId === shiftId);
+      .findIndex((s) => s.shiftId === id);
     // Locate the assignment object by day in the shift's assignments
     const assignmentIndex = form
       .watch(`numEmployeesAssigned.${shiftIndex}.assignments`)
@@ -65,14 +61,14 @@ const GridSelector: FC<Props> = ({ workDays, shifts, form }) => {
         </thead>
         <tbody>
           {shifts.map((shift) => (
-            <tr key={shift.shiftId}>
-              <td className='w-16  p-2'>{shift.shiftName}</td>
+            <tr key={shift.id}>
+              <td className='w-16  p-2'>{shift.name}</td>
               {workDays.map((day) => (
                 <GridCell
-                  key={`${shift.shiftId}-${day}`}
-                  shiftId={shift.shiftId}
+                  key={`${shift.id}-${day}`}
+                  shiftId={shift.id}
                   day={day}
-                  value={getValue(shift.shiftId, day)}
+                  value={getValue(shift.id, day)}
                   updateValue={updateValue}
                 />
               ))}
