@@ -1,10 +1,3 @@
-// File: roster.tsx
-// Description: the main component on the dashboard which shows the roster for the week
-// Created  by: osh
-//          at: 17:07 on Sunday, the 11th of February, 2024.
-// Last edited: 23:55 on Sunday, the 11th of February, 2024.
-
-// shadcn
 import {
   Table,
   TableHeader,
@@ -28,9 +21,10 @@ interface Assignment {
 
 interface Props {
   assignments: Assignment[];
+  setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Roster: React.FC<Props> = ({ assignments }: Props) => {
+const Roster: React.FC<Props> = ({ assignments, setShowEditDialog }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   // the function for choosing which side the shift should extend to
@@ -93,6 +87,7 @@ const Roster: React.FC<Props> = ({ assignments }: Props) => {
                         startTime={shifts[index]?.startTime}
                         endTime={shifts[index]?.endTime}
                         employee={employee}
+                        setShowEditDialog={setShowEditDialog}
                       />
                     ) : (
                       ''

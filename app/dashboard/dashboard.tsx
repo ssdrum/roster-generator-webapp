@@ -23,6 +23,9 @@ const Dashboard: FC<Props> = ({
 }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [rosterData, setRosterData] = useState(null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+
+  console.log(showEditDialog);
 
   const handleClick = async () => {
     setIsGenerating(true);
@@ -59,7 +62,12 @@ const Dashboard: FC<Props> = ({
   return (
     <>
       <Title title={'Dashboard'} />
-      {rosterData && <Roster assignments={rosterData} />}
+      {rosterData && (
+        <Roster
+          assignments={rosterData}
+          setShowEditDialog={setShowEditDialog}
+        />
+      )}
       {isGenerating ? (
         <ButtonLoading />
       ) : (

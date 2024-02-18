@@ -1,24 +1,22 @@
-// File: shift.tsx
-// Description: the component that renders in the grid for the shift, takes the values as a prop
-// Created  by: root
-//          at: 22:50 on Sunday, the 11th of February, 2024.
-// Last edited: 00:00 on Monday, the 12th of February, 2024.
+import { Pencil2Icon } from '@radix-ui/react-icons';
 
-interface Details {
+interface Props {
   side: 'left' | 'right' | 'single' | 'both'; // the side to extend to, if any
   name?: string;
   startTime?: string;
   endTime?: string;
   employee: string;
+  setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Shift: React.FC<Details> = ({
+const Shift: React.FC<Props> = ({
   side,
   name,
   startTime,
   endTime,
   employee,
-}: Details) => {
+  setShowEditDialog,
+}) => {
   // apply the tailwind classes depending on the side prop we passed
   // this joins shift segments together if they're next to each other
   const adjustSide = () => {
@@ -79,6 +77,10 @@ const Shift: React.FC<Details> = ({
     return colours[sum % colours.length];
   };
 
+  const handleClick = () => {
+    setShowEditDialog(prev => !prev)
+  }
+
   return (
     // we need to apply the style using classic css since tailwind doesn't allow for dynamic colours
     <div
@@ -86,7 +88,10 @@ const Shift: React.FC<Details> = ({
       className={`h-16 text-white ${adjustSide()}`}
     >
       <div className='flex h-full flex-col justify-center'>
-        <div className='text-sm font-semibold'>{name}</div>
+        <div className='flex text-sm font-semibold'>
+          {name}
+          <Pencil2Icon onClick={handleClick} />
+        </div>
         <div className='text-xs'>
           {startTime} - {endTime}
         </div>
