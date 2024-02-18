@@ -25,8 +25,8 @@ export default async function DashboardLayout({
   return (
     <div className='flex'>
       <Navbar session={session} />
-
       <div className='container mx-auto my-5'>
+        {/* Context provider provides access to variables below to all components in /dashboard */}
         <DashboardProvider
           user={userData}
           employees={employees}
