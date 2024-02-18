@@ -31,9 +31,9 @@ const { v4: uuidv4 } = require('uuid');
 const EditShifts = () => {
   const { shifts } = useContext(DashboardContext)!;
   const [isSubmitting, setIsSubmitting] = useState(false); // when we click the button
-  const router = useRouter()
+  const router = useRouter();
   //const { push } = useRouter();
-  console.log("re-rendered")
+  console.log('re-rendered');
 
   // give the form default values
   const form = useForm<z.infer<typeof editShiftSchema>>({
@@ -60,7 +60,7 @@ const EditShifts = () => {
     } finally {
       await new Promise((r) => setTimeout(r, 500));
       setIsSubmitting(false);
-      router.refresh() // Re-fetch state
+      router.refresh(); // Re-fetch state
     }
   };
 

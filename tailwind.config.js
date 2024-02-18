@@ -17,7 +17,7 @@ module.exports = {
       },
       extend: {
         fontFamily: {
-          sans: ['var(--font-inter)'],
+          sans: ['var(--font-inter)'], // Necessary along other settings in /app/layout.tsx to fix font flickering on render
         },
       },
     },
