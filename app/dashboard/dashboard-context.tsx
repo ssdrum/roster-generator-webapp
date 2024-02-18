@@ -1,20 +1,29 @@
 'use client';
 
-import { FC, createContext, useState } from 'react';
+import { FC, ReactNode, createContext, useState } from 'react';
 import { Employee, NumEmployeesAssigned, Shift, User } from '@prisma/client';
-import Dashboard from './dashboard';
 
 type Props = {
+  children: ReactNode;
   user: User;
   employees: Employee[];
   shifts: Shift[];
   numEmployeesAssigned: NumEmployeesAssigned[];
 };
 
-export const DashboardContext = createContext<Props | undefined>(undefined)
+export const DashboardContext = createContext<
+  | {
+      user: User;
+      employees: Employee[];
+      shifts: Shift[];
+      numEmployeesAssigned: NumEmployeesAssigned[];
+    }
+  | undefined
+>(undefined);
 
 // Takes user data as props and stores them in a context object
 const DashboardProvider: FC<Props> = ({
+  children,
   user,
   employees,
   shifts,
@@ -29,7 +38,7 @@ const DashboardProvider: FC<Props> = ({
         numEmployeesAssigned: numEmployeesAssigned,
       }}
     >
-      <Dashboard />
+      {children}
     </DashboardContext.Provider>
   );
 };
