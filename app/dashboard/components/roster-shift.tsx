@@ -1,4 +1,5 @@
-import { Pencil2Icon } from '@radix-ui/react-icons';
+import { Shift } from '@prisma/client';
+import EditShiftBtn from './edit-shift-dialog';
 
 interface Props {
   side: 'left' | 'right' | 'single' | 'both'; // the side to extend to, if any
@@ -6,17 +7,18 @@ interface Props {
   startTime?: string;
   endTime?: string;
   employee: string;
-  setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  shifts: Shift[]
 }
 
-const Shift: React.FC<Props> = ({
+const RosterShift: React.FC<Props> = ({
   side,
   name,
   startTime,
   endTime,
   employee,
-  setShowEditDialog,
+  shifts
 }) => {
+  console.log(shifts)
   // apply the tailwind classes depending on the side prop we passed
   // this joins shift segments together if they're next to each other
   const adjustSide = () => {
@@ -77,10 +79,6 @@ const Shift: React.FC<Props> = ({
     return colours[sum % colours.length];
   };
 
-  const handleClick = () => {
-    setShowEditDialog(prev => !prev)
-  }
-
   return (
     // we need to apply the style using classic css since tailwind doesn't allow for dynamic colours
     <div
@@ -90,7 +88,7 @@ const Shift: React.FC<Props> = ({
       <div className='flex h-full flex-col justify-center'>
         <div className='flex text-sm font-semibold'>
           {name}
-          <Pencil2Icon onClick={handleClick} />
+          <EditShiftBtn />
         </div>
         <div className='text-xs'>
           {startTime} - {endTime}
@@ -100,4 +98,4 @@ const Shift: React.FC<Props> = ({
   );
 };
 
-export default Shift;
+export default RosterShift;

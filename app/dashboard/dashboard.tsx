@@ -7,6 +7,7 @@ import ButtonLoading from './components/button-loading';
 import { Button } from '../ui/shadcn/button';
 import genRoster from '../lib/roster-api-interface';
 import Title from '@/app/ui/title';
+import EditShiftBtn from './components/edit-shift-dialog';
 
 type Props = {
   user: User;
@@ -23,9 +24,6 @@ const Dashboard: FC<Props> = ({
 }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [rosterData, setRosterData] = useState(null);
-  const [showEditDialog, setShowEditDialog] = useState(false);
-
-  console.log(showEditDialog);
 
   const handleClick = async () => {
     setIsGenerating(true);
@@ -65,7 +63,7 @@ const Dashboard: FC<Props> = ({
       {rosterData && (
         <Roster
           assignments={rosterData}
-          setShowEditDialog={setShowEditDialog}
+          shifts={shifts}
         />
       )}
       {isGenerating ? (

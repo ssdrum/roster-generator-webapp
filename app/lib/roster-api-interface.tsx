@@ -88,22 +88,26 @@ const processAPIResponse = (
     const clientAssignment: any = {}; // Initialize client assignment object
 
     // Set employee name for the assignment
-    clientAssignment.employee =
-      employees[parseInt(APIassignment.employee_num) - 1].name;
+    clientAssignment.employee = {
+      id: employees[parseInt(APIassignment.employee_num) - 1].id,
+      name: employees[parseInt(APIassignment.employee_num) - 1].name,
+    };
 
     // Construct shifts array for the assignment
-    clientAssignment.shifts = [];
+    clientAssignment.shiftsAssigned = [];
     APIassignment.shifts.forEach((shift: number) => {
       if (shift === 1) {
         // If the shift is off, push null
-        clientAssignment.shifts.push(null);
+        clientAssignment.shiftsAssigned.push(null);
       } else {
+        const id = shifts[shift - 2].id;
         const name = shifts[shift - 2].name; // Shifts are 1-indexed, so subtract 2
         const startTime = shifts[shift - 2].startTime;
         const endTime = shifts[shift - 2].endTime;
 
         // Push shift details to the shifts array
-        clientAssignment.shifts.push({
+        clientAssignment.shiftsAssigned.push({
+          id: id,
           name: name,
           startTime: startTime,
           endTime: endTime,
