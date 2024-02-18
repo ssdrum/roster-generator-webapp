@@ -1,10 +1,10 @@
 'use client';
 
+import { useContext } from 'react';
+import { DashboardContext } from '@/app/dashboard/dashboard-context';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
-
-//shadcn
 import { Input } from '@/app/ui/shadcn/input';
 import { Button } from '@/app/ui/shadcn/button';
 import {
@@ -21,11 +21,13 @@ import {
   HoverCardContent,
 } from '@/app/ui/shadcn/hover-card';
 
-// own imports
 import { editEmployeeSchema } from '@/app/lib/formSchemas';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
 
 export default function EditEmployees() {
+  const { employees } = useContext(DashboardContext)!;
+  console.log(employees);
+  
   // here we would load the shift data from the db into this component,
   // but for now we have dummy data
   const tempEmployees = [

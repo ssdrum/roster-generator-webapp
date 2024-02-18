@@ -1,5 +1,6 @@
 'use client';
-import { useContext } from 'react';
+import { useContext, useState, FormEvent } from 'react';
+import { DashboardContext } from '@/app/dashboard/dashboard-context';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -20,32 +21,41 @@ import {
 } from '@/app/ui/shadcn/hover-card';
 import { editShiftSchema } from '@/app/lib/formSchemas';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
-import { DashboardContext } from '@/app/dashboard/dashboard-context';
+import { Loader2 } from 'lucide-react';
 
 const { v4: uuidv4 } = require('uuid');
 
 const EditShifts = () => {
   const { shifts } = useContext(DashboardContext)!;
-  console.log(shifts);
-
-  const tempShifts = [
-    { shiftName: 'Morning', shiftStartTime: '08:00', shiftEndTime: '16:00' },
-    { shiftName: 'Afternoon', shiftStartTime: '16:00', shiftEndTime: '00:00' },
-    { shiftName: 'Night', shiftStartTime: '00:00', shiftEndTime: '08:00' },
-  ];
+  const [isSubmitting, setIsSubmitting] = useState(false); // when we click the button
 
   // give the form default values
   const form = useForm<z.infer<typeof editShiftSchema>>({
     resolver: zodResolver(editShiftSchema),
     defaultValues: {
-      shifts: tempShifts,
+      shifts: shifts,
     },
   });
 
-  // when we submit the form, edit the db values
-  function onSubmit(values: z.infer<typeof editShiftSchema>) {
-    console.log(values);
-  }
+  const handleSubmit = async (e: FormEvent) => {
+    try {
+      e.preventDefault();
+      setIsSubmitting(true);
+      const updatedShifts = form.getValues().shifts;
+      const response = await fetch('/api/prisma/shifts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedShifts),
+      });
+    } catch (error) {
+      console.error('Error submitting shifts:', error);
+    } finally {
+      await new Promise((r) => setTimeout(r, 500));
+      setIsSubmitting(false);
+    }
+  };
 
   // methods for modifying the shifts
   const {
@@ -60,10 +70,10 @@ const EditShifts = () => {
 
   const addShift = () => {
     appendShift({
-      shiftId: uuidv4(),
-      shiftName: '',
-      shiftStartTime: '00:00',
-      shiftEndTime: '00:00',
+      id: uuidv4(),
+      name: '',
+      startTime: '00:00',
+      endTime: '00:00',
     }); // create a new shift object with our default values
   };
 
@@ -75,7 +85,7 @@ const EditShifts = () => {
     <div className='flex min-h-screen items-start justify-center'>
       {/* shadcn form wrapper */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit}>
           {/* loop over and render the shift fields */}
           {shiftFields.map((field, index) => (
             <div // grid container for the row
@@ -86,7 +96,7 @@ const EditShifts = () => {
               <div className='col-span-5 pr-4'>
                 <FormField
                   control={form.control}
-                  name={`shifts.${index}.shiftName`}
+                  name={`shifts.${index}.name`}
                   render={({ field }) => (
                     <FormItem>
                       {/* only render the label for the first one */}
@@ -122,7 +132,7 @@ const EditShifts = () => {
               <div className='col-span-3 pr-4'>
                 <FormField
                   control={form.control}
-                  name={`shifts.${index}.shiftStartTime`}
+                  name={`shifts.${index}.startTime`}
                   render={({ field }) => (
                     <FormItem>
                       {index === 0 && (
@@ -141,7 +151,7 @@ const EditShifts = () => {
               <div className='col-span-3 pr-4'>
                 <FormField
                   control={form.control}
-                  name={`shifts.${index}.shiftEndTime`}
+                  name={`shifts.${index}.endTime`}
                   render={({ field }) => (
                     <FormItem>
                       {index === 0 && <FormLabel>End Time</FormLabel>}
@@ -183,10 +193,17 @@ const EditShifts = () => {
                   </div>
 
                   <div className='col-span-11 pr-4 pt-4'>
-                    <Button className='w-full' type='submit'>
-                      {' '}
-                      Update{' '}
-                    </Button>
+                    {isSubmitting ? (
+                      <Button disabled className='w-full'>
+                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                        Updating
+                      </Button>
+                    ) : (
+                      <Button className='w-full' type='submit'>
+                        {' '}
+                        Update{' '}
+                      </Button>
+                    )}
                   </div>
                 </>
               )}

@@ -4,12 +4,12 @@ import { z } from 'zod';
 
 // ************* First page *************
 export const shiftSchema = z.object({
-  shiftId: z.string(),
-  shiftName: z.string().min(1, {
+  id: z.string(),
+  name: z.string().min(1, {
     message: 'Please give the shift a name.',
   }),
-  shiftStartTime: z.string(),
-  shiftEndTime: z.string(),
+  startTime: z.string(),
+  endTime: z.string(),
 });
 
 // ************* Second page *************

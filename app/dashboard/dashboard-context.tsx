@@ -11,6 +11,7 @@ type Props = {
   numEmployeesAssigned: NumEmployeesAssigned[];
 };
 
+// Initialise context as undefined
 export const DashboardContext = createContext<
   | {
       user: User;
