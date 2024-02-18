@@ -1,27 +1,16 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { useContext, useState } from 'react';
+import { DashboardContext } from '@/app/dashboard/dashboard-context';
 import Roster from './components/roster';
-import { Employee, NumEmployeesAssigned, Shift, User } from '@prisma/client';
 import ButtonLoading from './components/button-loading';
 import { Button } from '../ui/shadcn/button';
 import genRoster from '../lib/roster-api-interface';
 import Title from '@/app/ui/title';
-import EditShiftBtn from './components/edit-shift-dialog';
 
-type Props = {
-  user: User;
-  employees: Employee[];
-  shifts: Shift[];
-  numEmployeesAssigned: NumEmployeesAssigned[];
-};
+const Dashboard = () => {
+  const { user, employees, shifts } = useContext(DashboardContext)!;
 
-const Dashboard: FC<Props> = ({
-  user,
-  employees,
-  shifts,
-  numEmployeesAssigned,
-}) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [rosterData, setRosterData] = useState(null);
 

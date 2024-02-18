@@ -5,7 +5,7 @@ import {
   fetchUserData,
 } from '../lib/data';
 import { getUserSession } from '../lib/session';
-import Dashboard from './dashboard';
+import DashboardProvider from './dashboard-context';
 
 const FetchWrapper = async () => {
   // Retreive user id
@@ -19,7 +19,7 @@ const FetchWrapper = async () => {
   const numEmployeesAssigned = await fetchNumEmployeesAssigned(userId);
 
   return (
-    <Dashboard
+    <DashboardProvider
       user={userData}
       employees={employees}
       shifts={shifts}

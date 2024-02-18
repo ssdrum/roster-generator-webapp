@@ -1,9 +1,8 @@
 'use client';
+import { useContext } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
-
-//shadcn
 import { Input } from '@/app/ui/shadcn/input';
 import { Button } from '@/app/ui/shadcn/button';
 import {
@@ -19,16 +18,16 @@ import {
   HoverCardTrigger,
   HoverCardContent,
 } from '@/app/ui/shadcn/hover-card';
-
-// own imports
 import { editShiftSchema } from '@/app/lib/formSchemas';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
+import { DashboardContext } from '@/app/dashboard/dashboard-context';
 
 const { v4: uuidv4 } = require('uuid');
 
-export default function EditShifts() {
-  // here we would load the shift data from the db into this component,
-  // but for now we have dummy data
+const EditShifts = () => {
+  const { shifts } = useContext(DashboardContext)!;
+  console.log(shifts);
+
   const tempShifts = [
     { shiftName: 'Morning', shiftStartTime: '08:00', shiftEndTime: '16:00' },
     { shiftName: 'Afternoon', shiftStartTime: '16:00', shiftEndTime: '00:00' },
@@ -197,4 +196,6 @@ export default function EditShifts() {
       </Form>
     </div>
   );
-}
+};
+
+export default EditShifts;
