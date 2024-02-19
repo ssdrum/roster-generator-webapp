@@ -23,8 +23,8 @@ import {
   HoverCardContent,
 } from '@/app/ui/shadcn/hover-card';
 import { editEmployeeSchema } from '@/app/lib/formSchemas';
-import { Loader2 } from 'lucide-react';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
+import SubmitBtn from '@/app/ui/submit-btn';
 const { v4: uuidv4 } = require('uuid');
 
 const EditEmployees = () => {
@@ -86,7 +86,7 @@ const EditEmployees = () => {
 
   return (
     <>
-      <Title title={'Employees'} />
+      <Title title={'Edit Employees'} />
       <div className='flex min-h-screen items-start justify-center'>
         {/* shadcn form wrapper */}
         <Form {...form}>
@@ -179,19 +179,12 @@ const EditEmployees = () => {
                         <PlusIcon className='h-6 w-6' />
                       </Button>
                     </div>
-
                     <div className='col-span-11 pr-4 pt-4'>
-                      {isSubmitting ? (
-                        <Button disabled className='w-full'>
-                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                          Updating
-                        </Button>
-                      ) : (
-                        <Button className='w-full' type='submit'>
-                          {' '}
-                          Update{' '}
-                        </Button>
-                      )}
+                      <SubmitBtn
+                        isSubmitting={isSubmitting}
+                        text={'Update'}
+                        submittingText={'Updating...'}
+                      />
                     </div>
                   </>
                 )}

@@ -156,7 +156,7 @@ const StartForm = () => {
   // Example db POST request
   const submitToDB = async (data: any) => {
     // Send the POST request using fetch
-    const res = await fetch('/api/store-details', {
+    const res = await fetch('/api/prisma/store-initial-details', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -61,7 +61,7 @@ const Navbar: FC<Props> = ({ session }) => {
               <NavbarMenuItem
                 title={'Assignments'}
                 icon={faCalendarDays}
-                link={'/dashboard/assignments'}
+                link={'/dashboard/edit-assignments'}
               />
             </ul>
           </div>

@@ -8,14 +8,15 @@ import {
 } from '@/app/lib/formSchemas';
 
 export async function POST(req: any): Promise<NextResponse> {
-  const user = await getUserSession();
+  const session = await getUserSession();
+  const userId = session.id
   const data = await req.json();
 
   const { workDays, shifts, employees, numEmployeesAssigned } = data;
 
   // Update the user's workDays
   await prisma.user.update({
-    where: { id: user.id },
+    where: { id: userId },
     data: { workDays },
   });
 
@@ -32,7 +33,7 @@ export async function POST(req: any): Promise<NextResponse> {
           name: name,
           startTime: startTime,
           endTime: endTime,
-          createdBy: user.id,
+          createdBy: userId,
         },
       });
 
@@ -48,7 +49,7 @@ export async function POST(req: any): Promise<NextResponse> {
         data: {
           name: name,
           email: email,
-          employedBy: user.id,
+          employedBy: userId,
         },
       });
     })
@@ -80,7 +81,7 @@ export async function POST(req: any): Promise<NextResponse> {
               },
             },
             User: {
-              connect: { id: user.id }, // Connect the current user as the one who assigned this record
+              connect: { id: userId }, // Connect the current user as the one who assigned this record
             },
           },
         });

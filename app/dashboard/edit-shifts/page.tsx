@@ -24,7 +24,7 @@ import {
 } from '@/app/ui/shadcn/hover-card';
 import { editShiftSchema } from '@/app/lib/formSchemas';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
-import { Loader2 } from 'lucide-react';
+import SubmitBtn from '@/app/ui/submit-btn';
 const { v4: uuidv4 } = require('uuid');
 
 const EditShifts = () => {
@@ -196,19 +196,12 @@ const EditShifts = () => {
                         <PlusIcon className='h-6 w-6' />
                       </Button>
                     </div>
-
                     <div className='col-span-11 pr-4 pt-4'>
-                      {isSubmitting ? (
-                        <Button disabled className='w-full'>
-                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                          Updating
-                        </Button>
-                      ) : (
-                        <Button className='w-full' type='submit'>
-                          {' '}
-                          Update{' '}
-                        </Button>
-                      )}
+                      <SubmitBtn
+                        isSubmitting={isSubmitting}
+                        text={'Update'}
+                        submittingText={'Updating...'}
+                      />
                     </div>
                   </>
                 )}

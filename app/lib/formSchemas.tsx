@@ -59,6 +59,10 @@ export const editEmployeeSchema = z.object({
   employees: z.array(employeeSchema),
 });
 
+export const numEmployeesAssignedSchema = z.object({
+  employees: z.array(allNumAssignedSchema),
+});
+
 // Export types
 export type FormType = z.infer<typeof formSchema>;
 export type ShiftType = z.infer<typeof shiftSchema>;
