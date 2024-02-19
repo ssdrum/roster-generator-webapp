@@ -1,7 +1,9 @@
 import { prisma } from '@/app/lib/prisma';
 import { NextResponse } from 'next/server';
 import { getUserSession } from '@/app/lib/session';
+import { Shift } from '@prisma/client';
 
+/* Updates Employees data in the database */
 export async function POST(req: any) {
   const shifts = await req.json();
   const session = await getUserSession();
@@ -15,8 +17,9 @@ export async function POST(req: any) {
     );
   }
 
+  // Updarte/insert shifts
   const upsertShifts = await Promise.all(
-    shifts.map(async (shift: any) => {
+    shifts.map(async (shift: Shift) => {
       const { id, name, startTime, endTime } = shift;
 
       return prisma.shift.upsert({
@@ -38,8 +41,10 @@ export async function POST(req: any) {
     })
   );
 
-  // get the ids of the shifts to be deleted and delete them
+  // Get the ids of the shifts to be deleted and delete them
   const deleteShiftIds = upsertShifts.map((shift) => shift.id);
+
+  // Delete shifts
   const deleteShifts = await prisma.shift.deleteMany({
     where: {
       createdBy: userId,

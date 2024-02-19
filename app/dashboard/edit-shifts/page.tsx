@@ -31,10 +31,8 @@ const EditShifts = () => {
   const { shifts } = useContext(DashboardContext)!;
   const [isSubmitting, setIsSubmitting] = useState(false); // when we click the button
   const router = useRouter();
-  //const { push } = useRouter();
-  console.log('re-rendered');
 
-  // give the form default values
+  // Pre-populate form with shifts stored in the database
   const form = useForm<z.infer<typeof editShiftSchema>>({
     resolver: zodResolver(editShiftSchema),
     defaultValues: {
@@ -42,6 +40,29 @@ const EditShifts = () => {
     },
   });
 
+  // definining methods to modify shifts
+  const {
+    fields: shiftFields,
+    append: appendShift,
+    remove: removeShift,
+  } = useFieldArray({
+    control: form.control,
+    name: 'shifts',
+  });
+
+  // Add and delete shifts from form
+  const addShift = () => {
+    appendShift({
+      id: uuidv4(),
+      name: '',
+      startTime: '00:00',
+      endTime: '00:00',
+    }); // create a new shift object with our default values
+  };
+
+  const deleteShift = (index: number) => removeShift(index);
+
+  // Submit new values to database, then refresh page
   const handleSubmit = async (e: FormEvent) => {
     try {
       e.preventDefault();
@@ -59,32 +80,8 @@ const EditShifts = () => {
     } finally {
       await new Promise((r) => setTimeout(r, 500));
       setIsSubmitting(false);
-      router.refresh(); // Re-fetch state
+      router.refresh();
     }
-  };
-
-  // methods for modifying the shifts
-  const {
-    // definining the methods that this accepts
-    fields: shiftFields,
-    append: appendShift,
-    remove: removeShift,
-  } = useFieldArray({
-    control: form.control,
-    name: 'shifts',
-  });
-
-  const addShift = () => {
-    appendShift({
-      id: uuidv4(),
-      name: '',
-      startTime: '00:00',
-      endTime: '00:00',
-    }); // create a new shift object with our default values
-  };
-
-  const deleteShift = (index: number) => {
-    removeShift(index);
   };
 
   return (

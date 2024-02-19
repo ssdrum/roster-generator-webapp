@@ -1,7 +1,8 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, useState, FormEvent } from 'react';
 import { DashboardContext } from '@/app/dashboard/dashboard-context';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -22,13 +23,16 @@ import {
   HoverCardContent,
 } from '@/app/ui/shadcn/hover-card';
 import { editEmployeeSchema } from '@/app/lib/formSchemas';
+import { Loader2 } from 'lucide-react';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
 const { v4: uuidv4 } = require('uuid');
 
 const EditEmployees = () => {
   const { employees } = useContext(DashboardContext)!;
+  const [isSubmitting, setIsSubmitting] = useState(false); // when we click the button
+  const router = useRouter();
 
-  // give the form default values
+  // Pre-populate form with employees stored in the database
   const form = useForm<z.infer<typeof editEmployeeSchema>>({
     resolver: zodResolver(editEmployeeSchema),
     defaultValues: {
@@ -36,14 +40,8 @@ const EditEmployees = () => {
     },
   });
 
-  // when we submit the form, edit the db values
-  function onSubmit(values: z.infer<typeof editEmployeeSchema>) {
-    console.log(values);
-  }
-
-  // methods for modifying the shifts
+  // definining methods to modify shifts
   const {
-    // definining the methods that this accepts
     fields: employeeFields,
     append: appendEmployee,
     remove: removeEmployee,
@@ -52,6 +50,7 @@ const EditEmployees = () => {
     name: 'employees',
   });
 
+  // Add and delete employees from form
   const addEmployee = () => {
     appendEmployee({
       id: uuidv4(),
@@ -61,8 +60,28 @@ const EditEmployees = () => {
     });
   };
 
-  const deleteEmployee = (index: number) => {
-    removeEmployee(index);
+  const deleteEmployee = (index: number) => removeEmployee(index);
+
+  // Submit new values to database, then refresh page
+  const handleSubmit = async (e: FormEvent) => {
+    try {
+      e.preventDefault();
+      setIsSubmitting(true);
+      const updatedEmployees = form.getValues().employees;
+      const response = await fetch('/api/prisma/employees', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedEmployees),
+      });
+    } catch (error) {
+      console.error('Error submitting shifts:', error);
+    } finally {
+      await new Promise((r) => setTimeout(r, 500)); // Wait half a second after submitting
+      setIsSubmitting(false);
+      router.refresh();
+    }
   };
 
   return (
@@ -71,7 +90,7 @@ const EditEmployees = () => {
       <div className='flex min-h-screen items-start justify-center'>
         {/* shadcn form wrapper */}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit}>
             {/* loop over and render the shift fields */}
             {employeeFields.map((field, index) => (
               <div // grid container for the row
@@ -133,7 +152,6 @@ const EditEmployees = () => {
                   />
                 </div>
 
-
                 {/* delete icon for all but the first shift */}
                 {index !== 0 && (
                   <div className='col-span-1'>
@@ -163,10 +181,17 @@ const EditEmployees = () => {
                     </div>
 
                     <div className='col-span-11 pr-4 pt-4'>
-                      <Button className='w-full' type='submit'>
-                        {' '}
-                        Update{' '}
-                      </Button>
+                      {isSubmitting ? (
+                        <Button disabled className='w-full'>
+                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                          Updating
+                        </Button>
+                      ) : (
+                        <Button className='w-full' type='submit'>
+                          {' '}
+                          Update{' '}
+                        </Button>
+                      )}
                     </div>
                   </>
                 )}
@@ -177,6 +202,6 @@ const EditEmployees = () => {
       </div>
     </>
   );
-}
+};
 
-export default EditEmployees
+export default EditEmployees;
