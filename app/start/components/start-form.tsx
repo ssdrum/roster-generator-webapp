@@ -15,6 +15,7 @@ import { Day, formSchema } from '../../lib/formSchemas';
 import WorkDetails from './work-details';
 import EmployeeDetails from './employee-details';
 import GridSelector from '@/app/start/components/grid-selector';
+import Title from '@/app/ui/title';
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -190,9 +191,24 @@ const StartForm = () => {
     }
   };
 
+  // Dynamically selected title
+  let currTitle = '';
+  switch (currStepIndex) {
+    case 0:
+      currTitle = 'Business Details';
+      break;
+    case 1:
+      currTitle = 'Employees';
+      break;
+    case 2:
+      currTitle = 'Employees per Shift';
+      break;
+  }
+
   return (
     <div className='container mx-auto mt-20'>
       <ProgressBar currStepIndex={currStepIndex} />
+      <Title title={currTitle} />
       <Form {...form}>
         <form
           onSubmit={handleSubmit}
