@@ -15,8 +15,8 @@ import {
 } from '@/app/ui/shadcn/hover-card';
 import { Button } from '@/app/ui/shadcn/button';
 import { Input } from '@/app/ui/shadcn/input';
-
 import { formSchema } from '@/app/lib/formSchemas';
+const { v4: uuidv4 } = require('uuid');
 
 type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;
@@ -35,12 +35,12 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
   });
 
   // Add and delete employees
-  const addEmployee = (index: number) => {
+  const addEmployee = () => {
     appendEmployee({
-      employeeId: index,
-      employeeName: '',
-      employeeEmail: '',
-      workingDays: 1,
+      id: uuidv4(),
+      name: '',
+      email: '',
+      createdBy: ''
     });
   };
 
@@ -60,7 +60,7 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
           <div className='col-span-3 pr-4'>
             <FormField
               control={form.control}
-              name={`employees.${index}.employeeName`}
+              name={`employees.${index}.name`}
               render={({ field }) => (
                 <FormItem>
                   {/* only render the label for the first one */}
@@ -95,35 +95,13 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
           <div className='col-span-4 pr-4'>
             <FormField
               control={form.control}
-              name={`employees.${index}.employeeEmail`}
+              name={`employees.${index}.email`}
               render={({ field }) => (
                 <FormItem>
                   {/* only render the label for the first one */}
                   {index === 0 && <FormLabel>Employee Email</FormLabel>}
                   <FormControl>
                     <Input type='email' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* working days */}
-          <div className='col-span-1 pr-4'>
-            <FormField
-              control={form.control}
-              name={`employees.${index}.workingDays`}
-              render={({ field }) => (
-                <FormItem>
-                  {index === 0 && <FormLabel>Days Working</FormLabel>}
-                  <FormControl>
-                    <Input
-                      type='number'
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))} // convert the string to a number
-                      min={1}
-                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -152,7 +130,7 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
                 type='button'
                 variant='outline'
                 className='w-full'
-                onClick={() => addEmployee(index)}
+                onClick={() => addEmployee()}
               >
                 <PlusIcon className='h-6 w-6' />
               </Button>

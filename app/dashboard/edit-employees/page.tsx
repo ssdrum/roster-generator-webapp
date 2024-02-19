@@ -1,14 +1,13 @@
 'use client';
 
-import Title from '@/app/ui/title';
-import { useContext, useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useContext } from 'react';
 import { DashboardContext } from '@/app/dashboard/dashboard-context';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Input } from '@/app/ui/shadcn/input';
 import { Button } from '@/app/ui/shadcn/button';
+import Title from '@/app/ui/title';
 import {
   Form,
   FormField,
@@ -22,80 +21,59 @@ import {
   HoverCardTrigger,
   HoverCardContent,
 } from '@/app/ui/shadcn/hover-card';
-import { editShiftSchema } from '@/app/lib/formSchemas';
+import { editEmployeeSchema } from '@/app/lib/formSchemas';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
-import { Loader2 } from 'lucide-react';
 const { v4: uuidv4 } = require('uuid');
 
-const EditShifts = () => {
-  const { shifts } = useContext(DashboardContext)!;
-  const [isSubmitting, setIsSubmitting] = useState(false); // when we click the button
-  const router = useRouter();
-  //const { push } = useRouter();
-  console.log('re-rendered');
+const EditEmployees = () => {
+  const { employees } = useContext(DashboardContext)!;
 
   // give the form default values
-  const form = useForm<z.infer<typeof editShiftSchema>>({
-    resolver: zodResolver(editShiftSchema),
+  const form = useForm<z.infer<typeof editEmployeeSchema>>({
+    resolver: zodResolver(editEmployeeSchema),
     defaultValues: {
-      shifts: shifts,
+      employees: employees,
     },
   });
 
-  const handleSubmit = async (e: FormEvent) => {
-    try {
-      e.preventDefault();
-      setIsSubmitting(true);
-      const updatedShifts = form.getValues().shifts;
-      const response = await fetch('/api/prisma/shifts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedShifts),
-      });
-    } catch (error) {
-      console.error('Error submitting shifts:', error);
-    } finally {
-      await new Promise((r) => setTimeout(r, 500));
-      setIsSubmitting(false);
-      router.refresh(); // Re-fetch state
-    }
-  };
+  // when we submit the form, edit the db values
+  function onSubmit(values: z.infer<typeof editEmployeeSchema>) {
+    console.log(values);
+  }
 
   // methods for modifying the shifts
   const {
     // definining the methods that this accepts
-    fields: shiftFields,
-    append: appendShift,
-    remove: removeShift,
+    fields: employeeFields,
+    append: appendEmployee,
+    remove: removeEmployee,
   } = useFieldArray({
     control: form.control,
-    name: 'shifts',
+    name: 'employees',
   });
 
-  const addShift = () => {
-    appendShift({
+  const addEmployee = () => {
+    appendEmployee({
       id: uuidv4(),
       name: '',
-      startTime: '00:00',
-      endTime: '00:00',
-    }); // create a new shift object with our default values
+      email: '',
+      createdBy: '',
+    });
   };
 
-  const deleteShift = (index: number) => {
-    removeShift(index);
+  const deleteEmployee = (index: number) => {
+    removeEmployee(index);
   };
 
   return (
     <>
-      <Title title={'Edit Shifts'} />
+      <Title title={'Employees'} />
       <div className='flex min-h-screen items-start justify-center'>
         {/* shadcn form wrapper */}
         <Form {...form}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             {/* loop over and render the shift fields */}
-            {shiftFields.map((field, index) => (
+            {employeeFields.map((field, index) => (
               <div // grid container for the row
                 key={field.id}
                 className='grid w-full max-w-screen-xl grid-cols-12 py-2'
@@ -104,7 +82,7 @@ const EditShifts = () => {
                 <div className='col-span-5 pr-4'>
                   <FormField
                     control={form.control}
-                    name={`shifts.${index}.name`}
+                    name={`employees.${index}.name`}
                     render={({ field }) => (
                       <FormItem>
                         {/* only render the label for the first one */}
@@ -112,7 +90,7 @@ const EditShifts = () => {
                           <HoverCard openDelay={1} closeDelay={1}>
                             <HoverCardTrigger>
                               <FormLabel className='inline-flex items-center hover:underline'>
-                                Shift Name
+                                Employee Name
                                 <QuestionIcon className='pl-1 text-gray-500' />
                               </FormLabel>
                             </HoverCardTrigger>
@@ -120,10 +98,10 @@ const EditShifts = () => {
                               side={'top'}
                               className='text-sm text-gray-500'
                             >
-                              Enter the shifts that your employees work. Give it
-                              a name, and then enter the time that your shift
-                              starts and ends at. Use the + button to add more
-                              shifts, or the delete button to remove extras.
+                              List the employees that you want to work this
+                              week. Enter their details, and use the + button to
+                              add more shifts, or the delete button to remove
+                              extras.
                             </HoverCardContent>
                           </HoverCard>
                         )}
@@ -136,18 +114,18 @@ const EditShifts = () => {
                   />
                 </div>
 
-                {/* start time */}
-                <div className='col-span-3 pr-4'>
+                {/* email */}
+                <div className='col-span-4 pr-4'>
                   <FormField
                     control={form.control}
-                    name={`shifts.${index}.startTime`}
+                    name={`employees.${index}.email`}
                     render={({ field }) => (
                       <FormItem>
                         {index === 0 && (
-                          <FormLabel className=''>Start Time</FormLabel>
+                          <FormLabel className=''>Email</FormLabel>
                         )}
                         <FormControl>
-                          <Input type='time' {...field} />
+                          <Input type='email' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -155,22 +133,6 @@ const EditShifts = () => {
                   />
                 </div>
 
-                {/* end time */}
-                <div className='col-span-3 pr-4'>
-                  <FormField
-                    control={form.control}
-                    name={`shifts.${index}.endTime`}
-                    render={({ field }) => (
-                      <FormItem>
-                        {index === 0 && <FormLabel>End Time</FormLabel>}
-                        <FormControl>
-                          <Input type='time' {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
 
                 {/* delete icon for all but the first shift */}
                 {index !== 0 && (
@@ -179,7 +141,7 @@ const EditShifts = () => {
                       type='button'
                       size='icon'
                       variant='destructive'
-                      onClick={() => deleteShift(index)}
+                      onClick={() => deleteEmployee(index)}
                     >
                       <DeleteIcon className='h-6 w-6' />
                     </Button>
@@ -187,31 +149,24 @@ const EditShifts = () => {
                 )}
 
                 {/* plus button to add a new shift and a submit button but only under the last element */}
-                {index === shiftFields.length - 1 && (
+                {index === employeeFields.length - 1 && (
                   <>
                     <div className='col-span-11 pr-4 pt-4'>
                       <Button
                         type='button'
                         variant='outline'
                         className='w-full'
-                        onClick={addShift}
+                        onClick={() => addEmployee()}
                       >
                         <PlusIcon className='h-6 w-6' />
                       </Button>
                     </div>
 
                     <div className='col-span-11 pr-4 pt-4'>
-                      {isSubmitting ? (
-                        <Button disabled className='w-full'>
-                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                          Updating
-                        </Button>
-                      ) : (
-                        <Button className='w-full' type='submit'>
-                          {' '}
-                          Update{' '}
-                        </Button>
-                      )}
+                      <Button className='w-full' type='submit'>
+                        {' '}
+                        Update{' '}
+                      </Button>
                     </div>
                   </>
                 )}
@@ -222,6 +177,6 @@ const EditShifts = () => {
       </div>
     </>
   );
-};
+}
 
-export default EditShifts;
+export default EditEmployees

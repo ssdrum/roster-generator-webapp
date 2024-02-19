@@ -56,7 +56,7 @@ const Navbar: FC<Props> = ({ session }) => {
               <NavbarMenuItem
                 title={'Employees'}
                 icon={faUserGroup}
-                link={'/dashboard/employees'}
+                link={'/dashboard/edit-employees'}
               />
               <NavbarMenuItem
                 title={'Assignments'}

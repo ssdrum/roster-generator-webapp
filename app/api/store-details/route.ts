@@ -43,11 +43,11 @@ export async function POST(req: any): Promise<NextResponse> {
   // Create employees and assign them to the user
   Promise.all(
     employees.map(async (employeeData: EmployeeType) => {
-      const { employeeEmail, employeeName } = employeeData;
+      const { email, name } = employeeData;
       const employee = await prisma.employee.create({
         data: {
-          name: employeeName,
-          email: employeeEmail,
+          name: name,
+          email: email,
           employedBy: user.id,
         },
       });

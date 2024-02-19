@@ -4,7 +4,6 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import './edit-shift-dialog.css';
-import { Shift } from '@prisma/client';
 import { Button } from '@/app/ui/shadcn/button';
 import {
   Select,

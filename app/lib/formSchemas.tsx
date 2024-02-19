@@ -3,7 +3,7 @@ import { z } from 'zod';
 // Start form schemas
 
 // ************* First page *************
-export const shiftSchema = z.object({
+const shiftSchema = z.object({
   id: z.string(),
   name: z.string().min(1, {
     message: 'Please give the shift a name.',
@@ -14,19 +14,12 @@ export const shiftSchema = z.object({
 
 // ************* Second page *************
 const employeeSchema = z.object({
-  employeeId: z.number(),
-  employeeName: z.string().min(2, {
+  id: z.string(),
+  name: z.string().min(2, {
     message: 'Please enter a name longer than two characters.',
   }),
-  employeeEmail: z.string().email({ message: 'Please enter a valid email.' }),
-  workingDays: z
-    .number()
-    .min(1, {
-      message: 'Employees must work at least one day a week.',
-    })
-    .max(7, {
-      message: 'Employees cannot work more days than exists in a week.',
-    }),
+  email: z.string().email({ message: 'Please enter a valid email.' }),
+  createdBy: z.string()
 });
 
 // ************* Third page *************
