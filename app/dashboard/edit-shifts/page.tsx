@@ -25,6 +25,7 @@ import {
 import { editShiftSchema } from '@/app/lib/formSchemas';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
 import SubmitBtn from '@/app/ui/submit-btn';
+import { toast } from 'sonner';
 const { v4: uuidv4 } = require('uuid');
 
 const EditShifts = () => {
@@ -81,6 +82,7 @@ const EditShifts = () => {
       await new Promise((r) => setTimeout(r, 500));
       setIsSubmitting(false);
       router.refresh();
+      toast("Shifts list has been updated.")
     }
   };
 

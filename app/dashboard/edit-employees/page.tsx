@@ -25,6 +25,7 @@ import {
 import { editEmployeeSchema } from '@/app/lib/formSchemas';
 import { PlusIcon, QuestionIcon, DeleteIcon } from '@/app/lib/icons';
 import SubmitBtn from '@/app/ui/submit-btn';
+import { toast } from 'sonner';
 const { v4: uuidv4 } = require('uuid');
 
 const EditEmployees = () => {
@@ -81,6 +82,7 @@ const EditEmployees = () => {
       await new Promise((r) => setTimeout(r, 500)); // Wait half a second after submitting
       setIsSubmitting(false);
       router.refresh();
+      toast("Employees list has been updated.")
     }
   };
 

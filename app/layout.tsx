@@ -7,6 +7,7 @@ The next three line override that behavour.
 */
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+
 config.autoAddCss = false;
 
 const inter = Inter({
