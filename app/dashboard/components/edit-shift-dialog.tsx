@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { Cross2Icon } from '@radix-ui/react-icons';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import './edit-shift-dialog.css';
 import { Shift } from '@prisma/client';
@@ -12,13 +11,15 @@ import {
   SelectContent,
   SelectItem,
 } from '@/app/ui/shadcn/ui/select';
+import { RosterAssignment } from '@/app/lib/formSchemas';
 
 type Props = {
   selected?: string;
   shifts: Shift[];
+  assignment: RosterAssignment;
 };
 
-const EditShiftBtn: FC<Props> = ({ selected, shifts }) => {
+const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment }) => {
   const shiftOptions = [
     <SelectItem key='off' value='off'>
       Off
@@ -29,6 +30,17 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts }) => {
       </SelectItem>
     )),
   ];
+
+  console.log("selected: ", selected)
+  console.log("shifts: ", shifts)
+  console.log("assignment: ", assignment)
+
+  const handleSaveChanges = (selectedValue?: string) => {
+    if (selectedValue === undefined) {
+      return;
+    }
+    console.log('Selected value:', selectedValue);
+  };
 
   return (
     <Dialog.Root>
@@ -42,7 +54,7 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts }) => {
         <Dialog.Content className='DialogContent'>
           <Dialog.Title className='DialogTitle'>Edit shift</Dialog.Title>
           <Dialog.Description className='DialogDescription'>
-            Select the new shift. Click Save changes when you&apos;re done.
+            Select the new shift. Click Save changes when you{'\''}re done.
           </Dialog.Description>
           <fieldset className='Fieldset'>
             <label className='Label' htmlFor='shiftSelect'>
@@ -64,8 +76,8 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts }) => {
           >
             <Dialog.Close asChild>
               <Button
-                className='bg-green-200 text-green-800 hover:bg-green-300'
                 type='button'
+                onClick={() => handleSaveChanges(selected)}
               >
                 Save changes
               </Button>
@@ -73,7 +85,6 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts }) => {
           </div>
           <Dialog.Close asChild>
             <button className='IconButton' aria-label='Close'>
-              <Cross2Icon />
             </button>
           </Dialog.Close>
         </Dialog.Content>
