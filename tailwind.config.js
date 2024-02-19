@@ -15,6 +15,11 @@ module.exports = {
       screens: {
         '2xl': '1400px',
       },
+      extend: {
+        fontFamily: {
+          sans: ['var(--font-inter)'], // Necessary along other settings in /app/layout.tsx to fix font flickering on render
+        },
+      },
     },
     extend: {
       colors: {

@@ -8,14 +8,15 @@ import {
 } from '@/app/lib/formSchemas';
 
 export async function POST(req: any): Promise<NextResponse> {
-  const user = await getUserSession();
+  const session = await getUserSession();
+  const userId = session.id;
   const data = await req.json();
 
   const { workDays, shifts, employees, numEmployeesAssigned } = data;
 
   // Update the user's workDays
   await prisma.user.update({
-    where: { id: user.id },
+    where: { id: userId },
     data: { workDays },
   });
 
@@ -25,30 +26,30 @@ export async function POST(req: any): Promise<NextResponse> {
   // Create shifts and assign them to the user
   const createdShifts = await Promise.all(
     shifts.map(async (shiftData: ShiftType) => {
-      const { shiftId, shiftName, shiftStartTime, shiftEndTime } = shiftData;
+      const { id, name, startTime, endTime } = shiftData;
 
       const shift = await prisma.shift.create({
         data: {
-          name: shiftName,
-          startTime: shiftStartTime,
-          endTime: shiftEndTime,
-          createdBy: user.id,
+          name: name,
+          startTime: startTime,
+          endTime: endTime,
+          createdBy: userId,
         },
       });
 
-      shiftsIdMap[shiftId] = shift.id;
+      shiftsIdMap[id] = shift.id;
     })
   );
 
   // Create employees and assign them to the user
   Promise.all(
     employees.map(async (employeeData: EmployeeType) => {
-      const { employeeEmail, employeeName } = employeeData;
+      const { email, name } = employeeData;
       const employee = await prisma.employee.create({
         data: {
-          name: employeeName,
-          email: employeeEmail,
-          employedBy: user.id,
+          name: name,
+          email: email,
+          employedBy: userId,
         },
       });
     })
@@ -80,7 +81,7 @@ export async function POST(req: any): Promise<NextResponse> {
               },
             },
             User: {
-              connect: { id: user.id }, // Connect the current user as the one who assigned this record
+              connect: { id: userId }, // Connect the current user as the one who assigned this record
             },
           },
         });

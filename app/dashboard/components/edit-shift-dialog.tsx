@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
+import { DashboardContext } from '../dashboard-context';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import './edit-shift-dialog.css';
-import { Shift } from '@prisma/client';
 import { Button } from '@/app/ui/shadcn/button';
 import {
   Select,
@@ -15,10 +15,11 @@ import {
 
 type Props = {
   selected?: string;
-  shifts: Shift[];
 };
 
-const EditShiftBtn: FC<Props> = ({ selected, shifts }) => {
+const EditShiftBtn: FC<Props> = ({ selected }) => {
+  const { shifts } = useContext(DashboardContext)!;
+
   const shiftOptions = [
     <SelectItem key='off' value='off'>
       Off
