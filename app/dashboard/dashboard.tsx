@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Roster from './components/roster';
 import { Employee, NumEmployeesAssigned, Shift, User } from '@prisma/client';
 import ButtonLoading from './components/button-loading';
@@ -8,6 +8,7 @@ import { Button } from '../ui/shadcn/button';
 import genRoster from '../lib/roster-api-interface';
 import Title from '@/app/ui/title';
 import EditShiftBtn from './components/edit-shift-dialog';
+import { RosterAssignment } from '../lib/formSchemas';
 
 type Props = {
   user: User;
@@ -22,45 +23,46 @@ const Dashboard: FC<Props> = ({
   shifts,
   numEmployeesAssigned,
 }) => {
+  const [rosterData, setRosterData] = useState<RosterAssignment[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [rosterData, setRosterData] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false)
 
+  // generate a roster and save it to the database
   const handleClick = async () => {
-    setIsGenerating(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait one second
+    setIsGenerating(true)
     const roster = await genRoster(user, employees, shifts);
-    setRosterData(roster);
-    setIsGenerating(false);
+    try {
+      const response = await fetch('api/prisma/roster', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(roster)
+      });
+    } catch (error) {
+      console.error('Error saving roster:', error);
+    } finally {
+      fetchData()
+      setIsGenerating(false)
+    }
   };
 
-  //// assignments data structure
-  //const assignments = [
-  //  {
-  //    employee: 'John',
-  //    shifts: [
-  //      { name: 'Blah', startTime: '8:00 AM', endTime: '4:00 PM' },
-  //      null,
-  //      { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
-  //      null,
-  //      { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' },
-  //    ],
-  //  },
-  //  {
-  //    employee: 'Jane',
-  //    shifts: [
-  //      null,
-  //      { name: 'Morning', startTime: '8:00 AM', endTime: '4:00 PM' },
-  //      null,
-  //      { name: 'Afternoon', startTime: '12:00 PM', endTime: '8:00 PM' },
-  //      { name: 'Evening', startTime: '4:00 PM', endTime: '12:00 AM' },
-  //    ],
-  //  },
-  //];
+    const fetchData = async () => {
+      try {
+        const response = await fetch('api/prisma/roster')
+        const data = await response.json();
+        setRosterData(data.rosterAssignments);
+      } catch (error) {
+        console.error('Error fetching roster:', error);
+      } finally {
+        setIsLoaded(true)
+      }
+    };
 
   return (
     <>
       <Title title={'Dashboard'} />
-      {rosterData && <Roster assignments={rosterData} shifts={shifts} />}
+      {isLoaded && <Roster assignments={rosterData} shifts={shifts} />}
       {isGenerating ? (
         <ButtonLoading />
       ) : (
