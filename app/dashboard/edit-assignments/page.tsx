@@ -11,6 +11,7 @@ import { formSchema } from '../../lib/formSchemas';
 import { FieldPath } from 'react-hook-form';
 import GridCell from '@/app/start/components/grid-cell';
 import SubmitBtn from '@/app/ui/submit-btn';
+import { transformData } from '@/app/lib/edit-assignments-helper';
 
 // Days displayed in the table header
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
@@ -21,6 +22,8 @@ const EditAssignments = () => {
   const { workDays } = user;
   const [isSubmitting, setIsSubmitting] = useState(false); // when we click the button
   const router = useRouter();
+
+  console.log(numEmployeesAssigned)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
