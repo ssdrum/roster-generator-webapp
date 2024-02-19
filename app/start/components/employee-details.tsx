@@ -40,7 +40,7 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
       id: uuidv4(),
       name: '',
       email: '',
-      createdBy: ''
+      createdBy: '',
     });
   };
 

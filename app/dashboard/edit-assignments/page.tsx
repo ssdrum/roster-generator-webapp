@@ -16,7 +16,8 @@ import SubmitBtn from '@/app/ui/submit-btn';
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
 const EditAssignments = () => {
-  const { user, shifts, employees, numEmployeesAssigned} = useContext(DashboardContext)!;
+  const { user, shifts, employees, numEmployeesAssigned } =
+    useContext(DashboardContext)!;
   const { workDays } = user;
   const [isSubmitting, setIsSubmitting] = useState(false); // when we click the button
   const router = useRouter();
@@ -28,8 +29,8 @@ const EditAssignments = () => {
       shifts: shifts,
       employees: employees,
       numEmployeesAssigned: [
-      // TODO: 1. Translate numEmployeesAssigned taken from useContext in the format below
-      //       2. Build API endpoint to update in DB
+        // TODO: 1. Translate numEmployeesAssigned taken from useContext in the format below
+        //       2. Build API endpoint to update in DB
         {
           shiftId: shifts[0].id,
           assignments: [

@@ -19,7 +19,7 @@ const employeeSchema = z.object({
     message: 'Please enter a name longer than two characters.',
   }),
   email: z.string().email({ message: 'Please enter a valid email.' }),
-  createdBy: z.string()
+  createdBy: z.string(),
 });
 
 // ************* Third page *************

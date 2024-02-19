@@ -9,7 +9,7 @@ import {
 
 export async function POST(req: any): Promise<NextResponse> {
   const session = await getUserSession();
-  const userId = session.id
+  const userId = session.id;
   const data = await req.json();
 
   const { workDays, shifts, employees, numEmployeesAssigned } = data;
