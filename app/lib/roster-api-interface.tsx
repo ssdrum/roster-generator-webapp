@@ -125,7 +125,6 @@ const processAPIResponse = (
     rosterData.data.push(clientAssignment);
   });
 
-  console.log(rosterData);
   return rosterData;
 };
 
