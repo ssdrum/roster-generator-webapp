@@ -94,7 +94,12 @@ const RosterShift: React.FC<Props> = ({
       <div className='flex h-full flex-col justify-center'>
         <div className='flex justify-between text-sm font-semibold'>
           <p>{name}</p>
-          <EditShiftBtn shifts={shifts} selected={id} assignment={assignment} day={day}/>
+          <EditShiftBtn
+            shifts={shifts}
+            selected={id}
+            assignment={assignment}
+            day={day}
+          />
         </div>
         <div className='text-xs'>
           {startTime} - {endTime}
