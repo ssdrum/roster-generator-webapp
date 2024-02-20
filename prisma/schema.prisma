@@ -52,7 +52,7 @@ model Shift {
 model Assignment {
   id         String   @id @default(cuid())
   Employee   Employee @relation(fields: [assignedTo], references: [id])
-  Shift      Shift    @relation(fields: [shift], references: [id])
+  Shift      Shift    @relation(fields: [shift], references: [id], onDelete: Cascade)
   User       User     @relation(fields: [assignedBy], references: [id])
   day        Int
   assignedBy String
@@ -65,13 +65,13 @@ model Assignment {
 model NumEmployeesAssigned {
   id          String        @id @default(cuid())
   shift       String
-  Shift       Shift         @relation(fields: [shift], references: [id])
+  Shift       Shift         @relation(fields: [shift], references: [id], onDelete: Cascade)
   countPerDay CountPerDay[]
-  assignedBy  String
-  User        User          @relation(fields: [assignedBy], references: [id])
 
   @@map(name: "num_employees_assigned")
 }
+
+Invia un messaggio in @oshdubh
 
 model CountPerDay {
   id                     String                @id @default(cuid())
