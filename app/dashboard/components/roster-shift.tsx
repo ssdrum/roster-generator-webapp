@@ -1,5 +1,6 @@
-import { Shift } from '@prisma/client';
+import { Shift, Assignment } from '@prisma/client';
 import EditShiftBtn from './edit-shift-dialog';
+import { RosterAssignment } from '@/app/lib/formSchemas';
 
 interface Props {
   id?: string;
@@ -9,6 +10,8 @@ interface Props {
   endTime?: string;
   employee: string;
   shifts: Shift[];
+  assignment: RosterAssignment;
+  day: number;
 }
 
 const RosterShift: React.FC<Props> = ({
@@ -19,6 +22,8 @@ const RosterShift: React.FC<Props> = ({
   endTime,
   employee,
   shifts,
+  assignment,
+  day,
 }) => {
   // apply the tailwind classes depending on the side prop we passed
   // this joins shift segments together if they're next to each other
@@ -89,7 +94,7 @@ const RosterShift: React.FC<Props> = ({
       <div className='flex h-full flex-col justify-center'>
         <div className='flex justify-between text-sm font-semibold'>
           <p>{name}</p>
-          <EditShiftBtn selected={id} />
+          <EditShiftBtn shifts={shifts} selected={id} assignment={assignment} day={day}/>
         </div>
         <div className='text-xs'>
           {startTime} - {endTime}
