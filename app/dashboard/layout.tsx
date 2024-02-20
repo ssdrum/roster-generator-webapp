@@ -33,8 +33,6 @@ export default async function DashboardLayout({
       redirect('/start');
     }
 
-    console.log(userData)
-
     return (
       <div className='flex'>
         <Navbar session={session} />

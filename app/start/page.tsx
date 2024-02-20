@@ -178,7 +178,6 @@ const StartForm = () => {
     e.preventDefault();
     if (isLastStep) {
       form.handleSubmit(async (data) => {
-        console.log(data);
         setIsSubmitting(true);
         await submitToDB(data);
         alert("You're all set! Time to generate your first roster!");

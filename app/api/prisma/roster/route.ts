@@ -17,7 +17,6 @@ export async function POST(req: any) {
   const createAssignments = await Promise.all(
     // map over the input data
     data.map(async (data: any) => {
-      // console.log("data", data)
       const { employee, shiftsAssigned } = data;
 
       // map over the shifts subarray
@@ -25,7 +24,6 @@ export async function POST(req: any) {
         shiftsAssigned.map(async (shift: any, index: number) => {
           if (shift) {
             // skip the entries where there is no shift for that day (it's null)
-            // console.log("shift: ", shift)
 
             return prisma.assignment.create({
               data: {
@@ -119,8 +117,6 @@ export async function PATCH(req: any) {
         id: assignment.id,
       },
     });
-    console.log('deleted');
-    console.log(deletedAssignment);
   } else {
     // if assignment.shift is not null, update the shift
     const updatedAssignment = await prisma.assignment.update({
@@ -128,11 +124,9 @@ export async function PATCH(req: any) {
         id: assignment.id,
       },
       data: {
-        shift: data.shift
+        shift: data.shift,
       },
     });
-    console.log('udpated');
-    console.log(updatedAssignment);
   }
 
   return NextResponse.json({ message: 'success' }, { status: 200 });

@@ -49,8 +49,6 @@ export default function AddShift({ shifts, assignment, day }: Props) {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-
     fetch('/api/prisma/roster', {
       method: 'PUT',
       headers: {
