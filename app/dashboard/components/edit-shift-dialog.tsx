@@ -65,9 +65,6 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
   // console.log("assignment: ", assignment)
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data)
-    console.log("day:", day)
-    console.log("assignment", assignment)
 
     if (data.shift === "off") {
       data.shift = null 

@@ -134,3 +134,23 @@ export async function PATCH(req: any) {
     )
 
 }
+
+export async function PUT(req:any) {
+    const user = await getUserSession();
+    const data = await req.json();
+
+    const assignment = await prisma.assignment.create({
+        data: {
+            day: data.day,
+            assignedBy: user.id,
+            shift: data.shift,
+            assignedTo: data.assignment.employee.id,
+        }
+    })
+
+     return NextResponse.json(
+        {assignment},
+        {status: 200}
+    )
+    
+}

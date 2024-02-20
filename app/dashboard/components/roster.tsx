@@ -10,6 +10,7 @@ import {
 import RosterShift from './roster-shift';
 import { Shift } from '@prisma/client';
 import { RosterAssignment } from '@/app/lib/formSchemas';
+import AddShift from './add-shift';
 
 type Props = {
   assignments: RosterAssignment[];
@@ -88,7 +89,11 @@ const Roster: FC<Props> = ({ assignments, shifts }) => {
                         day={index}
                       />
                     ) : (
-                      ''
+                      <AddShift
+                        shifts={shifts}
+                        assignment={assignment}
+                        day={index}
+                      />
                     )}
                   </TableCell>
                 ))}
