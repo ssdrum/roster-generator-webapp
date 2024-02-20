@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import Roster from './components/roster';
 import { Employee, NumEmployeesAssigned, Shift, User } from '@prisma/client';
 import ButtonLoading from './components/button-loading';

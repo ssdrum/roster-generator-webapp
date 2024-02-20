@@ -7,6 +7,7 @@ import ButtonLoading from './components/button-loading';
 import { Button } from '../ui/shadcn/button';
 import genRoster from '../lib/roster-api-interface';
 import Title from '@/app/ui/title';
+import { useRouter } from 'next/navigation';
 
 type APIresponseType = {
   status: number;
@@ -14,48 +15,63 @@ type APIresponseType = {
   data: [];
 };
 const Dashboard = () => {
-  const { user, employees, shifts } = useContext(DashboardContext)!;
-
+  const { userData, employees, shifts, assignments } =
+    useContext(DashboardContext)!;
   const [isGenerating, setIsGenerating] = useState(false);
-  const [rosterData, setRosterData] = useState<APIresponseType | null>(null);
+  const router = useRouter()
 
   const handleClick = async () => {
     setIsGenerating(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait one second
-    const APIresponse: APIresponseType = await genRoster(
-      user,
-      employees,
-      shifts
-    );
-    setIsGenerating(false);
-
-    if (APIresponse.status === 1) {
-      // Status 1 means that the constraints are unfeasible
-      alert(
-        'Looks like there was an error! Try changing your settings before re-generating'
-      );
-      setRosterData(null);
-    } else {
-      setRosterData(APIresponse);
+    const roster = await genRoster(userData, employees, shifts);
+    try {
+      // Store roster to database
+      const response = await fetch('api/prisma/roster', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(roster.data),
+      });
+    } catch (error) {
+      console.error('Error saving roster:', error);
+    } finally {
+      router.refresh() // Refresh to re-fetch data
+      setIsGenerating(false);
     }
+
+    //if (APIresponse.status === 1) {
+    //  // Status 1 means that the constraints are unfeasible
+    //  alert(
+    //    'Looks like there was an error! Try changing your settings before re-generating'
+    //  );
+    //  setRosterData(null);
+    //} else {
+    //  setRosterData(APIresponse);
+    //}
   };
 
   return (
     <>
       <Title title={'Dashboard'} />
-      {rosterData && <Roster assignments={rosterData.data} shifts={shifts} />}
+      {assignments.length > 0 && ( // Only show roster if there are assignments stored
+        <Roster assignments={assignments} shifts={shifts} userData={userData} />
+      )}
+      {/*
       {rosterData && (
         <p className='mb-5'>
           Showing 1 of {rosterData.numSolutions} possible rosters.
         </p>
       )}
+      */}
       {isGenerating ? (
         <ButtonLoading />
       ) : (
         <Button onClick={handleClick} className=''>
-          {rosterData ? 'Regenerate' : 'Generate Roster'}
+          {assignments.length > 0 ? 'Regenerate' : 'Generate Roster'}
         </Button>
       )}
+      {/*
+       */}
     </>
   );
 };

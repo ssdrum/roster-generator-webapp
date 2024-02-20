@@ -6,6 +6,7 @@ import {
   Assignment,
   NumEmployeesAssigned,
 } from '@prisma/client'; // Prisma generates classess associated with the models defined in the schema automatically
+import { RosterAssignment } from './formSchemas';
 
 /* Collection of functions to fetch data from the database */
 export const fetchUsers = async (): Promise<User[]> => {
@@ -56,14 +57,52 @@ export const fetchNumEmployeesAssigned = async (
   return numEmployeesAssigned;
 };
 
-export const fetchAssignments = async (
-  userId: string
-): Promise<Assignment[]> => {
-  /* Returns all assignments created by user */
-  const assignments = await prisma.assignment.findMany({
-    where: {
-      assignedBy: userId,
-    },
+export const fetchAssignments = async (userId: string) => {
+  // load all of the assignments from the database, grouped by assignedTo
+  const data = await prisma.assignment.findMany({
+    where: { assignedBy: userId },
   });
-  return assignments;
-};
+
+  // get the user data so that we can get the week length to create our array of shifts
+  const userData = await prisma.user.findFirstOrThrow({
+    where: { id: userId },
+  });
+
+  // group the data by employee
+  const groupedData = data.reduce((data: any, index) => {
+    if (!data[index.assignedTo]) {
+      data[index.assignedTo] = [];
+    }
+    data[index.assignedTo].push(index);
+    return data;
+  }, {});
+
+  let rosterAssignments: RosterAssignment[] = [];
+
+  // loop over the different employees to get the shifts they are assigned
+  for (let assignment in groupedData) {
+    // fetch the employee from the db
+    let employee = await prisma.employee.findFirstOrThrow({
+      where: { id: assignment },
+    });
+
+    // create the shift array by looping over the shifts and adding them to the right index by the day
+    let shifts = new Array(userData.workDays.length).fill(null);
+    await Promise.all(
+      groupedData[assignment].map(async (assignment: any) => {
+        let shift = await prisma.shift.findFirstOrThrow({
+          where: { id: assignment.shift },
+        });
+        shifts[assignment.day] = shift;
+      })
+    );
+
+    // add the roster to our rosters
+    rosterAssignments.push({
+      employee: employee,
+      shiftsAssigned: shifts,
+    });
+  }
+
+  return rosterAssignments;
+}

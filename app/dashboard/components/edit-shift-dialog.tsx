@@ -68,6 +68,10 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
       data.shift = null;
     }
 
+    console.log(data.shift)
+    console.log(day)
+    console.log(assignment)
+
     fetch('/api/prisma/roster', {
       method: 'PATCH',
       headers: {

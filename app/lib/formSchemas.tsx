@@ -63,6 +63,7 @@ export const editEmployeeSchema = z.object({
 export const numEmployeesAssignedSchema = z.object({
   employees: z.array(allNumAssignedSchema),
 });
+
 export type RosterAssignment = {
   employee: Employee;
   shiftsAssigned: (Shift | null)[];

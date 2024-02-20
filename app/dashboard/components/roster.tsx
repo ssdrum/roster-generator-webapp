@@ -1,5 +1,4 @@
-import { FC, useContext } from 'react';
-import { DashboardContext } from '@/app/dashboard/dashboard-context';
+import { FC } from 'react';
 import {
   Table,
   TableHeader,
@@ -9,13 +8,14 @@ import {
   TableCell,
 } from '@/app/ui/shadcn/table';
 import RosterShift from './roster-shift';
-import { Shift } from '@prisma/client';
+import { Shift, User } from '@prisma/client';
 import { RosterAssignment } from '@/app/lib/formSchemas';
 import AddShift from './add-shift';
 
 type Props = {
   assignments: RosterAssignment[];
   shifts: Shift[];
+  userData: User;
 };
 
 const daysNames = [
@@ -27,12 +27,10 @@ const daysNames = [
   'Saturday',
   'Sunday',
 ];
-const Roster: FC<Props> = ({ assignments, shifts }) => {
-  const { user } = useContext(DashboardContext)!;
-
+const Roster: FC<Props> = ({ assignments, shifts, userData }) => {
   // Select only days selected by the user
   const days: string[] = [];
-  user.workDays.forEach((workDay) => days.push(daysNames[workDay]));
+  userData.workDays.forEach((workDay) => days.push(daysNames[workDay]));
 
   // the function for choosing which side the shift should extend to
   function determineSide(shifts: (Shift | null)[], index: number): string {
