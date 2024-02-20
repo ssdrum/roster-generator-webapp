@@ -58,11 +58,13 @@ const Navbar: FC<Props> = ({ session }) => {
                 icon={faUserGroup}
                 link={'/dashboard/edit-employees'}
               />
-              <NavbarMenuItem
+              {/* TODO
+                <NavbarMenuItem
                 title={'Assignments'}
                 icon={faCalendarDays}
                 link={'/dashboard/edit-assignments'}
               />
+              */}
             </ul>
           </div>
         </div>

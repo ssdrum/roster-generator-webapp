@@ -35,8 +35,7 @@ const StartForm = () => {
   ];
 
   // Initialise form with default values on first render
-  const firstShiftId = uuidv4();
-  const secondShiftId = uuidv4();
+  const firstShiftId = uuidv4()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
@@ -44,62 +43,27 @@ const StartForm = () => {
       shifts: [
         {
           id: firstShiftId,
-          name: 'Morning',
+          name: '',
           startTime: '08:00',
-          endTime: '12:00',
-        },
-        {
-          id: secondShiftId,
-          name: 'Evening',
-          startTime: '15:00',
-          endTime: '21:00',
+          endTime: '17:00',
         },
       ],
       employees: [
         {
-          id: '0',
-          name: 'Good Employee',
-          email: 'good@mail.com',
+          id: uuidv4(),
+          name: '',
+          email: '',
           createdBy: '',
-        },
-        {
-          id: '1',
-          name: 'Bad Employee',
-          email: 'bad@mail.com',
-          createdBy: '',
-        },
-        {
-          id: '2',
-          name: 'Luigi',
-          email: 'luigi@mail.com',
-          createdBy: '',
-        },
-        {
-          id: '3',
-          name: 'Oisin',
-          email: 'oisin@mail.com',
-          createdBy: '',
-        },
-      ],
+        }      ],
       numEmployeesAssigned: [
         {
           shiftId: firstShiftId,
           assignments: [
             { day: 0, numAssigned: 1 },
-            { day: 1, numAssigned: 2 },
-            { day: 2, numAssigned: 2 },
-            { day: 3, numAssigned: 2 },
-            { day: 4, numAssigned: 2 },
-          ],
-        },
-        {
-          shiftId: secondShiftId,
-          assignments: [
-            { day: 0, numAssigned: 1 },
-            { day: 1, numAssigned: 2 },
-            { day: 2, numAssigned: 2 },
-            { day: 3, numAssigned: 2 },
-            { day: 4, numAssigned: 2 },
+            { day: 1, numAssigned: 1 },
+            { day: 2, numAssigned: 1 },
+            { day: 3, numAssigned: 1 },
+            { day: 4, numAssigned: 1 },
           ],
         },
       ],
