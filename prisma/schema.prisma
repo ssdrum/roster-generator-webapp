@@ -67,8 +67,8 @@ model NumEmployeesAssigned {
   shift       String
   Shift       Shift         @relation(fields: [shift], references: [id], onDelete: Cascade)
   countPerDay CountPerDay[]
-  User        User?         @relation(fields: [userId], references: [id])
-  userId      String?
+  assignedBy  String
+  User        User          @relation(fields: [assignedBy], references: [id])
 
   @@map(name: "num_employees_assigned")
 }
