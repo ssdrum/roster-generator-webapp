@@ -2,6 +2,7 @@
 
 import { FC, ReactNode, createContext, useState } from 'react';
 import { Employee, NumEmployeesAssigned, Shift, User } from '@prisma/client';
+import { Toaster } from '../ui/shadcn/ui/sonner';
 
 type Props = {
   children: ReactNode;
@@ -40,6 +41,7 @@ const DashboardProvider: FC<Props> = ({
       }}
     >
       {children}
+      <Toaster />
     </DashboardContext.Provider>
   );
 };

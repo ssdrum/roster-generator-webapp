@@ -8,6 +8,7 @@ import {
 } from '../lib/data';
 import { getUserSession } from '@/app/lib/session';
 import DashboardProvider from '@/app/dashboard/dashboard-context';
+import { redirect } from 'next/navigation';
 
 export default async function DashboardLayout({
   children, // will be a page or nested layout
@@ -15,10 +16,11 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const session: Session = await getUserSession();
-  const userId = session.id;
-
-  if (userId !== undefined) { // Wait for session to be retreived before rendering page
+  if (session === undefined) {
+    redirect('/');
+  } else {
     // Fetch all data related to user server-side
+    const userId = session.id;
     const userData = await fetchUserData(userId);
     const employees = await fetchEmployees(userId);
     const shifts = await fetchShifts(userId);
