@@ -1,4 +1,5 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+import { DashboardContext } from '@/app/dashboard/dashboard-context';
 import {
   Table,
   TableHeader,
@@ -20,8 +21,21 @@ type Props = {
   shifts: Shift[];
 };
 
+const daysNames = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
 const Roster: FC<Props> = ({ assignments, shifts }) => {
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const { user } = useContext(DashboardContext)!;
+
+  // Select only days selected by the user
+  const days: string[] = [];
+  user.workDays.forEach((workDay) => days.push(daysNames[workDay]));
 
   // the function for choosing which side the shift should extend to
   function determineSide(shifts: (Shift | null)[], index: number): string {
@@ -48,7 +62,7 @@ const Roster: FC<Props> = ({ assignments, shifts }) => {
   }
 
   return (
-    <div className='w-full rounded-lg border mb-10'>
+    <div className='mb-10 w-full rounded-lg border'>
       <div className='relative w-full overflow-auto'>
         <Table>
           <TableHeader>
