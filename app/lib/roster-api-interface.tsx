@@ -81,7 +81,14 @@ const processAPIResponse = (
   employees: Employee[],
   shifts: Shift[]
 ) => {
-  const rosterData: any = []; // Initialize roster data array
+  const rosterData: any = { numSolutions: 0, status: APIres.status, data: [] };
+
+  // If status returned by API is 1, constraint are unfeasible
+  if (APIres.status === 1) {
+    return rosterData;
+  }
+
+  rosterData.numSolutions = APIres.num_solutions;
 
   // Iterate through each assignment in the API response
   APIres.data.forEach((APIassignment: any) => {
@@ -115,9 +122,10 @@ const processAPIResponse = (
       }
     });
 
-    rosterData.push(clientAssignment);
+    rosterData.data.push(clientAssignment);
   });
 
+  console.log(rosterData)
   return rosterData;
 };
 

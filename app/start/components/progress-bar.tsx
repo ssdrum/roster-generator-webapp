@@ -1,33 +1,28 @@
-// Component: https://www.hyperui.dev/components/application-ui/steps
-
 import { FC } from 'react';
-import ProgressBarItem from '@/app/start/components/progress-bar-item';
 
 type Props = { currStepIndex: number };
 
 const ProgressBar: FC<Props> = ({ currStepIndex }) => {
-  return (
-    <div className='m-auto my-20 flex max-w-2xl flex-col'>
-      <h2 className='sr-only'>Steps</h2>
+  // Calculate the width of the progress bar dynamically based on the current step index
+  const progressBarWidth = `${((currStepIndex + 1) / 3) * 100}%`;
 
-      <div className='after:mt-4 after:block after:h-1 after:w-full after:rounded-lg after:bg-gray-200'>
-        <ol className='flex justify-between text-sm font-medium text-gray-500'>
-          <ProgressBarItem
-            title={'Business Details'}
-            isChecked={currStepIndex > 0}
-            alignment={'start'}
-          />
-          <ProgressBarItem
-            title={'Employees'}
-            isChecked={currStepIndex > 1}
-            alignment={'center'}
-          />
-          <ProgressBarItem
-            title={'Assignments'}
-            isChecked={currStepIndex > 2}
-            alignment={'end'}
-          />
-        </ol>
+  return (
+    <div className='mb-10'>
+      <h2 className='sr-only'>Steps</h2>
+      <div>
+        <p className='text-xs font-medium text-gray-500'>
+          {currStepIndex + 1}/3
+        </p>
+        {/* Apply animation to the progress bar using CSS transitions */}
+        <div className='mt-4 overflow-hidden rounded-full bg-gray-200'>
+          <div
+            className='h-2 rounded-full bg-blue-500'
+            style={{
+              width: progressBarWidth,
+              transition: 'width 0.5s ease-in-out',
+            }}
+          ></div>
+        </div>
       </div>
     </div>
   );
