@@ -44,7 +44,7 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
 
   // Update shift in database
   const handleClick = () => {
-    console.log(selectedShift)
+    console.log(selectedShift);
 
     try {
       fetch('/api/prisma/roster', {

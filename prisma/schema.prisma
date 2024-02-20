@@ -16,6 +16,7 @@ model User {
   createdAt            DateTime               @default(now()) @map(name: "created_at")
   updatedAt            DateTime               @updatedAt @map(name: "updated_at")
   workDays             Int[]
+  isNewUser            Boolean                @default(true)
   Assignment           Assignment[]
   Employee             Employee[]
   shiftsCreated        Shift[]

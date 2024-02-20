@@ -17,7 +17,7 @@ export async function POST(req: any): Promise<NextResponse> {
   // Update the user's workDays
   await prisma.user.update({
     where: { id: userId },
-    data: { workDays },
+    data: { workDays, isNewUser: false },
   });
 
   // Associates client-side shift ids with database shift ids

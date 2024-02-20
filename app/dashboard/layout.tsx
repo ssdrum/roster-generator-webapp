@@ -1,7 +1,7 @@
 import Navbar from '@/app/ui/navbar';
 import { Session } from '@/app/lib/types';
 import {
-    fetchAssignments,
+  fetchAssignments,
   fetchEmployees,
   fetchNumEmployeesAssigned,
   fetchShifts,
@@ -26,7 +26,14 @@ export default async function DashboardLayout({
     const employees = await fetchEmployees(userId);
     const shifts = await fetchShifts(userId);
     const numEmployeesAssigned = await fetchNumEmployeesAssigned(userId);
-    const assignments = await fetchAssignments(userId)
+    const assignments = await fetchAssignments(userId);
+
+    // Redirect to start form if user is new
+    if (userData.isNewUser) {
+      redirect('/start');
+    }
+
+    console.log(userData)
 
     return (
       <div className='flex'>

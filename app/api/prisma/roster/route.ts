@@ -47,7 +47,7 @@ export async function POST(req: any) {
   );
 }
 
-export async function GET(req: any) {
+export async function GET() {
   const user = await getUserSession();
 
   // load all of the assignments from the database, grouped by assignedTo

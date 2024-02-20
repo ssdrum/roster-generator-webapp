@@ -17,6 +17,7 @@ type APIresponseType = {
 const Dashboard = () => {
   const { userData, employees, shifts, assignments } =
     useContext(DashboardContext)!;
+
   const [isGenerating, setIsGenerating] = useState(false);
   const router = useRouter()
 
