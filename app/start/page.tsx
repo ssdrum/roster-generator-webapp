@@ -181,7 +181,7 @@ const StartForm = () => {
         console.log(data);
         setIsSubmitting(true);
         await submitToDB(data);
-        alert("You're all set! Time to generate your first roster!")
+        alert("You're all set! Time to generate your first roster!");
         push('/dashboard');
       })();
     } else {

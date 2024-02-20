@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import React, { FC } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -12,15 +12,15 @@ import {
   SelectContent,
   SelectItem,
 } from '@/app/ui/shadcn/ui/select';
-import { 
-  Form, 
+import {
+  Form,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/app/ui/shadcn/form'
+} from '@/app/ui/shadcn/form';
 import { RosterAssignment } from '@/app/lib/formSchemas';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -49,25 +49,23 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
 
   // create the form for the dialog
   const FormSchema = z.object({
-    shift: z
-      .string().nullable()
-  })
-  
+    shift: z.string().nullable(),
+  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      shift: selected
-    }
-  })
+      shift: selected,
+    },
+  });
 
   // console.log("selected: ", selected)
   // console.log("shifts: ", shifts)
   // console.log("assignment: ", assignment)
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-
-    if (data.shift === "off") {
-      data.shift = null 
+    if (data.shift === 'off') {
+      data.shift = null;
     }
 
     fetch('/api/prisma/roster', {
@@ -75,10 +73,12 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({shift: data.shift, day: day, assignment: assignment}),
-    })
-
-    
+      body: JSON.stringify({
+        shift: data.shift,
+        day: day,
+        assignment: assignment,
+      }),
+    });
   }
 
   return (
@@ -93,7 +93,7 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
         <Dialog.Content className='DialogContent'>
           <Dialog.Title className='DialogTitle'>Edit shift</Dialog.Title>
           <Dialog.Description className='DialogDescription'>
-            Select the new shift. Click Save changes when you{'\''}re done.
+            Select the new shift. Click Save changes when you{"'"}re done.
           </Dialog.Description>
           <fieldset className='Fieldset'>
             <label className='Label' htmlFor='shiftSelect'>
@@ -105,10 +105,13 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
                   control={form.control}
-                  name="shift"
+                  name='shift'
                   render={({ field }) => (
                     <FormItem>
-                      <Select onValueChange={field.onChange} defaultValue={field.value!}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value!}
+                      >
                         <FormControl>
                           <SelectTrigger className='w-[180px]'>
                             <SelectValue placeholder='Select a shift' />
@@ -117,15 +120,13 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
                         <SelectContent>{shiftOptions}</SelectContent>
                       </Select>
                     </FormItem>
-                  )}/>
+                  )}
+                />
 
                 {/* <Dialog.Close asChild> */}
-                  <Button
-                    type='submit'
-                    className="mt-4"
-                  >
-                    Save changes
-                  </Button>
+                <Button type='submit' className='mt-4'>
+                  Save changes
+                </Button>
                 {/* </Dialog.Close> */}
               </form>
             </Form>
@@ -136,11 +137,9 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
               marginTop: 25,
               justifyContent: 'flex-end',
             }}
-          >
-          </div>
+          ></div>
           <Dialog.Close asChild>
-            <button className='IconButton' aria-label='Close'>
-            </button>
+            <button className='IconButton' aria-label='Close'></button>
           </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>

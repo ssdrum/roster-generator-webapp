@@ -25,11 +25,11 @@ const Dashboard: FC<Props> = ({
 }) => {
   const [rosterData, setRosterData] = useState<RosterAssignment[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // generate a roster and save it to the database
   const handleClick = async () => {
-    setIsGenerating(true)
+    setIsGenerating(true);
     const roster = await genRoster(user, employees, shifts);
     try {
       const response = await fetch('api/prisma/roster', {
@@ -37,27 +37,27 @@ const Dashboard: FC<Props> = ({
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify(roster)
+        body: JSON.stringify(roster),
       });
     } catch (error) {
       console.error('Error saving roster:', error);
     } finally {
-      fetchData()
-      setIsGenerating(false)
+      fetchData();
+      setIsGenerating(false);
     }
   };
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch('api/prisma/roster')
-        const data = await response.json();
-        setRosterData(data.rosterAssignments);
-      } catch (error) {
-        console.error('Error fetching roster:', error);
-      } finally {
-        setIsLoaded(true)
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await fetch('api/prisma/roster');
+      const data = await response.json();
+      setRosterData(data.rosterAssignments);
+    } catch (error) {
+      console.error('Error fetching roster:', error);
+    } finally {
+      setIsLoaded(true);
+    }
+  };
 
   return (
     <>
