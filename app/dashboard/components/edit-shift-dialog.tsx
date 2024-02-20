@@ -1,9 +1,9 @@
-'use client';
-
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import './edit-shift-dialog.css';
+import { Shift } from '@prisma/client';
 import { Button } from '@/app/ui/shadcn/button';
 import {
   Select,
@@ -12,21 +12,8 @@ import {
   SelectContent,
   SelectItem,
 } from '@/app/ui/shadcn/ui/select';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/app/ui/shadcn/form';
 import { RosterAssignment } from '@/app/lib/formSchemas';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { getUserSession } from '@/app/lib/session';
-import { Shift } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   selected?: string;
@@ -36,6 +23,9 @@ type Props = {
 };
 
 const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
+  const [selectedShift, setSelectedShift] = useState(selected);
+  const router = useRouter();
+
   const shiftOptions = [
     <SelectItem key='off' value='off'>
       Off
@@ -47,43 +37,33 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
     )),
   ];
 
-  // create the form for the dialog
-  const FormSchema = z.object({
-    shift: z.string().nullable(),
-  });
+  // Store selected shift in state
+  const handleShiftChange = (value: string) => {
+    setSelectedShift(value);
+  };
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      shift: selected,
-    },
-  });
+  // Update shift in database
+  const handleClick = () => {
+    console.log(selectedShift)
 
-  // console.log("selected: ", selected)
-  // console.log("shifts: ", shifts)
-  // console.log("assignment: ", assignment)
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (data.shift === 'off') {
-      data.shift = null;
+    try {
+      fetch('/api/prisma/roster', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          shift: selectedShift === 'off' ? null : selectedShift,
+          day: day,
+          assignment: assignment,
+        }),
+      });
+    } catch {
+      console.log('Error trying to change shift');
+    } finally {
+      router.refresh();
     }
-
-    console.log(data.shift)
-    console.log(day)
-    console.log(assignment)
-
-    fetch('/api/prisma/roster', {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        shift: data.shift,
-        day: day,
-        assignment: assignment,
-      }),
-    });
-  }
+  };
 
   return (
     <Dialog.Root>
@@ -97,43 +77,18 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
         <Dialog.Content className='DialogContent'>
           <Dialog.Title className='DialogTitle'>Edit shift</Dialog.Title>
           <Dialog.Description className='DialogDescription'>
-            Select the new shift. Click Save changes when you{"'"}re done.
+            Select the new shift. Click Save changes when you&apos;re done.
           </Dialog.Description>
           <fieldset className='Fieldset'>
             <label className='Label' htmlFor='shiftSelect'>
               Select Shift
             </label>
-
-            {/* form */}
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField
-                  control={form.control}
-                  name='shift'
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value!}
-                      >
-                        <FormControl>
-                          <SelectTrigger className='w-[180px]'>
-                            <SelectValue placeholder='Select a shift' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>{shiftOptions}</SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                />
-
-                {/* <Dialog.Close asChild> */}
-                <Button type='submit' className='mt-4'>
-                  Save changes
-                </Button>
-                {/* </Dialog.Close> */}
-              </form>
-            </Form>
+            <Select defaultValue={selected} onValueChange={handleShiftChange}>
+              <SelectTrigger className='w-[180px]'>
+                <SelectValue placeholder='Select a shift' />
+              </SelectTrigger>
+              <SelectContent>{shiftOptions}</SelectContent>
+            </Select>
           </fieldset>
           <div
             style={{
@@ -141,9 +96,21 @@ const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
               marginTop: 25,
               justifyContent: 'flex-end',
             }}
-          ></div>
+          >
+            <Dialog.Close asChild>
+              <Button
+                className='bg-green-200 text-green-800 hover:bg-green-300'
+                type='submit'
+                onClick={handleClick}
+              >
+                Save changes
+              </Button>
+            </Dialog.Close>
+          </div>
           <Dialog.Close asChild>
-            <button className='IconButton' aria-label='Close'></button>
+            <button className='IconButton' aria-label='Close'>
+              <Cross2Icon />
+            </button>
           </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>

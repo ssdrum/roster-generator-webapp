@@ -27,7 +27,6 @@ export default async function DashboardLayout({
     const shifts = await fetchShifts(userId);
     const numEmployeesAssigned = await fetchNumEmployeesAssigned(userId);
     const assignments = await fetchAssignments(userId)
-    console.log(assignments)
 
     return (
       <div className='flex'>

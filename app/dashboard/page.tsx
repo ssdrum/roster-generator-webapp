@@ -35,7 +35,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Error saving roster:', error);
     } finally {
-      router.refresh() // Refresh to re-fetch data
+      router.refresh() // Reload page to see changes
       setIsGenerating(false);
     }
 

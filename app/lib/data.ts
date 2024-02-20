@@ -57,7 +57,9 @@ export const fetchNumEmployeesAssigned = async (
   return numEmployeesAssigned;
 };
 
-export const fetchAssignments = async (userId: string) => {
+export const fetchAssignments = async (
+  userId: string
+): Promise<RosterAssignment[]> => {
   // load all of the assignments from the database, grouped by assignedTo
   const data = await prisma.assignment.findMany({
     where: { assignedBy: userId },
@@ -105,4 +107,4 @@ export const fetchAssignments = async (userId: string) => {
   }
 
   return rosterAssignments;
-}
+};

@@ -51,7 +51,7 @@ model Shift {
 // Represents an employee, assigned to a shift by a user
 model Assignment {
   id         String   @id @default(cuid())
-  Employee   Employee @relation(fields: [assignedTo], references: [id])
+  Employee   Employee @relation(fields: [assignedTo], references: [id], onDelete: Cascade)
   Shift      Shift    @relation(fields: [shift], references: [id], onDelete: Cascade)
   User       User     @relation(fields: [assignedBy], references: [id])
   day        Int

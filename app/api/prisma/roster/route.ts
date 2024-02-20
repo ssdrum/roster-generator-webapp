@@ -102,7 +102,6 @@ export async function GET(req: any) {
 export async function PATCH(req: any) {
   const user = await getUserSession();
   const data = await req.json();
-  console.log(data)
 
   // get the assignment from the database where all the fields match
   const assignment = await prisma.assignment.findFirstOrThrow({
@@ -113,26 +112,28 @@ export async function PATCH(req: any) {
     },
   });
 
-  console.log('assignment: ', assignment);
-
-  //if (data.shift === null) {
-  //  // if assignment.shift is null, delete the shift
-  //  const deleteAssignment = await prisma.assignment.delete({
-  //    where: {
-  //      id: assignment.id,
-  //    },
-  //  });
-  //} else {
-  //  // if assignment.shift is not null, update the shift
-  //  const updateAssignment = await prisma.assignment.update({
-  //    where: {
-  //      id: assignment.id,
-  //    },
-  //    data: {
-  //      shift: data.shift.id,
-  //    },
-  //  });
-  //}
+  if (data.shift === null) {
+    // if assignment.shift is null, delete the shift
+    const deletedAssignment = await prisma.assignment.delete({
+      where: {
+        id: assignment.id,
+      },
+    });
+    console.log('deleted');
+    console.log(deletedAssignment);
+  } else {
+    // if assignment.shift is not null, update the shift
+    const updatedAssignment = await prisma.assignment.update({
+      where: {
+        id: assignment.id,
+      },
+      data: {
+        shift: data.shift
+      },
+    });
+    console.log('udpated');
+    console.log(updatedAssignment);
+  }
 
   return NextResponse.json({ message: 'success' }, { status: 200 });
 }
