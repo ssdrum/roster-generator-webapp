@@ -82,7 +82,7 @@ const EditEmployees = () => {
       await new Promise((r) => setTimeout(r, 500)); // Wait half a second after submitting
       setIsSubmitting(false);
       router.refresh();
-      toast("Employees list has been updated.")
+      toast('Employees list has been updated.');
     }
   };
 

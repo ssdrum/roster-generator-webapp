@@ -82,7 +82,7 @@ const EditShifts = () => {
       await new Promise((r) => setTimeout(r, 500));
       setIsSubmitting(false);
       router.refresh();
-      toast("Shifts list has been updated.")
+      toast('Shifts list has been updated.');
     }
   };
 

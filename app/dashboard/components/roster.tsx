@@ -21,7 +21,15 @@ type Props = {
 };
 
 const Roster: FC<Props> = ({ assignments, shifts }) => {
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
 
   // the function for choosing which side the shift should extend to
   function determineSide(shifts: (Shift | null)[], index: number): string {
@@ -48,7 +56,7 @@ const Roster: FC<Props> = ({ assignments, shifts }) => {
   }
 
   return (
-    <div className='w-full rounded-lg border mb-10'>
+    <div className='mb-10 w-full rounded-lg border'>
       <div className='relative w-full overflow-auto'>
         <Table>
           <TableHeader>

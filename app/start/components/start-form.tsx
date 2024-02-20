@@ -35,7 +35,7 @@ const StartForm = () => {
   ];
 
   // Initialise form with default values on first render
-  const firstShiftId = uuidv4()
+  const firstShiftId = uuidv4();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
@@ -54,7 +54,8 @@ const StartForm = () => {
           name: '',
           email: '',
           createdBy: '',
-        }      ],
+        },
+      ],
       numEmployeesAssigned: [
         {
           shiftId: firstShiftId,
@@ -148,7 +149,7 @@ const StartForm = () => {
         console.log(data);
         setIsSubmitting(true);
         await submitToDB(data);
-        alert("You're all set!, Time to generate your first roster!")
+        alert("You're all set!, Time to generate your first roster!");
         push('/dashboard');
       })();
     } else {
