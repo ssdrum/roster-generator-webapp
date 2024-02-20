@@ -17,6 +17,7 @@ model User {
   createdAt            DateTime               @default(now()) @map(name: "created_at")
   updatedAt            DateTime               @updatedAt @map(name: "updated_at")
   workDays             Int[]
+  isNewUser            Boolean                @default(true)
   Assignment           Assignment[]
   Employee             Employee[]
   shiftsCreated        Shift[]
@@ -28,7 +29,7 @@ model User {
 model Employee {
   id         String       @id @default(cuid())
   name       String
-  email      String       @unique
+  email      String
   Assignment Assignment[]
   User       User         @relation(fields: [employedBy], references: [id])
   employedBy String
@@ -52,8 +53,8 @@ model Shift {
 // Represents an employee, assigned to a shift by a user
 model Assignment {
   id         String   @id @default(cuid())
-  Employee   Employee @relation(fields: [assignedTo], references: [id])
-  Shift      Shift    @relation(fields: [shift], references: [id])
+  Employee   Employee @relation(fields: [assignedTo], references: [id], onDelete: Cascade)
+  Shift      Shift    @relation(fields: [shift], references: [id], onDelete: Cascade)
   User       User     @relation(fields: [assignedBy], references: [id])
   day        Int
   assignedBy String
@@ -66,7 +67,7 @@ model Assignment {
 model NumEmployeesAssigned {
   id          String        @id @default(cuid())
   shift       String
-  Shift       Shift         @relation(fields: [shift], references: [id])
+  Shift       Shift         @relation(fields: [shift], references: [id], onDelete: Cascade)
   countPerDay CountPerDay[]
   assignedBy  String
   User        User          @relation(fields: [assignedBy], references: [id])

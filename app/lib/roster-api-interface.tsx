@@ -24,7 +24,7 @@ const genRoster = async (
   const num_employees = employees.length;
   const num_days = user.workDays.length;
   const num_shifts = shifts.length;
-  const soft_days_off = true; // Soft days off flag
+  const soft_days_off = false; // Soft days off flag
 
   // Prepare query data object
   const queryData: QueryData = {
@@ -125,7 +125,6 @@ const processAPIResponse = (
     rosterData.data.push(clientAssignment);
   });
 
-  console.log(rosterData);
   return rosterData;
 };
 

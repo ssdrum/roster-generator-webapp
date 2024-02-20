@@ -9,16 +9,14 @@ import {
   TableCell,
 } from '@/app/ui/shadcn/table';
 import RosterShift from './roster-shift';
-import { Employee, Shift } from '@prisma/client';
-
-type RosterAssignment = {
-  employee: Employee;
-  shiftsAssigned: (Shift | null)[];
-};
+import { Shift, User } from '@prisma/client';
+import { RosterAssignment } from '@/app/lib/formSchemas';
+import AddShift from './add-shift';
 
 type Props = {
   assignments: RosterAssignment[];
   shifts: Shift[];
+  userData: User;
 };
 
 const daysNames = [
@@ -30,12 +28,10 @@ const daysNames = [
   'Saturday',
   'Sunday',
 ];
-const Roster: FC<Props> = ({ assignments, shifts }) => {
-  const { user } = useContext(DashboardContext)!;
-
+const Roster: FC<Props> = ({ assignments, shifts, userData }) => {
   // Select only days selected by the user
   const days: string[] = [];
-  user.workDays.forEach((workDay) => days.push(daysNames[workDay]));
+  userData.workDays.forEach((workDay) => days.push(daysNames[workDay]));
 
   // the function for choosing which side the shift should extend to
   function determineSide(shifts: (Shift | null)[], index: number): string {
@@ -77,34 +73,40 @@ const Roster: FC<Props> = ({ assignments, shifts }) => {
           </TableHeader>
           <TableBody>
             {/* loop over the assignments array and get the employees and their shifts */}
-            {assignments.map(({ employee, shiftsAssigned }) => (
-              <TableRow key={employee.name}>
+            {assignments.map((assignment, i) => (
+              <TableRow key={assignment.employee.name}>
                 <TableCell className='w-64 font-medium'>
-                  {employee.name}
+                  {assignment.employee.name}
                 </TableCell>
                 {/* loop over the days and draw shifts in the cells where there are shifts */}
                 {days.map((d, index) => (
                   <TableCell key={index} className='border-l p-0'>
-                    {shiftsAssigned !== null &&
-                    shiftsAssigned[index] !== null ? (
+                    {assignment.shiftsAssigned !== null &&
+                    assignment.shiftsAssigned[index] !== null ? (
                       // pass the props to the shift component
                       <RosterShift
                         side={
-                          determineSide(shiftsAssigned, index) as
+                          determineSide(assignment.shiftsAssigned, index) as
                             | 'left'
                             | 'right'
                             | 'single'
                             | 'both'
                         } // calculate if it should stretch to a side, and assert into the allowed options
-                        id={shiftsAssigned[index]?.id}
-                        name={shiftsAssigned[index]?.name}
-                        startTime={shiftsAssigned[index]?.startTime}
-                        endTime={shiftsAssigned[index]?.endTime}
-                        employee={employee.name}
+                        id={assignment.shiftsAssigned[index]?.id}
+                        name={assignment.shiftsAssigned[index]?.name}
+                        startTime={assignment.shiftsAssigned[index]?.startTime}
+                        endTime={assignment.shiftsAssigned[index]?.endTime}
+                        employee={assignment.employee.name}
                         shifts={shifts}
+                        assignment={assignment}
+                        day={index}
                       />
                     ) : (
-                      ''
+                      <AddShift
+                        shifts={shifts}
+                        assignment={assignment}
+                        day={index}
+                      />
                     )}
                   </TableCell>
                 ))}

@@ -3,7 +3,7 @@ import { signIn } from 'next-auth/react';
 
 const GoogleSignInButton = () => {
   const handleClick = () => {
-    signIn('google', { callbackUrl: '/start' });
+    signIn('google', { callbackUrl: '/dashboard' }); // Redirect to dasboard on sign-in
   };
 
   return (

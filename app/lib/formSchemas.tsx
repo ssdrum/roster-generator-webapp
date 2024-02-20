@@ -1,3 +1,4 @@
+import { Employee, Shift } from '@prisma/client';
 import { z } from 'zod';
 
 // Start form schemas
@@ -62,6 +63,11 @@ export const editEmployeeSchema = z.object({
 export const numEmployeesAssignedSchema = z.object({
   employees: z.array(allNumAssignedSchema),
 });
+
+export type RosterAssignment = {
+  employee: Employee;
+  shiftsAssigned: (Shift | null)[];
+};
 
 // Export types
 export type FormType = z.infer<typeof formSchema>;

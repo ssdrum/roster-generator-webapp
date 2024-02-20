@@ -1,9 +1,9 @@
-import React, { FC, useContext } from 'react';
-import { DashboardContext } from '../dashboard-context';
+import React, { FC, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import './edit-shift-dialog.css';
+import { Shift } from '@prisma/client';
 import { Button } from '@/app/ui/shadcn/button';
 import {
   Select,
@@ -12,13 +12,19 @@ import {
   SelectContent,
   SelectItem,
 } from '@/app/ui/shadcn/ui/select';
+import { RosterAssignment } from '@/app/lib/formSchemas';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   selected?: string;
+  shifts: Shift[];
+  assignment: RosterAssignment;
+  day: number;
 };
 
-const EditShiftBtn: FC<Props> = ({ selected }) => {
-  const { shifts } = useContext(DashboardContext)!;
+const EditShiftBtn: FC<Props> = ({ selected, shifts, assignment, day }) => {
+  const [selectedShift, setSelectedShift] = useState(selected);
+  const router = useRouter();
 
   const shiftOptions = [
     <SelectItem key='off' value='off'>
@@ -30,6 +36,32 @@ const EditShiftBtn: FC<Props> = ({ selected }) => {
       </SelectItem>
     )),
   ];
+
+  // Store selected shift in state
+  const handleShiftChange = (value: string) => {
+    setSelectedShift(value);
+  };
+
+  // Update shift in database
+  const handleClick = () => {
+    try {
+      fetch('/api/prisma/roster', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          shift: selectedShift === 'off' ? null : selectedShift,
+          day: day,
+          assignment: assignment,
+        }),
+      });
+    } catch {
+      console.log('Error trying to change shift');
+    } finally {
+      router.refresh();
+    }
+  };
 
   return (
     <Dialog.Root>
@@ -49,7 +81,7 @@ const EditShiftBtn: FC<Props> = ({ selected }) => {
             <label className='Label' htmlFor='shiftSelect'>
               Select Shift
             </label>
-            <Select defaultValue={selected}>
+            <Select defaultValue={selected} onValueChange={handleShiftChange}>
               <SelectTrigger className='w-[180px]'>
                 <SelectValue placeholder='Select a shift' />
               </SelectTrigger>
@@ -66,7 +98,8 @@ const EditShiftBtn: FC<Props> = ({ selected }) => {
             <Dialog.Close asChild>
               <Button
                 className='bg-green-200 text-green-800 hover:bg-green-300'
-                type='button'
+                type='submit'
+                onClick={handleClick}
               >
                 Save changes
               </Button>

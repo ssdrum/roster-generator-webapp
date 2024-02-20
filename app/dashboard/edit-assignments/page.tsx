@@ -16,9 +16,9 @@ import SubmitBtn from '@/app/ui/submit-btn';
 const daysNames = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
 
 const EditAssignments = () => {
-  const { user, shifts, employees, numEmployeesAssigned } =
+  const { userData, shifts, employees, numEmployeesAssigned } =
     useContext(DashboardContext)!;
-  const { workDays } = user;
+  const { workDays } = userData;
   const [isSubmitting, setIsSubmitting] = useState(false); // when we click the button
   const router = useRouter();
 

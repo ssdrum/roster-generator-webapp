@@ -1,6 +1,7 @@
 import Navbar from '@/app/ui/navbar';
 import { Session } from '@/app/lib/types';
 import {
+  fetchAssignments,
   fetchEmployees,
   fetchNumEmployeesAssigned,
   fetchShifts,
@@ -25,6 +26,12 @@ export default async function DashboardLayout({
     const employees = await fetchEmployees(userId);
     const shifts = await fetchShifts(userId);
     const numEmployeesAssigned = await fetchNumEmployeesAssigned(userId);
+    const assignments = await fetchAssignments(userId);
+
+    // Redirect to start form if user is new
+    if (userData.isNewUser) {
+      redirect('/start');
+    }
 
     return (
       <div className='flex'>
@@ -32,10 +39,11 @@ export default async function DashboardLayout({
         <div className='container mx-auto my-5'>
           {/* Context provider provides access to variables below to all components in /dashboard */}
           <DashboardProvider
-            user={userData}
+            userData={userData}
             employees={employees}
             shifts={shifts}
             numEmployeesAssigned={numEmployeesAssigned}
+            assignments={assignments}
           >
             {children}
           </DashboardProvider>
