@@ -85,6 +85,7 @@ const Roster: FC<Props> = ({ assignments, shifts }) => {
                         employee={assignment.employee.name}
                         shifts={shifts}
                         assignment={assignment}
+                        day={index}
                       />
                     ) : (
                       ''

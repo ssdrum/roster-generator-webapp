@@ -47,7 +47,7 @@ export async function POST(req: any) {
 export async function GET(req: any) {
     const user = await getUserSession();
 
-    // load all of teh assignments from the database, grouped by assignedTo
+    // load all of the assignments from the database, grouped by assignedTo
     const data = await prisma.assignment.findMany({
         where: { assignedBy: user.id },
     })
@@ -69,9 +69,7 @@ export async function GET(req: any) {
     let rosterAssignments: RosterAssignment[] = [];
 
     // loop over the different employees to get the shifts they are assigned 
-    let i = 0
     for (let assignment in groupedData) {
-        // console.log("assignment: ", groupedData[assignment])
 
         // fetch the employee from the db
         let employee = await prisma.employee.findFirstOrThrow({
@@ -92,12 +90,47 @@ export async function GET(req: any) {
             employee: await employee,
             shiftsAssigned: await shifts
         });
-
-        i++; 
     }
+
     return NextResponse.json({ rosterAssignments }, { status: 200 })
 }
 
-async function PATCH(req: any) {
-    console.log(await req.json)
+export async function PATCH(req: any) {
+    const user = await getUserSession();
+    const data = await req.json(); 
+
+    console.log("data: ", await data)
+
+    // get the assignment from the database where all the fields match
+    const assignment = await prisma.assignment.findFirstOrThrow({
+        where: {
+            assignedBy: user.id,
+            assignedTo: data.assignment.employee.id,
+            day: data.day
+        }
+    });
+    console.log("assignment: ", await assignment)
+
+    if (data.shift === null) { // if assignment.shift is null, delete the shift
+        const deleteAssignment = await prisma.assignment.delete({
+            where: {
+                id: assignment.id
+            }
+        });
+    } else { // if assignment.shift is not null, update the shift
+        const updateAssignment = await prisma.assignment.update({
+            where: {
+                id: assignment.id
+            },
+            data: {
+                shift: data.shift.id
+            }
+        });
+    }
+
+    return NextResponse.json(
+        {message: "success"},
+        {status: 200}
+    )
+
 }
