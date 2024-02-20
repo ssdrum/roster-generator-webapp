@@ -16,26 +16,29 @@ export default async function DashboardLayout({
 }) {
   const session: Session = await getUserSession();
   const userId = session.id;
-  // Fetch all data related to user server-side
-  const userData = await fetchUserData(userId);
-  const employees = await fetchEmployees(userId);
-  const shifts = await fetchShifts(userId);
-  const numEmployeesAssigned = await fetchNumEmployeesAssigned(userId);
 
-  return (
-    <div className='flex'>
-      <Navbar session={session} />
-      <div className='container mx-auto my-5'>
-        {/* Context provider provides access to variables below to all components in /dashboard */}
-        <DashboardProvider
-          user={userData}
-          employees={employees}
-          shifts={shifts}
-          numEmployeesAssigned={numEmployeesAssigned}
-        >
-          {children}
-        </DashboardProvider>
+  if (userId !== undefined) { // Wait for session to be retreived before rendering page
+    // Fetch all data related to user server-side
+    const userData = await fetchUserData(userId);
+    const employees = await fetchEmployees(userId);
+    const shifts = await fetchShifts(userId);
+    const numEmployeesAssigned = await fetchNumEmployeesAssigned(userId);
+
+    return (
+      <div className='flex'>
+        <Navbar session={session} />
+        <div className='container mx-auto my-5'>
+          {/* Context provider provides access to variables below to all components in /dashboard */}
+          <DashboardProvider
+            user={userData}
+            employees={employees}
+            shifts={shifts}
+            numEmployeesAssigned={numEmployeesAssigned}
+          >
+            {children}
+          </DashboardProvider>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
