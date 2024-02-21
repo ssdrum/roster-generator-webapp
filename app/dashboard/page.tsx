@@ -8,7 +8,6 @@ import { Button } from '../ui/shadcn/button';
 import genRoster from '../lib/roster-api-interface';
 import Title from '@/app/ui/title';
 import { useRouter } from 'next/navigation';
-import { storeRoster } from '../lib/data';
 
 // The roster-generating API returns data in this format
 type APIresponseType = {
@@ -52,7 +51,7 @@ const Dashboard = () => {
       } else {
         // Otherwise, notify the user that we have relaxed number of days off
         alert(
-          `We couldn't assign ${userData.numDaysOff} days off to everyone. This is the best result possible.`
+          `We couldn't assign ${userData.numDaysOff} days off to everyone. This is the best we could do.`
         );
       }
     }
