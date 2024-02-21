@@ -1,11 +1,5 @@
 import { prisma } from '@/app/lib/prisma';
-import {
-  User,
-  Employee,
-  Shift,
-  Assignment,
-  NumEmployeesAssigned,
-} from '@prisma/client'; // Prisma generates classess associated with the models defined in the schema automatically
+import { User, Employee, Shift, NumEmployeesAssigned } from '@prisma/client'; // Prisma generates classess associated with the models defined in the schema automatically
 import { RosterAssignment } from './formSchemas';
 
 /* Collection of functions to fetch data from the database */
@@ -105,6 +99,20 @@ export const fetchAssignments = async (
       shiftsAssigned: shifts,
     });
   }
+
+  // Return roster sorted on the employees names in ascending order
+  // Credits: https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
+  rosterAssignments.sort((a: RosterAssignment, b: RosterAssignment): number => {
+    const empA = a.employee.name.toLowerCase();
+    const empB = b.employee.name.toLowerCase();
+    if (empA < empB) {
+      return -1;
+    }
+    if (empB > empB) {
+      return 1;
+    }
+    return 0;
+  });
 
   return rosterAssignments;
 };
