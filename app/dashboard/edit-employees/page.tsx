@@ -29,7 +29,7 @@ import { toast } from 'sonner';
 const { v4: uuidv4 } = require('uuid');
 
 const EditEmployees = () => {
-  const { employees } = useContext(DashboardContext)!;
+  const { userData, employees } = useContext(DashboardContext)!;
   const [isSubmitting, setIsSubmitting] = useState(false); // when we click the button
   const router = useRouter();
 
@@ -37,6 +37,7 @@ const EditEmployees = () => {
   const form = useForm<z.infer<typeof editEmployeeSchema>>({
     resolver: zodResolver(editEmployeeSchema),
     defaultValues: {
+      numDaysOff: userData.numDaysOff,
       employees: employees,
     },
   });
@@ -65,24 +66,27 @@ const EditEmployees = () => {
 
   // Submit new values to database, then refresh page
   const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
       setIsSubmitting(true);
+      const numDaysOff = form.getValues().numDaysOff;
       const updatedEmployees = form.getValues().employees;
       const response = await fetch('/api/prisma/employees', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updatedEmployees),
+        body: JSON.stringify({
+          numDaysOff: numDaysOff,
+          employees: updatedEmployees,
+        }),
       });
     } catch (error) {
       console.error('Error submitting shifts:', error);
     } finally {
-      await new Promise((r) => setTimeout(r, 500)); // Wait half a second after submitting
       setIsSubmitting(false);
       router.refresh();
-      toast('Employees list has been updated.');
+      toast('Employees details have been updated.');
     }
   };
 
@@ -93,6 +97,34 @@ const EditEmployees = () => {
         {/* shadcn form wrapper */}
         <Form {...form}>
           <form onSubmit={handleSubmit}>
+            {/* Number of days off field */}
+            <FormField
+              control={form.control}
+              name='numDaysOff'
+              render={({ field }) => (
+                <FormItem className='mb-10'>
+                  <HoverCard openDelay={1} closeDelay={1}>
+                    <HoverCardTrigger>
+                      <FormLabel className='inline-flex items-center hover:underline'>
+                        Weekly days off number
+                        <QuestionIcon className='pl-1 text-gray-500' />
+                      </FormLabel>
+                    </HoverCardTrigger>
+                    <HoverCardContent
+                      side={'top'}
+                      className='text-sm text-gray-500'
+                    >
+                      Select the number of days off to give each employee per
+                      week.
+                    </HoverCardContent>
+                  </HoverCard>
+                  <FormControl className='w-1/4'>
+                    <Input type='number' {...field} min={0} max={4} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* loop over and render the shift fields */}
             {employeeFields.map((field, index) => (
               <div // grid container for the row

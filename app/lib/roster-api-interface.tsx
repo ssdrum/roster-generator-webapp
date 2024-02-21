@@ -5,6 +5,7 @@ type QueryData = {
   num_employees: number;
   num_days: number;
   num_shifts: number;
+  num_days_off: number;
   soft_days_off: boolean;
 };
 
@@ -16,21 +17,23 @@ type QueryData = {
  * @returns The generated roster data.
  */
 const genRoster = async (
-  user: User,
+  userData: User,
   employees: Employee[],
   shifts: Shift[]
 ) => {
   // Calculate the number of employees, days, and shifts
   const num_employees = employees.length;
-  const num_days = user.workDays.length;
+  const num_days = userData.workDays.length;
   const num_shifts = shifts.length;
+  const num_days_off = userData.numDaysOff;
   const soft_days_off = false; // Soft days off flag
 
   // Prepare query data object
   const queryData: QueryData = {
     num_employees: num_employees,
     num_days: num_days,
-    num_shifts: num_shifts + 1, // Add 1 to include off shift
+    num_shifts: num_shifts + 1, // Being off is considered a shift by the API, so we add 1.
+    num_days_off: num_days_off,
     soft_days_off: soft_days_off,
   };
 

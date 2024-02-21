@@ -17,6 +17,7 @@ model User {
   updatedAt            DateTime               @updatedAt @map(name: "updated_at")
   workDays             Int[]
   isNewUser            Boolean                @default(true)
+  numDaysOff           Int                    @default(0)
   Assignment           Assignment[]
   Employee             Employee[]
   shiftsCreated        Shift[]

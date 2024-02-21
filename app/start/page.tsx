@@ -52,6 +52,7 @@ const StartForm = () => {
           endTime: '21:00',
         },
       ],
+      numDaysOff: 0,
       employees: [
         {
           id: '0',
@@ -112,6 +113,7 @@ const StartForm = () => {
         | 'workDays'
         | 'shifts'
         | 'employees'
+        | 'numDaysOff'
         | 'numEmployeesAssigned'; // define the types of fields we can expect
       let fieldsToValidate: FieldNames[] = []; // the array containing the specific fields we want to validate on this page
       switch (
@@ -121,7 +123,7 @@ const StartForm = () => {
           fieldsToValidate = ['workDays', 'shifts'];
           break;
         case 'two':
-          fieldsToValidate = ['employees'];
+          fieldsToValidate = ['employees', 'numDaysOff'];
           break;
         case 'three':
           fieldsToValidate = ['numEmployeesAssigned'];
@@ -174,6 +176,7 @@ const StartForm = () => {
     }
   };
 
+  // Submit data and go to /dashboard if on last page. Go on next page otherwise
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (isLastStep) {

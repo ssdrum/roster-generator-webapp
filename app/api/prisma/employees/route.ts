@@ -3,9 +3,9 @@ import { NextResponse } from 'next/server';
 import { getUserSession } from '@/app/lib/session';
 import { Employee } from '@prisma/client';
 
-/* Updates Shifts data in the database */
+/* Updates Employees data in the database */
 export async function POST(req: any) {
-  const employees = await req.json();
+  const { numDaysOff, employees } = await req.json();
   const session = await getUserSession();
   const userId = session.id;
 
@@ -17,7 +17,13 @@ export async function POST(req: any) {
     );
   }
 
-  // Updarte/insert employees
+  // Update number of days off
+  const updatedNumDaysOff = await prisma.user.update({
+    where: { id: userId },
+    data: { numDaysOff: parseInt(numDaysOff, 10) },
+  });
+
+  // Update/insert employees
   const upsertEmployees = await Promise.all(
     employees.map(async (employee: Employee) => {
       const { id, name, email } = employee;
