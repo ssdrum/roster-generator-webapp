@@ -8,6 +8,7 @@ import { Button } from '../ui/shadcn/button';
 import genRoster from '../lib/roster-api-interface';
 import Title from '@/app/ui/title';
 import { useRouter } from 'next/navigation';
+import { storeRoster } from '../lib/data';
 
 // The roster-generating API returns data in this format
 type APIresponseType = {
@@ -24,26 +25,40 @@ const Dashboard = () => {
 
   const router = useRouter();
 
+  // Try generating roster and display result
   const handleClick = async () => {
     setIsGenerating(true);
-    const APIresponse: APIresponseType = await genRoster(
+    let APIresponse: APIresponseType = await genRoster(
       userData,
       employees,
-      shifts
+      shifts,
+      false // First try by setting numDaysOff as a hard constraint
     );
-    const { status, numSolutions, data } = APIresponse;
+    let { status, numSolutions, data } = APIresponse;
 
-    // Handle infeasible constraints
     if (status === 1) {
-      setIsGenerating(false);
-      setNumSolutions(null);
-      alert(
-        "Looks like we can't make your roster! Try changing the parameters before re-generating"
-      );
-      return;
+      // If the roster is infeasible, try setting numDaysOff as a soft constraint
+      APIresponse = await genRoster(userData, employees, shifts, true);
+      ({ status, numSolutions, data } = APIresponse); // Override first response
+
+      // If the constraints are infeasible again, tell user to change constraints
+      if (status === 1) {
+        setIsGenerating(false);
+        setNumSolutions(null);
+        alert(
+          "Looks like we can't make your roster! Try changing the parameters before re-generating"
+        );
+        return;
+      } else {
+        // Otherwise, notify the user that we have relaxed number of days off
+        alert(
+          `We couldn't assign ${userData.numDaysOff} days off to everyone. This is the best result possible.`
+        );
+      }
     }
+
+    // Store roster to database
     try {
-      // Store roster to database
       const response = await fetch('api/prisma/roster', {
         method: 'POST',
         headers: {

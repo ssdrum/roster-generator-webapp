@@ -19,14 +19,15 @@ type QueryData = {
 const genRoster = async (
   userData: User,
   employees: Employee[],
-  shifts: Shift[]
+  shifts: Shift[],
+  softDaysOff: boolean
 ) => {
   // Calculate the number of employees, days, and shifts
   const num_employees = employees.length;
   const num_days = userData.workDays.length;
   const num_shifts = shifts.length;
   const num_days_off = userData.numDaysOff;
-  const soft_days_off = false; // Soft days off flag
+  const soft_days_off = softDaysOff; // Soft days off flag
 
   // Prepare query data object
   const queryData: QueryData = {
