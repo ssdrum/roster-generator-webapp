@@ -47,6 +47,10 @@ export const formSchema = z.object({
     message: "Please select at least one day that you're open.",
   }),
   shifts: z.array(shiftSchema),
+  numDaysOff: z.coerce // Convert string input to number. (No, just using .number doesn't work)
+    .number()
+    .min(0, { message: 'Please enter a valid number of days off' })
+    .max(4, { message: 'Number of days off must be less than 5' }),
   employees: z.array(employeeSchema),
   numEmployeesAssigned: z.array(allNumAssignedSchema),
 });
@@ -57,6 +61,10 @@ export const editShiftSchema = z.object({
 });
 
 export const editEmployeeSchema = z.object({
+  numDaysOff: z.coerce // Convert string input to number. (No, just using .number doesn't work)
+    .number()
+    .min(0, { message: 'Please enter a valid number of days off' })
+    .max(4, { message: 'Number of days off must be less than 5' }),
   employees: z.array(employeeSchema),
 });
 

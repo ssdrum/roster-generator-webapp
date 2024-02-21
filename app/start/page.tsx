@@ -52,6 +52,7 @@ const StartForm = () => {
           endTime: '21:00',
         },
       ],
+      numDaysOff: 0,
       employees: [
         {
           id: '0',
@@ -174,6 +175,7 @@ const StartForm = () => {
     }
   };
 
+  // Submit data and go to /dashboard if on last page. Go on next page otherwise
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (isLastStep) {
