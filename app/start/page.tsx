@@ -113,6 +113,7 @@ const StartForm = () => {
         | 'workDays'
         | 'shifts'
         | 'employees'
+        | 'numDaysOff'
         | 'numEmployeesAssigned'; // define the types of fields we can expect
       let fieldsToValidate: FieldNames[] = []; // the array containing the specific fields we want to validate on this page
       switch (
@@ -122,7 +123,7 @@ const StartForm = () => {
           fieldsToValidate = ['workDays', 'shifts'];
           break;
         case 'two':
-          fieldsToValidate = ['employees'];
+          fieldsToValidate = ['employees', 'numDaysOff'];
           break;
         case 'three':
           fieldsToValidate = ['numEmployeesAssigned'];
