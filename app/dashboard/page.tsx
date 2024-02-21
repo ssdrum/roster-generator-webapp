@@ -9,11 +9,13 @@ import genRoster from '../lib/roster-api-interface';
 import Title from '@/app/ui/title';
 import { useRouter } from 'next/navigation';
 
+// The roster-generating API returns data in this format
 type APIresponseType = {
-  status: number;
+  status: number; // 0 for success, 1 for infeasible
   numSolutions: number;
   data: [];
 };
+
 const Dashboard = () => {
   const { userData, employees, shifts, assignments } =
     useContext(DashboardContext)!;
@@ -24,10 +26,15 @@ const Dashboard = () => {
 
   const handleClick = async () => {
     setIsGenerating(true);
-    const roster = await genRoster(userData, employees, shifts);
+    const APIresponse: APIresponseType = await genRoster(
+      userData,
+      employees,
+      shifts
+    );
+    const { status, numSolutions, data } = APIresponse;
 
     // Handle infeasible constraints
-    if (roster.status === 1) {
+    if (status === 1) {
       setIsGenerating(false);
       setNumSolutions(null);
       alert(
@@ -42,13 +49,13 @@ const Dashboard = () => {
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify(roster.data),
+        body: JSON.stringify(data),
       });
     } catch (error) {
       console.error('Error saving roster:', error);
     } finally {
       router.refresh(); // Reload page to see changes
-      setNumSolutions(roster.numSolutions);
+      setNumSolutions(numSolutions);
       setIsGenerating(false);
     }
   };
