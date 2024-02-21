@@ -86,7 +86,7 @@ const EditEmployees = () => {
     } finally {
       setIsSubmitting(false);
       router.refresh();
-      toast('Employees list has been updated.');
+      toast('Employees details have been updated.');
     }
   };
 
