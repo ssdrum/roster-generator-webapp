@@ -28,7 +28,7 @@ type Props = {
 };
 
 const WorkDetails: FC<Props> = ({ form, days }) => {
-  // Fieldarray lets us manage a changing number of shifts (an array of fields [duh])
+  // Fieldarray lets us manage a changing number of shifts (an array of fields)
   // shifts
   const {
     fields: shiftFields,
@@ -50,8 +50,6 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
       newAssignment.assignments.push(newDay);
     });
 
-    // updates grid-selector data
-    form.getValues().numEmployeesAssigned.push(newAssignment);
     // create a new shift object with our default values
     appendShift({
       id: shiftId,
@@ -63,45 +61,12 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
 
   /* Updates shifts array and grid-selector data */
   const deleteShift = (shiftId: any) => {
-    // Remove shift from grid-selector data
-    const formValues = form.getValues();
-    const newValues = formValues.numEmployeesAssigned.filter(
-      (elem) => elem.shiftId !== shiftId
-    );
-    form.setValue('numEmployeesAssigned', newValues);
     // Remove shift from shifts array
     const shiftIndex = shiftFields.findIndex((field) => field.id === shiftId);
     removeShift(shiftIndex);
   };
 
   /* Updates grid-selector data when user adds or removes a workday */
-  const updateDays = (days: number[]): void => {
-    // Removes days from form grid-selector data when de-selected
-    form.getValues().numEmployeesAssigned.forEach((data) => {
-      data.assignments.forEach((assignment, index) => {
-        if (!days.includes(assignment.day)) {
-          data.assignments.splice(index, 1);
-        }
-      });
-    });
-
-    // Adds days in form data when selected
-    days.forEach((day) => {
-      form.getValues().numEmployeesAssigned.forEach((data) => {
-        // Check if the day is already assigned
-        const isDayAssigned = data.assignments.some(
-          (assignment) => assignment.day === day
-        );
-        if (!isDayAssigned) {
-          // Add the day to assignments
-          data.assignments.push({
-            day: day,
-            numAssigned: 1,
-          });
-        }
-      });
-    });
-  };
 
   return (
     <>
@@ -133,7 +98,6 @@ const WorkDetails: FC<Props> = ({ form, days }) => {
                   const numberValue = newValue
                     .map((val) => parseInt(val, 10))
                     .sort();
-                  updateDays(numberValue);
                   onChange(numberValue);
                 }}
               >

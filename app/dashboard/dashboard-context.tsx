@@ -2,9 +2,7 @@
 
 import { FC, ReactNode, createContext } from 'react';
 import {
-  Assignment,
   Employee,
-  NumEmployeesAssigned,
   Shift,
   User,
 } from '@prisma/client';
@@ -16,7 +14,6 @@ type Props = {
   userData: User;
   employees: Employee[];
   shifts: Shift[];
-  numEmployeesAssigned: NumEmployeesAssigned[];
   assignments: RosterAssignment[];
 };
 
@@ -26,7 +23,6 @@ export const DashboardContext = createContext<
       userData: User;
       employees: Employee[];
       shifts: Shift[];
-      numEmployeesAssigned: NumEmployeesAssigned[];
       assignments: RosterAssignment[];
     }
   | undefined
@@ -38,7 +34,6 @@ const DashboardProvider: FC<Props> = ({
   userData,
   employees,
   shifts,
-  numEmployeesAssigned,
   assignments,
 }) => {
   return (
@@ -47,7 +42,6 @@ const DashboardProvider: FC<Props> = ({
         userData: userData,
         employees: employees,
         shifts: shifts,
-        numEmployeesAssigned: numEmployeesAssigned,
         assignments: assignments,
       }}
     >

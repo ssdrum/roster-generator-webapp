@@ -21,7 +21,6 @@ model User {
   Assignment           Assignment[]
   Employee             Employee[]
   shiftsCreated        Shift[]
-  NumEmployeesAssigned NumEmployeesAssigned[]
 
   @@map(name: "users")
 }
@@ -45,7 +44,6 @@ model Shift {
   Assignment           Assignment[]
   User                 User                   @relation(fields: [createdBy], references: [id])
   createdBy            String
-  NumEmployeesAssigned NumEmployeesAssigned[]
 
   @@map(name: "shifts")
 }
@@ -62,25 +60,4 @@ model Assignment {
   assignedTo String
 
   @@map(name: "assignments")
-}
-
-model NumEmployeesAssigned {
-  id          String        @id @default(cuid())
-  shift       String
-  Shift       Shift         @relation(fields: [shift], references: [id], onDelete: Cascade)
-  countPerDay CountPerDay[]
-  assignedBy  String
-  User        User          @relation(fields: [assignedBy], references: [id])
-
-  @@map(name: "num_employees_assigned")
-}
-
-model CountPerDay {
-  id                     String                @id @default(cuid())
-  day                    Int
-  numAssigned            Int
-  NumEmployeesAssigned   NumEmployeesAssigned? @relation(fields: [numEmployeesAssignedId], references: [id])
-  numEmployeesAssignedId String?
-
-  @@map(name: "count_per_day")
 }

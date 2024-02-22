@@ -1,5 +1,5 @@
 import { prisma } from '@/app/lib/prisma';
-import { User, Employee, Shift, NumEmployeesAssigned } from '@prisma/client'; // Prisma generates classess associated with the models defined in the schema automatically
+import { User, Employee, Shift } from '@prisma/client'; // Prisma generates classess associated with the models defined in the schema automatically
 import { RosterAssignment } from './formSchemas';
 
 /* Collection of functions to fetch data from the database */
@@ -36,19 +36,6 @@ export const fetchShifts = async (userId: string): Promise<Shift[]> => {
     },
   });
   return shifts;
-};
-
-export const fetchNumEmployeesAssigned = async (
-  userId: string
-): Promise<NumEmployeesAssigned[]> => {
-  /* Returns data from NumEmployeesAssigned table */
-  const numEmployeesAssigned = await prisma.numEmployeesAssigned.findMany({
-    where: {
-      assignedBy: userId,
-    },
-    include: { Shift: true, countPerDay: true },
-  });
-  return numEmployeesAssigned;
 };
 
 export const fetchAssignments = async (
