@@ -1,8 +1,10 @@
 'use client';
 import { signIn } from 'next-auth/react';
+import wakeupServer from '../lib/wakeup';
 
 const GoogleSignInButton = () => {
   const handleClick = () => {
+    wakeupServer()
     signIn('google', { callbackUrl: '/dashboard' }); // Redirect to dasboard on sign-in
   };
 

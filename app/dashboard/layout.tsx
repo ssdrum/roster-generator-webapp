@@ -9,6 +9,7 @@ import {
 import { getUserSession } from '@/app/lib/session';
 import DashboardProvider from '@/app/dashboard/dashboard-context';
 import { redirect } from 'next/navigation';
+import wakeupServer from '../lib/wakeup';
 
 export default async function DashboardLayout({
   children, // will be a page or nested layout
@@ -23,7 +24,6 @@ export default async function DashboardLayout({
     const userId = session.id;
     const userData = await fetchUserData(userId);
     const employees = await fetchEmployees(userId);
-    console.log(employees)
     const shifts = await fetchShifts(userId);
     const assignments = await fetchAssignments(userId);
 
