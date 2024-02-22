@@ -9,11 +9,13 @@ import genRoster from '../lib/roster-api-interface';
 import Title from '@/app/ui/title';
 import { useRouter } from 'next/navigation';
 
+// The roster-generating API returns data in this format
 type APIresponseType = {
-  status: number;
+  status: number; // 0 for success, 1 for infeasible
   numSolutions: number;
   data: [];
 };
+
 const Dashboard = () => {
   const { userData, employees, shifts, assignments } =
     useContext(DashboardContext)!;
@@ -22,33 +24,52 @@ const Dashboard = () => {
 
   const router = useRouter();
 
+  // Try generating roster and display result
   const handleClick = async () => {
     setIsGenerating(true);
-    const roster = await genRoster(userData, employees, shifts);
+    let APIresponse: APIresponseType = await genRoster(
+      userData,
+      employees,
+      shifts,
+      false // First try by setting numDaysOff as a hard constraint
+    );
+    let { status, numSolutions, data } = APIresponse;
 
-    // Handle infeasible constraints
-    if (roster.status === 1) {
-      setIsGenerating(false);
-      setNumSolutions(null);
-      alert(
-        "Looks like we can't make your roster! Try changing the parameters before re-generating"
-      );
-      return;
+    if (status === 1) {
+      // If the roster is infeasible, try setting numDaysOff as a soft constraint
+      APIresponse = await genRoster(userData, employees, shifts, true);
+      ({ status, numSolutions, data } = APIresponse); // Override first response
+
+      // If the constraints are infeasible again, tell user to change constraints
+      if (status === 1) {
+        setIsGenerating(false);
+        setNumSolutions(null);
+        alert(
+          "Looks like we can't make your roster! Try changing the parameters before re-generating"
+        );
+        return;
+      } else {
+        // Otherwise, notify the user that we have relaxed number of days off
+        alert(
+          `We couldn't assign ${userData.numDaysOff} days off to everyone. This is the best we could do.`
+        );
+      }
     }
+
+    // Store roster to database
     try {
-      // Store roster to database
       const response = await fetch('api/prisma/roster', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify(roster.data),
+        body: JSON.stringify(data),
       });
     } catch (error) {
       console.error('Error saving roster:', error);
     } finally {
       router.refresh(); // Reload page to see changes
-      setNumSolutions(roster.numSolutions);
+      setNumSolutions(numSolutions);
       setIsGenerating(false);
     }
   };

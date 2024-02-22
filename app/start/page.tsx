@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import { Day, formSchema } from '@/app/lib/formSchemas';
 import WorkDetails from '@/app/start/components/work-details';
 import EmployeeDetails from '@/app/start/components/employee-details';
-import GridSelector from '@/app/start/components/grid-selector';
 import Title from '@/app/ui/title';
 const { v4: uuidv4 } = require('uuid');
 
@@ -52,6 +51,7 @@ const StartForm = () => {
           endTime: '21:00',
         },
       ],
+      numDaysOff: 0,
       employees: [
         {
           id: '0',
@@ -78,28 +78,6 @@ const StartForm = () => {
           createdBy: '',
         },
       ],
-      numEmployeesAssigned: [
-        {
-          shiftId: firstShiftId,
-          assignments: [
-            { day: 0, numAssigned: 1 },
-            { day: 1, numAssigned: 2 },
-            { day: 2, numAssigned: 2 },
-            { day: 3, numAssigned: 2 },
-            { day: 4, numAssigned: 2 },
-          ],
-        },
-        {
-          shiftId: secondShiftId,
-          assignments: [
-            { day: 0, numAssigned: 1 },
-            { day: 1, numAssigned: 2 },
-            { day: 2, numAssigned: 2 },
-            { day: 3, numAssigned: 2 },
-            { day: 4, numAssigned: 2 },
-          ],
-        },
-      ],
     },
   });
   const { trigger } = form;
@@ -108,11 +86,7 @@ const StartForm = () => {
   const nextPage = () => {
     (async () => {
       // check the current page's shift
-      type FieldNames =
-        | 'workDays'
-        | 'shifts'
-        | 'employees'
-        | 'numEmployeesAssigned'; // define the types of fields we can expect
+      type FieldNames = 'workDays' | 'shifts' | 'employees' | 'numDaysOff';
       let fieldsToValidate: FieldNames[] = []; // the array containing the specific fields we want to validate on this page
       switch (
         step.key // decide which values to validate based on the current page
@@ -121,10 +95,7 @@ const StartForm = () => {
           fieldsToValidate = ['workDays', 'shifts'];
           break;
         case 'two':
-          fieldsToValidate = ['employees'];
-          break;
-        case 'three':
-          fieldsToValidate = ['numEmployeesAssigned'];
+          fieldsToValidate = ['employees', 'numDaysOff'];
           break;
         default:
           fieldsToValidate = [];
@@ -142,13 +113,6 @@ const StartForm = () => {
     useMultiStepForm([
       <WorkDetails key={'one'} form={form} days={days} />,
       <EmployeeDetails key={'two'} form={form} />,
-      // Temporary dummy data
-      <GridSelector
-        key={'three'}
-        workDays={form.getValues().workDays.sort()}
-        shifts={form.getValues().shifts}
-        form={form}
-      />,
     ]);
 
   // Submit all form data to db
@@ -174,6 +138,7 @@ const StartForm = () => {
     }
   };
 
+  // Submit data and go to /dashboard if on last page. Go on next page otherwise
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (isLastStep) {

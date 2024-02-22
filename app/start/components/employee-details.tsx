@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import {
@@ -22,7 +22,7 @@ type Props = {
   form: UseFormReturn<z.infer<typeof formSchema>>;
 };
 
-const EmployeeDetails: React.FC<Props> = ({ form }) => {
+const EmployeeDetails: FC<Props> = ({ form }) => {
   /// fieldarray lets us manage a changing number of shifts ( an array of fields)
   // employees
   const {
@@ -50,6 +50,31 @@ const EmployeeDetails: React.FC<Props> = ({ form }) => {
 
   return (
     <>
+      {/* Number of days off */}
+      <FormField
+        control={form.control}
+        name='numDaysOff'
+        render={({ field }) => (
+          <FormItem>
+            <HoverCard openDelay={1} closeDelay={1}>
+              <HoverCardTrigger>
+                <FormLabel className='inline-flex items-center hover:underline'>
+                  Weekly days off number
+                  <QuestionIcon className='pl-1 text-gray-500' />
+                </FormLabel>
+              </HoverCardTrigger>
+              <HoverCardContent side={'top'} className='text-sm text-gray-500'>
+                Select the number of days off to give each employee per week.
+              </HoverCardContent>
+            </HoverCard>
+            <FormControl className='w-1/4'>
+              <Input type='number' {...field} min={0} max={4} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       {/* employee details */}
       {employeeFields.map((field, index) => (
         <div // gird container for the row

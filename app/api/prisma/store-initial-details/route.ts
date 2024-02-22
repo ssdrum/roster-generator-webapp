@@ -1,23 +1,19 @@
 import { prisma } from '@/app/lib/prisma';
 import { NextResponse } from 'next/server';
 import { getUserSession } from '@/app/lib/session';
-import {
-  ShiftType,
-  EmployeeType,
-  AllNumAssignedSchema,
-} from '@/app/lib/formSchemas';
+import { ShiftType, EmployeeType } from '@/app/lib/formSchemas';
 
 export async function POST(req: any): Promise<NextResponse> {
   const session = await getUserSession();
   const userId = session.id;
   const data = await req.json();
 
-  const { workDays, shifts, employees, numEmployeesAssigned } = data;
+  const { workDays, shifts, numDaysOff, employees } = data;
 
   // Update the user's workDays
   await prisma.user.update({
     where: { id: userId },
-    data: { workDays, isNewUser: false },
+    data: { workDays, numDaysOff: numDaysOff, isNewUser: false },
   });
 
   // Associates client-side shift ids with database shift ids
@@ -53,40 +49,6 @@ export async function POST(req: any): Promise<NextResponse> {
         },
       });
     })
-  );
-
-  // Create numEmployeesAssigned and assign them to the shifts
-  await Promise.all(
-    numEmployeesAssigned.map(
-      async (numEmployeesAssignedData: AllNumAssignedSchema) => {
-        const { shiftId, assignments } = numEmployeesAssignedData;
-
-        const shift = await prisma.shift.findUnique({
-          where: {
-            id: shiftsIdMap[shiftId],
-          },
-        });
-
-        const numEmployeesAssigned = await prisma.numEmployeesAssigned.create({
-          data: {
-            Shift: {
-              connect: { id: shift?.id },
-            },
-            countPerDay: {
-              createMany: {
-                data: assignments.map((assignment: any) => ({
-                  day: assignment.day,
-                  numAssigned: assignment.numAssigned,
-                })),
-              },
-            },
-            User: {
-              connect: { id: userId }, // Connect the current user as the one who assigned this record
-            },
-          },
-        });
-      }
-    )
   );
 
   return NextResponse.json(

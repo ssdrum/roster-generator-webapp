@@ -33,22 +33,17 @@ const numAssignedSchema = z.object({
   numAssigned: z.number(),
 });
 
-/* Number of employees assigned to a shift, for every working day
-     Example: [{shiftId: 0, assignments: [{day: 0, numAssigned: 2}, {day: 1, numAssigned: 3}, ...], ...]
- */
-const allNumAssignedSchema = z.object({
-  shiftId: z.string(),
-  assignments: z.array(numAssignedSchema),
-});
-
 // Main form schema
 export const formSchema = z.object({
   workDays: z.array(z.number()).min(1, {
     message: "Please select at least one day that you're open.",
   }),
   shifts: z.array(shiftSchema),
+  numDaysOff: z.coerce // Convert string input to number. (No, just using .number doesn't work)
+    .number()
+    .min(0, { message: 'Please enter a valid number of days off' })
+    .max(4, { message: 'Number of days off must be less than 5' }),
   employees: z.array(employeeSchema),
-  numEmployeesAssigned: z.array(allNumAssignedSchema),
 });
 
 // Edit pages schemas
@@ -57,11 +52,11 @@ export const editShiftSchema = z.object({
 });
 
 export const editEmployeeSchema = z.object({
+  numDaysOff: z.coerce // Convert string input to number. (No, just using .number doesn't work)
+    .number()
+    .min(0, { message: 'Please enter a valid number of days off' })
+    .max(4, { message: 'Number of days off must be less than 5' }),
   employees: z.array(employeeSchema),
-});
-
-export const numEmployeesAssignedSchema = z.object({
-  employees: z.array(allNumAssignedSchema),
 });
 
 export type RosterAssignment = {
@@ -74,7 +69,6 @@ export type FormType = z.infer<typeof formSchema>;
 export type ShiftType = z.infer<typeof shiftSchema>;
 export type EmployeeType = z.infer<typeof employeeSchema>;
 export type NumAssignedType = z.infer<typeof numAssignedSchema>;
-export type AllNumAssignedSchema = z.infer<typeof allNumAssignedSchema>;
 export type Day =
   | 'Monday'
   | 'Tuesday'

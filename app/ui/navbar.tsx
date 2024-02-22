@@ -11,7 +11,6 @@ import {
   faHouse,
   faClock,
   faUserGroup,
-  faCalendarDays,
   faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -58,13 +57,6 @@ const Navbar: FC<Props> = ({ session }) => {
                 icon={faUserGroup}
                 link={'/dashboard/edit-employees'}
               />
-              {/* TODO
-                <NavbarMenuItem
-                title={'Assignments'}
-                icon={faCalendarDays}
-                link={'/dashboard/edit-assignments'}
-              />
-              */}
             </ul>
           </div>
         </div>

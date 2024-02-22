@@ -3,7 +3,6 @@ import { Session } from '@/app/lib/types';
 import {
   fetchAssignments,
   fetchEmployees,
-  fetchNumEmployeesAssigned,
   fetchShifts,
   fetchUserData,
 } from '../lib/data';
@@ -25,7 +24,6 @@ export default async function DashboardLayout({
     const userData = await fetchUserData(userId);
     const employees = await fetchEmployees(userId);
     const shifts = await fetchShifts(userId);
-    const numEmployeesAssigned = await fetchNumEmployeesAssigned(userId);
     const assignments = await fetchAssignments(userId);
 
     // Redirect to start form if user is new
@@ -42,7 +40,6 @@ export default async function DashboardLayout({
             userData={userData}
             employees={employees}
             shifts={shifts}
-            numEmployeesAssigned={numEmployeesAssigned}
             assignments={assignments}
           >
             {children}
