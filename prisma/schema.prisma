@@ -11,17 +11,17 @@ datasource db {
 }
 
 model User {
-  id                   String                 @id @default(cuid())
-  name                 String
-  email                String                 @unique
-  createdAt            DateTime               @default(now()) @map(name: "created_at")
-  updatedAt            DateTime               @updatedAt @map(name: "updated_at")
-  workDays             Int[]
-  isNewUser            Boolean                @default(true)
-  numDaysOff           Int                    @default(0)
-  Assignment           Assignment[]
-  Employee             Employee[]
-  shiftsCreated        Shift[]
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  createdAt     DateTime     @default(now()) @map(name: "created_at")
+  updatedAt     DateTime     @updatedAt @map(name: "updated_at")
+  workDays      Int[]
+  isNewUser     Boolean      @default(true)
+  numDaysOff    Int          @default(0)
+  Assignment    Assignment[]
+  Employee      Employee[]
+  shiftsCreated Shift[]
 
   @@map(name: "users")
 }
@@ -38,13 +38,13 @@ model Employee {
 }
 
 model Shift {
-  id                   String                 @id @default(cuid())
-  name                 String
-  startTime            String
-  endTime              String
-  Assignment           Assignment[]
-  User                 User                   @relation(fields: [createdBy], references: [id])
-  createdBy            String
+  id         String       @id @default(cuid())
+  name       String
+  startTime  String
+  endTime    String
+  Assignment Assignment[]
+  User       User         @relation(fields: [createdBy], references: [id])
+  createdBy  String
 
   @@map(name: "shifts")
 }
@@ -54,7 +54,7 @@ model Assignment {
   id         String   @id @default(cuid())
   Employee   Employee @relation(fields: [assignedTo], references: [id], onDelete: Cascade)
   Shift      Shift    @relation(fields: [shift], references: [id], onDelete: Cascade)
-  User       User     @relation(fields: [assignedBy], references: [id])
+  User       User     @relation(fields: [assignedBy], references: [id], onDelete: Cascade)
   day        Int
   assignedBy String
   shift      String
