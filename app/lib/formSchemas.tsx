@@ -33,7 +33,6 @@ const numAssignedSchema = z.object({
   numAssigned: z.number(),
 });
 
-
 // Main form schema
 export const formSchema = z.object({
   workDays: z.array(z.number()).min(1, {

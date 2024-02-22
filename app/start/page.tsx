@@ -86,11 +86,7 @@ const StartForm = () => {
   const nextPage = () => {
     (async () => {
       // check the current page's shift
-      type FieldNames =
-        | 'workDays'
-        | 'shifts'
-        | 'employees'
-        | 'numDaysOff'
+      type FieldNames = 'workDays' | 'shifts' | 'employees' | 'numDaysOff';
       let fieldsToValidate: FieldNames[] = []; // the array containing the specific fields we want to validate on this page
       switch (
         step.key // decide which values to validate based on the current page
