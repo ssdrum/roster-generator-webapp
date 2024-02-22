@@ -23,6 +23,7 @@ export default async function DashboardLayout({
     const userId = session.id;
     const userData = await fetchUserData(userId);
     const employees = await fetchEmployees(userId);
+    console.log(employees)
     const shifts = await fetchShifts(userId);
     const assignments = await fetchAssignments(userId);
 

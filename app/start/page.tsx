@@ -31,14 +31,13 @@ const StartForm = () => {
   ];
 
   // Initialise form with default values on first render
-  const firstShiftId = uuidv4();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema), // Link the react form and the resolver together for validation
     defaultValues: {
       workDays: [0, 1, 2, 3, 4], // Pre-select Monday-Friday
       shifts: [
         {
-          id: firstShiftId,
+          id: uuidv4(),
           name: 'Morning',
           startTime: '08:00',
           endTime: '12:00',
@@ -47,7 +46,7 @@ const StartForm = () => {
       numDaysOff: 0,
       employees: [
         {
-          id: '-1',
+          id: uuidv4(),
           name: '',
           email: '',
           createdBy: '',
